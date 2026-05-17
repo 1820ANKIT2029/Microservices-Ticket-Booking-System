@@ -1,0 +1,12 @@
+rootProject.name = 'event-ticket-booking-system'
+
+include 'gateway-server'
+include 'eureka-server'
+include 'config-server'
+include 'user-service'
+include 'booking-service'
+include 'payment-service'
+include 'notification-service'
+include 'search-service'
+include 'analytics-service'
+include 'event-service'
