@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.glassfish.hk2:hk2-locator:4.0.0-M3" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.glassfish.hk2" artifactId="hk2-locator" version="4.0.0-M3" baseVersion="4.0.0-M3" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.glassfish.hk2/hk2-locator/4.0.0-M3/64a198be0ce5a86c6e6e439188fc4e7187416588/hk2-locator-4.0.0-M3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
