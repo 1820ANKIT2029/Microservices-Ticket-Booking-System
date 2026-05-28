@@ -20,13 +20,14 @@ public class VenueSectionMapper {
 
         return VenueSectionDTO.builder()
                 .id(entity.getId())
-                .venueId(entity.getVenue() != null ? entity.getVenue().getId() : null)
+                .venueId(entity.getVenue().getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .sectionType(entity.getSectionType())
                 .totalSeats(entity.getTotalSeats())
                 .rowCount(entity.getRowCount())
                 .seatsPerRow(entity.getSeatsPerRow())
+                .svgElementId(entity.getSvgElementId())
                 .seats(entity.getSeats() != null ?
                         entity.getSeats().stream().map(seatMapper::toDto).collect(Collectors.toList()) : Collections.emptyList())
                 .build();
@@ -43,14 +44,13 @@ public class VenueSectionMapper {
                 .totalSeats(dto.getTotalSeats())
                 .rowCount(dto.getRowCount())
                 .seatsPerRow(dto.getSeatsPerRow())
+                .svgElementId(dto.getSvgElementId())
                 .seats(dto.getSeats() != null ?
                         dto.getSeats().stream().map(seatMapper::toEntity).collect(Collectors.toList()) : Collections.emptyList())
                 .build();
 
-        if (dto.getVenueId() != null) {
-            Venue venue = new Venue();
-            venue.setId(dto.getVenueId());
-            section.setVenue(venue);
+        if(dto.getVenueId() != null){
+            section.getVenue().setId(dto.getVenueId());
         }
 
         return section;

@@ -4,6 +4,8 @@ import com.ankit.event_service.dto.PerformerDTO;
 import com.ankit.event_service.entity.Performer;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 public class PerformerMapper {
 
@@ -42,6 +44,7 @@ public class PerformerMapper {
                 .isActive(dto.getIsActive())
                 .createdAt(dto.getCreatedAt())
                 .modifiedAt(dto.getModifiedAt())
+                .events(new ArrayList<>())
                 .build();
     }
 }
