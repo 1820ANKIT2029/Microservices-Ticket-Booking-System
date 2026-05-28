@@ -1,4 +1,4 @@
-package com.ankit.event_service.respository;
+package com.ankit.event_service.repository;
 
 import com.ankit.event_service.entity.Performer;
 import org.springframework.data.jpa.repository.JpaRepository;
