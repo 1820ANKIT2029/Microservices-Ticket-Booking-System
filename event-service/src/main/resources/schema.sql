@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `venues` (
     `timezone` VARCHAR(100),
     `total_capacity` INT,
     `website_url` VARCHAR(2048),
+    `svg_template_url` VARCHAR(2048),
     `amenities` TEXT,
     `is_active` BOOLEAN DEFAULT TRUE,
     `created_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `venue_sections` (
     `total_seats` INT,
     `row_count` INT,
     `seats_per_row` INT,
+    `svg_element_id` VARCHAR(100),
     FOREIGN KEY (`venue_id`) REFERENCES `venues` (`id`) ON DELETE CASCADE
 );
 
@@ -36,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `seats` (
     `seat_number` VARCHAR(50) NOT NULL,
     `row_label` VARCHAR(50),
     `seat_type` VARCHAR(100),
+    `svg_element_id` VARCHAR(100),
     `is_accessible` BOOLEAN DEFAULT FALSE,
     `is_active` BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (`venue_section_id`) REFERENCES `venue_sections` (`id`) ON DELETE CASCADE,

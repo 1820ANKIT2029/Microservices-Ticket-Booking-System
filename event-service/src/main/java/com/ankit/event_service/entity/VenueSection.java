@@ -40,6 +40,9 @@ public class VenueSection {
     @Column(name = "seats_per_row")
     private Integer seatsPerRow;
 
+    @Column(name = "svg_element_id", length = 100)
+    private String svgElementId;
+
     @OneToMany(mappedBy = "venueSection", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Seat> seats = new ArrayList<>();

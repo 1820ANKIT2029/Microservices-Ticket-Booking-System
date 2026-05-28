@@ -33,6 +33,9 @@ public class Seat {
     @Column(name = "seat_type", length = 100)
     private String seatType;
 
+    @Column(name = "svg_element_id", length = 100)
+    private String svgElementId;
+
     @Column(name = "is_accessible")
     private Boolean isAccessible = false;
 

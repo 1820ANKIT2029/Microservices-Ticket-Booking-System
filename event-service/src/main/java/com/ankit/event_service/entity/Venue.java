@@ -57,6 +57,9 @@ public class Venue {
     @Column(name = "website_url", length = 2048)
     private String websiteUrl;
 
+    @Column(name = "svg_template_url", length = 2048)
+    private String svgTemplateUrl;
+
     @Column(columnDefinition = "TEXT")
     private String amenities;
 
