@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SessionSeats {
+public class SessionSeat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +36,5 @@ public class SessionSeats {
     @Enumerated(EnumType.STRING)
     @Column(length = 50)
     @Builder.Default
-    private SessionSeatsStatus status = SessionSeatsStatus.AVAILABLE;
+    private SessionSeatStatus status = SessionSeatStatus.AVAILABLE;
 }
