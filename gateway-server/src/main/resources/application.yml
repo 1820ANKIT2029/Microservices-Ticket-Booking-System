@@ -4,3 +4,29 @@ server:
 spring:
   application:
     name: 'gateway-service'
+
+  cloud:
+    gateway:
+      routes:
+        - id: event-service
+          uri: lb://EVENT-SERVICE
+          predicates:
+            - Path=/api/events/**
+
+        - id: booking-service
+          uri: lb://BOOKING-SERVICE
+          predicates:
+            - Path=/api/bookings/**
+
+        - id: user-service
+          uri: lb://VENUE-SERVICE
+          predicates:
+            - Path=/api/venues/**
+
+    config:
+      enabled: false
+
+  eureka:
+    client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka/
