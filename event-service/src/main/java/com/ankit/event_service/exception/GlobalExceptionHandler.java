@@ -1,6 +1,5 @@
 package com.ankit.event_service.exception;
 
-import com.ankit.event_service.dto.ErrorResponseWrapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

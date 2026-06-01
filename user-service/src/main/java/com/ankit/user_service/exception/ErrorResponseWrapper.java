@@ -1,9 +1,10 @@
-package com.ankit.event_service.dto;
+package com.ankit.user_service.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.ZonedDateTime;
 
 @Data

@@ -1,7 +1,5 @@
 package com.ankit.user_service.exception;
 
-import com.ankit.event_service.dto.ErrorResponseWrapper;
-import com.ankit.event_service.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
