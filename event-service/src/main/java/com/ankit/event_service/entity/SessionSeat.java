@@ -2,6 +2,7 @@ package com.ankit.event_service.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SessionSeatAvailability {
+public class SessionSeats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +33,8 @@ public class SessionSeatAvailability {
     @Column(name = "override_price", precision = 10, scale = 2)
     private BigDecimal overridePrice;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 50)
-    private String status = "AVAILABLE";
+    @Builder.Default
+    private SessionSeatsStatus status = SessionSeatsStatus.AVAILABLE;
 }

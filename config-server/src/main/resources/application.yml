@@ -1,6 +1,19 @@
 server:
-  port: 8085
+  port: 8888
 
 spring:
   application:
     name: 'config-service'
+
+  profiles:
+    active: git
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: "https://github.com/1820ANKIT2029/Event-Ticketing-System-Config.git"
+          default-label: main
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
