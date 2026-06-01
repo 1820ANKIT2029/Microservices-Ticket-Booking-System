@@ -36,6 +36,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(SeatAlreadyBookedException.class)
+    public ResponseEntity<ErrorResponseWrapper<String>> handleSeatAlreadyBooked(
+            ResourceNotFoundException ex, HttpServletRequest request) {
+
+        ErrorResponseWrapper<String> error = ErrorResponseWrapper.<String>builder()
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .timestamp(ZonedDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
     // 2. Intercept and format validation constraint failures (400)
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
