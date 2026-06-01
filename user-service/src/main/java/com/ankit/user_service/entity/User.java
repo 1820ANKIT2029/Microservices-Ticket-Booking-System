@@ -37,9 +37,6 @@ public class User {
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
-    @Column(name = "hashed_password", nullable = false, length = 255)
-    private String hashedPassword;
-
     @Column(name = "avatar_url", length = 2048)
     private String avatarUrl;
 
@@ -60,8 +57,4 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private ZonedDateTime updatedAt;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<UserSession> sessions = new ArrayList<>();
 }
