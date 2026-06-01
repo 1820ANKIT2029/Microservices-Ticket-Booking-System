@@ -1,3 +1,5 @@
+CREATE TYPE item_status AS ENUM ('AVAILABLE', 'RESERVED', 'SOLD');
+
 CREATE TABLE IF NOT EXISTS `venues` (
     `id` SERIAL PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
@@ -126,13 +128,13 @@ CREATE TABLE IF NOT EXISTS `ticket_types` (
     FOREIGN KEY (`event_session_id`) REFERENCES `event_sessions` (`id`) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS `session_seat_availabilities` (
+CREATE TABLE IF NOT EXISTS `session_seats` (
     `id` SERIAL PRIMARY KEY,
     `event_session_id` INT NOT NULL,
     `seat_id` INT NOT NULL,
     `ticket_type_id` INT,
     `override_price` DECIMAL(10, 2),
-    `status` VARCHAR(50) DEFAULT 'AVAILABLE', -- e.g., AVAILABLE, RESERVED, SOLD
+    status item_status DEFAULT 'AVAILABLE', -- e.g., AVAILABLE, RESERVED, SOLD
     FOREIGN KEY (`event_session_id`) REFERENCES `event_sessions` (`id`) ON DELETE CASCADE,
     FOREIGN KEY (`seat_id`) REFERENCES `seats` (`id`) ON DELETE CASCADE,
     FOREIGN KEY (`ticket_type_id`) REFERENCES `ticket_types` (`id`) ON DELETE SET NULL
