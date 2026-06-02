@@ -33,7 +33,7 @@ public class Payment {
     private BigDecimal amount;
 
     @Column(length = 10)
-    private String currency = "USD";
+    private String currency = "INR";
 
     @Column(nullable = false, length = 50)
     private String status; // e.g., INITIATED, SUCCESS, FAILED
@@ -44,15 +44,11 @@ public class Payment {
     @Column(name = "gateway_response", columnDefinition = "TEXT")
     private String gatewayResponse;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_method_id")
-    private PaymentMethod paymentMethod;
-
     @Column(name = "booking_id", nullable = false)
     private Long bookingId; // Logical decentralized link to Booking Service
 
     @Column(name = "user_id", nullable = false, length = 100)
-    private String userId; // Logical decentralized link to User Service
+    private Long userId; // Logical decentralized link to User Service
 
     @Column(name = "completed_id", length = 100)
     private String completedId;
