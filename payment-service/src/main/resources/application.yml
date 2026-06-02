@@ -18,3 +18,10 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+razorpay:
+  key_id: ${RAZORPAY_KEY_ID}
+  key_secret: ${RAZORPAY_KEY_SECRET}
+  webhook:
+    secret: ${RAZORPAY_WEBHOOK_SECRET}
+    event_type: ${RAZORPAY_WEBHOOK_EVENT_TYPE}
