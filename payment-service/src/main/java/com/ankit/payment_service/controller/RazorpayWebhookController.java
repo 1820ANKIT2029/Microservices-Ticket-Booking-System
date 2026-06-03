@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class RazorpayWebhookController {
     private final IWebhookService webhookService;
 
-    @PostMapping("/webhook/razorpay")
+    @PostMapping("/api/payment/webhook/razorpay")
     public ResponseEntity<String> handleRazorpayWebhook(
             @RequestBody String payload,
             @RequestHeader("X-Razorpay-Signature") String signature
