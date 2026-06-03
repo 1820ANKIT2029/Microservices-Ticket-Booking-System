@@ -3,11 +3,14 @@ package com.ankit.payment_service.service.impl;
 import com.ankit.payment_service.service.IWebhookService;
 import com.razorpay.RazorpayException;
 import com.razorpay.Utils;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RazorpayWebhookService implements IWebhookService {
     @Value("${razorpay.webhook.secret}")
     private String webhookSecret;
@@ -15,7 +18,7 @@ public class RazorpayWebhookService implements IWebhookService {
     @Value("${razorpay.webhook.event_type}")
     private String eventType;
 
-    // TODO: feign client
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     public void handlePaymentWebhook(String payload, String signature) {
 
@@ -35,7 +38,7 @@ public class RazorpayWebhookService implements IWebhookService {
 
                 String bookingId = notes.getString("bookingId");
 
-                // TODO: feign client to notify booking-service
+                kafkaTemplate.send("payment-success-topic", bookingId);
             }
         } catch (RazorpayException e) {
             throw new RuntimeException(e);

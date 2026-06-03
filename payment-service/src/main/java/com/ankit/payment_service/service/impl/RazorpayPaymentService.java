@@ -62,7 +62,7 @@ public class RazorpayPaymentService implements IPaymentService {
         }
     }
 
-    private PaymentDTO createRazorpayOrder(Long bookingId, Long userId, double amount, String currencyCode) throws RazorpayException {
+    private PaymentDTO createRazorpayOrder(Long bookingId, Long userId, BigDecimal amount, String currencyCode) throws RazorpayException {
         JSONObject orderRequest = new JSONObject();
 
         // Dynamically find the subunit factor based on the ISO-4217 currency code
@@ -73,7 +73,7 @@ public class RazorpayPaymentService implements IPaymentService {
         BigDecimal multiplier = BigDecimal.valueOf(Math.pow(10, fractionDigits));
 
         // 2. Convert raw amount to Razorpay's lowest subunit denomination safely
-        long lowestDenominationAmount = BigDecimal.valueOf(amount)
+        long lowestDenominationAmount = amount
                 .multiply(multiplier)
                 .setScale(0, RoundingMode.HALF_UP) // Remove trailing fraction anomalies
                 .longValue();
