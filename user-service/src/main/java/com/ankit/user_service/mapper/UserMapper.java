@@ -2,14 +2,13 @@ package com.ankit.user_service.mapper;
 
 import com.ankit.user_service.dto.UserRequestDto;
 import com.ankit.user_service.dto.UserResponseDto;
-import com.ankit.user_service.entity.User;
-import com.ankit.user_service.entity.UserRole;
+import com.ankit.user_service.entity.UserProfile;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
 
-    public UserResponseDto toDto(User entity) {
+    public UserResponseDto toDto(UserProfile entity) {
         if (entity == null) return null;
 
         return UserResponseDto.builder()
@@ -19,25 +18,18 @@ public class UserMapper {
                 .email(entity.getEmail())
                 .phoneNumber(entity.getPhoneNumber())
                 .avatarUrl(entity.getAvatarUrl())
-                .role(entity.getRole())
-                .isActive(entity.getIsActive())
-                .lastLoginAt(entity.getLastLoginAt())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    public User toEntity(UserRequestDto dto) {
+    public UserProfile toEntity(UserRequestDto dto) {
         if (dto == null) return null;
 
-        return User.builder()
+        return UserProfile.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .email(dto.getEmail())
                 .phoneNumber(dto.getPhoneNumber())
                 .avatarUrl(dto.getAvatarUrl())
-                .role(dto.getRole() != null ? dto.getRole() : UserRole.CONSUMER)
-                .isActive(true)
                 .build();
     }
 }

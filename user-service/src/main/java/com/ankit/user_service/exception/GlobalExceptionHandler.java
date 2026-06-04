@@ -23,7 +23,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // 1. Handle Domain Resource Missing Errors (404)
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponseWrapper<String>> handleResourceNotFound(
-            ResourceNotFoundException ex, HttpServletRequest request) {
+            ResourceNotFoundException ex, HttpServletRequest request
+    ) {
 
         ErrorResponseWrapper<String> error = ErrorResponseWrapper.<String>builder()
                 .status(HttpStatus.NOT_FOUND.value())
@@ -39,7 +40,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // 2. Intercept and format validation constraint failures (400)
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+            MethodArgumentNotValidException ex, HttpHeaders headers,
+            HttpStatusCode status, WebRequest request
+    ) {
 
         Map<String, String> validationErrors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
@@ -57,6 +60,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(errorWrapper, status);
+    }
+
+    @ExceptionHandler(InvalidCredentialException.class)
+    public ResponseEntity<ErrorResponseWrapper<String>> handleInvalidCredential(
+            InvalidCredentialException ex, HttpServletRequest request
+    ) {
+        ErrorResponseWrapper<String> error = ErrorResponseWrapper.<String>builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .timestamp(ZonedDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
     // 3. Fallback Catch-All for true system bugs (500)
