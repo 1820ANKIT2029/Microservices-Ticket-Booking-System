@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/event-session")
+@RequestMapping("/api/event-session")
 @RequiredArgsConstructor
 public class EventSessionController {
     final private IEventSessionService eventSessionService;

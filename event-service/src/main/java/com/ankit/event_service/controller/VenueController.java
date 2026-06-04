@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/venues")
+@RequestMapping("/api/venues")
 @RequiredArgsConstructor
 public class VenueController {
     final private IVenueService venueService;

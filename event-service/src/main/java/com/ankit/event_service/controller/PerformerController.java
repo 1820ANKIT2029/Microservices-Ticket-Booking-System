@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/performers")
+@RequestMapping("/api/performers")
 @RequiredArgsConstructor
 public class PerformerController {
     private final IPerformerService performerService;

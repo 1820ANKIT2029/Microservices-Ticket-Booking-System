@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/session-seats")
+@RequestMapping("/api/session-seats")
 @AllArgsConstructor
 public class SessionSeatController {
     private final ISessionSeatService sessionSeatsService;
