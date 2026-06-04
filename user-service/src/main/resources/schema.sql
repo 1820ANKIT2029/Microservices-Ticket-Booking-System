@@ -1,17 +1,30 @@
--- ENUM types
 CREATE TYPE user_role AS ENUM ('CONSUMER', 'ORGANIZER', 'ADMIN');
 
-CREATE TABLE IF NOT EXISTS `users` (
-    `id` SERIAL PRIMARY KEY,
-    `user_id` VARCHAR(100) NOT NULL UNIQUE,
-    `first_name` VARCHAR(100) NOT NULL,
-    `last_name` VARCHAR(100) NOT NULL,
-    `email` VARCHAR(255) NOT NULL UNIQUE,
-    `phone_number` VARCHAR(20),
-    `avatar_url` VARCHAR(2048),
-    `role` user_role DEFAULT 'CONSUMER',
-    `is_active` BOOLEAN DEFAULT TRUE,
-    `last_login_at` TIMESTAMP WITH TIME ZONE,
-    `created_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS user_credentials (
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(100) NOT NULL UNIQUE,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role user_role DEFAULT 'CONSUMER',
+    is_active BOOLEAN DEFAULT TRUE,
+    last_login_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS user_profiles (
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(100) NOT NULL UNIQUE,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    phone_number VARCHAR(20),
+    avatar_url VARCHAR(2048),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_user_credential
+        FOREIGN KEY(user_id)
+        REFERENCES user_credentials(user_id)
+        ON DELETE CASCADE
 );
