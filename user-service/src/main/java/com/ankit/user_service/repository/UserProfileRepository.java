@@ -1,7 +1,11 @@
 package com.ankit.user_service.repository;
 
-import com.ankit.user_service.entity.User;
+import com.ankit.user_service.entity.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.Optional;
+
+public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
+    Optional<UserProfile> findByEmail(String email);
+    Optional<UserProfile> findByUserId(String userId);
 }
