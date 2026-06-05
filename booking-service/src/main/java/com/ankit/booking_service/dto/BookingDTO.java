@@ -2,18 +2,18 @@ package com.ankit.booking_service.dto;
 
 import com.ankit.booking_service.entity.BookingStatus;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class BookingDTO {
     private Long id;
     private String bookingRef;
