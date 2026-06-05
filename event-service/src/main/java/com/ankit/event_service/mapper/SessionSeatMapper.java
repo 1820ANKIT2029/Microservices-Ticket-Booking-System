@@ -2,10 +2,13 @@ package com.ankit.event_service.mapper;
 
 import com.ankit.event_service.dto.SessionSeatDTO;
 import com.ankit.event_service.entity.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class SessionSeatMapper {
+    private final TicketTypeMapper ticketTypeMapper;
 
     public SessionSeatDTO toDto(SessionSeat entity) {
         if (entity == null) return null;
@@ -14,7 +17,7 @@ public class SessionSeatMapper {
                 .id(entity.getId())
                 .eventSessionId(entity.getEventSession() != null ? entity.getEventSession().getId() : null)
                 .seatId(entity.getSeat() != null ? entity.getSeat().getId() : null)
-                .ticketTypeId(entity.getTicketType() != null ? entity.getTicketType().getId() : null)
+                .ticketTypeDTO(this.ticketTypeMapper.toDto(entity.getTicketType()))
                 .overridePrice(entity.getOverridePrice())
                 .status(entity.getStatus())
                 .build();
@@ -27,6 +30,7 @@ public class SessionSeatMapper {
                 .id(dto.getId())
                 .overridePrice(dto.getOverridePrice())
                 .status(dto.getStatus() != null ? dto.getStatus() : SessionSeatStatus.AVAILABLE)
+                .ticketType(dto.getTicketTypeDTO() != null ? this.ticketTypeMapper.toEntity(dto.getTicketTypeDTO()) : null)
                 .build();
 
         if (dto.getEventSessionId() != null) {
@@ -39,12 +43,6 @@ public class SessionSeatMapper {
             Seat seat = new Seat();
             seat.setId(dto.getSeatId());
             sessionSeat.setSeat(seat);
-        }
-
-        if (dto.getTicketTypeId() != null) {
-            TicketType ticketType = new TicketType();
-            ticketType.setId(dto.getTicketTypeId());
-            sessionSeat.setTicketType(ticketType);
         }
 
         return sessionSeat;

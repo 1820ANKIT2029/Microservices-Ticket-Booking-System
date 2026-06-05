@@ -19,15 +19,15 @@ public class SessionSeat {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_session_id", nullable = false)
+    @JoinColumn(name = "event_session_id", nullable = false, updatable = false)
     private EventSession eventSession;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seat_id", nullable = false)
+    @JoinColumn(name = "seat_id", nullable = false, updatable = false)
     private Seat seat;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ticket_type_id")
+    @JoinColumn(name = "ticket_type_id", updatable = false)
     private TicketType ticketType;
 
     @Column(name = "override_price", precision = 10, scale = 2)
