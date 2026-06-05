@@ -13,7 +13,33 @@ spring:
       server:
         git:
           uri: "https://github.com/1820ANKIT2029/Event-Ticketing-System-Config.git"
+          search-paths:
+            - common
+            - gateway-server
+            - eureka-server
+            - user-service
+            - event-service
+            - booking-service
+            - payment-service
+            - notification-service
+            - search-service
+            - analytics-service
           default-label: main
           timeout: 5
           clone-on-start: true
           force-pull: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
