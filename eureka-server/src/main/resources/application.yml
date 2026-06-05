@@ -3,13 +3,29 @@ server:
 
 spring:
   application:
-    name: 'eureka-service'
+    name: 'eureka-server'
   cloud:
     config:
-      enabled: false
+      uri: "optional:configserver:http://localhost:8888/"
+  config:
+    import: optional:configserver:http://localhost:8888/
 
 eureka:
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: false # true when using Eureka Cluster Nodes
+    fetch-registry: false # true when using Eureka Cluster Nodes
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
