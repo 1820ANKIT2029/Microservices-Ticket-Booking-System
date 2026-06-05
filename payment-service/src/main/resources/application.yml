@@ -19,6 +19,22 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: booking-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    #      properties:
+    #        spring.json.trusted.packages: "com.ankit.notification_service.dto"
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  #      properties:
+  #        spring.json.trusted.packages: "com.example.notification-service.dto"
+
 razorpay:
   key_id: ${RAZORPAY_KEY_ID}
   key_secret: ${RAZORPAY_KEY_SECRET}

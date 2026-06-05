@@ -2,6 +2,8 @@ package com.ankit.payment_service.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -9,6 +11,6 @@ import lombok.*;
 public class BookingRequestDTO {
     private Long bookingId;
     private Long userId;
-    private Double amount;
+    private BigDecimal amount;
     private String currencyCode;
 }
