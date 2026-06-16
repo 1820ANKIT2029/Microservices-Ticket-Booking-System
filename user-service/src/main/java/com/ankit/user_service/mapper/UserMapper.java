@@ -25,6 +25,7 @@ public class UserMapper {
         if (dto == null) return null;
 
         return UserProfile.builder()
+                .userId(dto.getUserId())
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .email(dto.getEmail())
