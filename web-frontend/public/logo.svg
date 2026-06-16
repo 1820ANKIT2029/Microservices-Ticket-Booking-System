@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 25 60 45">
+  <defs>
+    <mask id="ticket-mask">
+      <!-- Using explicit coordinates rather than % prevents browser clipping bugs at the bottom -->
+      <rect x="0" y="0" width="100" height="100" fill="#fff" />
+      <!-- The black circles punch transparent holes through the mask -->
+      <circle cx="10" cy="47.5" r="8" fill="#000" />
+      <circle cx="70" cy="47.5" r="8" fill="#000" />
+    </mask>
+  </defs>
+  
+  <!-- The main ticket shape -->
+  <rect x="10" y="25" width="60" height="45" rx="4" fill="#7000ff" mask="url(#ticket-mask)" />
+  
+  <!-- Dashed tear line -->
+  <path stroke="#fff" stroke-width="7" stroke-dasharray="4 3" d="M25 35v25" />
+</svg>

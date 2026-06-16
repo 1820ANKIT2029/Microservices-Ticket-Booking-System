@@ -1,0 +1,207 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* ShadCN core tokens */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    monospace;
+  --font-heading: var(--font-sans);
+
+  /* ShadCN component tokens */
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* ShadCN radius */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* ===== EventPass — Material Design 3 Color Tokens ===== */
+
+  /* Surface system */
+  --color-surface: #fef7ff;
+  --color-surface-dim: #dfd7e8;
+  --color-surface-bright: #fef7ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f9f1ff;
+  --color-surface-container: #f3ebfc;
+  --color-surface-container-high: #ede5f6;
+  --color-surface-container-highest: #e7dff0;
+  --color-on-surface: #1d1a25;
+  --color-on-surface-variant: #4a4457;
+  --color-inverse-surface: #332e3b;
+  --color-inverse-on-surface: #f6edff;
+  --color-surface-variant: #e7dff0;
+  --color-surface-tint: #7212ff;
+
+  /* Primary extended */
+  --color-primary-container: #7000ff;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #ddcdff;
+  --color-inverse-primary: #d1bcff;
+  --color-primary-fixed: #e9ddff;
+  --color-primary-fixed-dim: #d1bcff;
+  --color-on-primary-fixed: #23005b;
+  --color-on-primary-fixed-variant: #5700c9;
+
+  /* Secondary extended */
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #dadff3;
+  --color-on-secondary-container: #5d6273;
+  --color-secondary-fixed: #dde2f6;
+  --color-secondary-fixed-dim: #c1c6d9;
+  --color-on-secondary-fixed: #151b29;
+  --color-on-secondary-fixed-variant: #414756;
+
+  /* Tertiary */
+  --color-tertiary: #7b2900;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #a23900;
+  --color-on-tertiary-container: #ffc8b4;
+  --color-tertiary-fixed: #ffdbce;
+  --color-tertiary-fixed-dim: #ffb599;
+  --color-on-tertiary-fixed: #370e00;
+  --color-on-tertiary-fixed-variant: #7f2b00;
+
+  /* Error extended */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* Outline */
+  --color-outline: #7b7489;
+  --color-outline-variant: #ccc3da;
+
+  /* On-background */
+  --color-on-background: #1d1a25;
+
+  /* ===== EventPass Typography Scale ===== */
+  --text-display-lg: 48px;
+  --text-display-lg--line-height: 56px;
+  --text-display-lg--letter-spacing: -0.02em;
+
+  --text-display-lg-mobile: 32px;
+  --text-display-lg-mobile--line-height: 40px;
+  --text-display-lg-mobile--letter-spacing: -0.02em;
+
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 32px;
+
+  --text-headline-sm: 20px;
+  --text-headline-sm--line-height: 28px;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+
+  --text-label-md: 14px;
+  --text-label-md--line-height: 20px;
+  --text-label-md--letter-spacing: 0.01em;
+
+  --text-label-sm: 12px;
+  --text-label-sm--line-height: 16px;
+}
+
+:root {
+  /* ShadCN tokens → EventPass Daybreak Edition */
+  --background: #fef7ff;
+  --foreground: #1d1a25;
+  --card: #ffffff;
+  --card-foreground: #1d1a25;
+  --popover: #ffffff;
+  --popover-foreground: #1d1a25;
+  --primary: #5400c3;
+  --primary-foreground: #ffffff;
+  --secondary: #585e6f;
+  --secondary-foreground: #ffffff;
+  --muted: #f3ebfc;
+  --muted-foreground: #4a4457;
+  --accent: #ede5f6;
+  --accent-foreground: #1d1a25;
+  --destructive: #ba1a1a;
+  --border: #ccc3da;
+  --input: #f3ebfc;
+  --ring: #7212ff;
+  --chart-1: #5400c3;
+  --chart-2: #585e6f;
+  --chart-3: #7b2900;
+  --chart-4: #7212ff;
+  --chart-5: #a23900;
+  --radius: 0.5rem;
+  --sidebar: #f9f1ff;
+  --sidebar-foreground: #1d1a25;
+  --sidebar-primary: #5400c3;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ede5f6;
+  --sidebar-accent-foreground: #1d1a25;
+  --sidebar-border: #ccc3da;
+  --sidebar-ring: #7212ff;
+}
+
+/* ===== Utility Classes ===== */
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(228, 231, 236, 0.5);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
