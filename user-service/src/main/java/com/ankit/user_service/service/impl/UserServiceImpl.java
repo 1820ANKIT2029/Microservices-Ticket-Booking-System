@@ -17,16 +17,16 @@ public class UserServiceImpl implements IUserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserResponseDto getUser(Long userId) {
-        UserProfile user = this.userRepository.findById(userId)
+    public UserResponseDto getUser(String userId) {
+        UserProfile user = this.userRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
         return this.userMapper.toDto(user);
     }
 
     @Override
-    public UserResponseDto createUser(UserRequestDto userRequestDto) {
+    public void createUser(UserRequestDto userRequestDto) {
         UserProfile user = this.userMapper.toEntity(userRequestDto);
         UserProfile savedUser = this.userRepository.save(user);
-        return this.userMapper.toDto(savedUser);
+        this.userMapper.toDto(savedUser);
     }
 }

@@ -1,17 +1,13 @@
 package com.ankit.user_service.service.impl;
 
-import com.ankit.user_service.dto.AuthRequest;
-import com.ankit.user_service.dto.LoginResponse;
-import com.ankit.user_service.dto.ProfileCreationRequest;
-import com.ankit.user_service.dto.SimpleSignupRequest;
+import com.ankit.user_service.dto.*;
 import com.ankit.user_service.entity.UserCredential;
-import com.ankit.user_service.entity.UserProfile;
 import com.ankit.user_service.entity.UserRole;
 import com.ankit.user_service.exception.InvalidCredentialException;
 import com.ankit.user_service.repository.UserCredentialRepository;
-import com.ankit.user_service.repository.UserProfileRepository;
 import com.ankit.user_service.security.JwtService;
 import com.ankit.user_service.service.IAuthService;
+import com.ankit.user_service.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,14 +20,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
     private final UserCredentialRepository credentialRepository;
-    private final UserProfileRepository profileRepository;
+    private final IUserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    // 1. SIGNUP: Strictly creates credentials. No profile yet.
+    // SIGNUP
     @Transactional
     public String registerUser(SimpleSignupRequest request) {
-        if (credentialRepository.findByUsername(request.getUsername()).isPresent()) {
+        if (credentialRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Username is already taken.");
         }
 
@@ -39,7 +35,7 @@ public class AuthServiceImpl implements IAuthService {
 
         UserCredential credential = UserCredential.builder()
                 .userId(sharedUserId)
-                .username(request.getUsername())
+                .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(UserRole.CONSUMER)
                 .isActive(true)
@@ -47,13 +43,25 @@ public class AuthServiceImpl implements IAuthService {
                 .build();
 
         credentialRepository.save(credential);
+
+        UserRequestDto userRequestDto = UserRequestDto.builder()
+                .userId(sharedUserId)
+                .email(request.getEmail())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .phoneNumber(request.getPhoneNumber())
+                .build();
+
+        // Create user profile
+        this.userService.createUser(userRequestDto);
+
         return "User registration successful! Please log in to complete your profile.";
     }
 
-    // 2. LOGIN: Detects if this is the first login
+    // LOGIN
     @Transactional
     public LoginResponse login(AuthRequest request) {
-        UserCredential credential = credentialRepository.findByUsername(request.getUsername())
+        UserCredential credential = credentialRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new InvalidCredentialException("Invalid username or password"));
 
         if (!passwordEncoder.matches(request.getPassword(), credential.getPassword())) {
@@ -73,23 +81,9 @@ public class AuthServiceImpl implements IAuthService {
         return new LoginResponse(token, isFirstLogin);
     }
 
-    // 3. PROFILE CREATION: Called immediately after the first login redirection
+    // 3. PROFILE CREATION
     @Transactional
     public String createProfile(String userId, ProfileCreationRequest request) {
-        // Double-check if the profile already exists to prevent duplication override
-        if (profileRepository.findByUserId(userId).isPresent()) {
-            throw new RuntimeException("Profile already exists for this user.");
-        }
-
-        UserProfile profile = new UserProfile();
-        profile.setUserId(userId);
-        profile.setFirstName(request.getFirstName());
-        profile.setLastName(request.getLastName());
-        profile.setEmail(request.getEmail());
-        profile.setPhoneNumber(request.getPhoneNumber());
-        profile.setAvatarUrl(request.getAvatarUrl());
-
-        profileRepository.save(profile);
         return "Profile created successfully!";
     }
 }
