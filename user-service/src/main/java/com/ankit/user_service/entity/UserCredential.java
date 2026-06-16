@@ -22,8 +22,8 @@ public class UserCredential {
     @Column(name = "user_id", unique = true, nullable = false, length = 100)
     private String userId;
 
-    @Column(unique = true, nullable = false, length = 100)
-    private String username;
+    @Column(unique = true, nullable = false, length = 255)
+    private String email;
 
     @Column(nullable = false, length = 255)
     private String password;

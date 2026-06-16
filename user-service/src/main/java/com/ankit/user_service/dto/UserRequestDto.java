@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDto {
-
+    private String userId;
     @NotBlank(message = "First name cannot be blank")
     private String firstName;
 

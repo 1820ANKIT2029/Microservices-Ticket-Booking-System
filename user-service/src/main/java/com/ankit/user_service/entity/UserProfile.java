@@ -27,7 +27,7 @@ public class UserProfile {
     @Column(unique = true, nullable = false, length = 255)
     private String email;
 
-    @Column(name = "phone_number", length = 20)
+    @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
 
     @Column(name = "avatar_url", length = 2048)
