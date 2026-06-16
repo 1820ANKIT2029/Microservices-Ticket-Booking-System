@@ -14,20 +14,23 @@ public class AuthController {
     private final IAuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SimpleSignupRequest request) {
-        return ResponseEntity.ok(authService.registerUser(request));
+    public ResponseEntity<ApiResponse<String>> signup(@RequestBody SimpleSignupRequest request) {
+        String s = authService.registerUser(request);
+        return ResponseEntity.ok(new ApiResponse<>(s, "user created"));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody AuthRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody AuthRequest request) {
+        LoginResponse res = authService.login(request);
+        return ResponseEntity.ok(new ApiResponse<>(res, "user logged in"));
     }
 
     @PostMapping("/create-profile")
-    public ResponseEntity<String> createProfile(
-            @RequestHeader("X-User-Id") String userId, // Injected by your API Gateway filter
+    public ResponseEntity<ApiResponse<String>> createProfile(
+            @RequestHeader("X-User-Id") String userId, // Injected by API Gateway filter
             @RequestBody ProfileCreationRequest request) {
+        String s = authService.createProfile(userId, request);
 
-        return ResponseEntity.ok(authService.createProfile(userId, request));
+        return ResponseEntity.ok(new ApiResponse<>(s, "profile created"));
     }
 }

@@ -1,5 +1,6 @@
 package com.ankit.user_service.controller;
 
+import com.ankit.user_service.dto.ApiResponse;
 import com.ankit.user_service.dto.UserRequestDto;
 import com.ankit.user_service.dto.UserResponseDto;
 import com.ankit.user_service.service.IUserService;
@@ -13,15 +14,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final IUserService userService;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long userId){
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUser(
+            @RequestHeader("X-User-Id") String userId
+    ){
         UserResponseDto usr = this.userService.getUser(userId);
-        return ResponseEntity.ok(usr);
+        return ResponseEntity.ok(new ApiResponse<>(usr, "user details"));
     }
 
-    @PostMapping("")
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto user){
-        UserResponseDto usr = this.userService.createUser(user);
-        return ResponseEntity.ok(usr);
+    @GetMapping("/{userId}")
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(@PathVariable String userId){
+        UserResponseDto usr = this.userService.getUser(userId);
+        return ResponseEntity.ok(new ApiResponse<>(usr, "user details"));
     }
 }
