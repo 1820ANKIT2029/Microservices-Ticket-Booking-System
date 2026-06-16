@@ -37,7 +37,7 @@ public class AuthServiceImpl implements IAuthService {
                 .userId(sharedUserId)
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(UserRole.CONSUMER)
+                .role(request.getRole())
                 .isActive(true)
                 .lastLoginAt(null)
                 .build();

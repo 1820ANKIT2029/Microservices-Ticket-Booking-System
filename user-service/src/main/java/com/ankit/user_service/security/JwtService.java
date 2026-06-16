@@ -24,7 +24,7 @@ public class JwtService {
 
     public String generateToken(String userId, String roleName, boolean isFirstLogin) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", List.of("ROLE_" + roleName));
+        claims.put("roles", List.of(roleName));
         claims.put("isFirstLogin", isFirstLogin); // Injecting the flag
 
         return Jwts.builder()
