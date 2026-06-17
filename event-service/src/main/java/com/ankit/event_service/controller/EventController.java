@@ -1,5 +1,6 @@
 package com.ankit.event_service.controller;
 
+import com.ankit.event_service.dto.ApiResponse;
 import com.ankit.event_service.dto.EventDTO;
 import com.ankit.event_service.service.IEventService;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +15,16 @@ public class EventController {
     private final IEventService eventService;
 
     @PostMapping("")
-    public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventdto){
+    public ResponseEntity<ApiResponse<EventDTO>> createEvent(@RequestBody EventDTO eventdto){
         EventDTO eventDTO = this.eventService.createEvent(eventdto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(eventDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse<>(eventDTO, "event created"));
     }
 
     @GetMapping("/{eventId}")
-    public ResponseEntity<EventDTO> getEvent(@PathVariable Long eventId) {
+    public ResponseEntity<ApiResponse<EventDTO>> getEvent(@PathVariable Long eventId) {
         EventDTO eventDTO = this.eventService.getEvent(eventId);
-        return ResponseEntity.ok(eventDTO);
+        return ResponseEntity.ok(new ApiResponse<>(eventDTO, "event details"));
     }
 
 }

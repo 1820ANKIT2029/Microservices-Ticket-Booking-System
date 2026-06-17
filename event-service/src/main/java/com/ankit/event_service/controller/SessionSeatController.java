@@ -1,5 +1,6 @@
 package com.ankit.event_service.controller;
 
+import com.ankit.event_service.dto.ApiResponse;
 import com.ankit.event_service.dto.SessionSeatDTO;
 import com.ankit.event_service.service.ISessionSeatService;
 import lombok.AllArgsConstructor;
@@ -15,20 +16,20 @@ public class SessionSeatController {
     private final ISessionSeatService sessionSeatsService;
 
     @PostMapping("/batch/lock")
-    public ResponseEntity<List<SessionSeatDTO>> LockSeats(
+    public ResponseEntity<ApiResponse<List<SessionSeatDTO>>> LockSeats(
             @RequestBody List<SessionSeatDTO> sessionSeats
     ) {
         List<SessionSeatDTO> res = this.sessionSeatsService
                 .lockSessionSeats(sessionSeats);
-        return ResponseEntity.ok(res);
+        return ResponseEntity.ok(new ApiResponse<>(res, "seats locked"));
     }
 
     @GetMapping("/{sessionSeatsId}")
-    public ResponseEntity<SessionSeatDTO> GetSessionSeat(
+    public ResponseEntity<ApiResponse<SessionSeatDTO>> GetSessionSeat(
             @PathVariable Long sessionSeatsId
     ) {
         SessionSeatDTO res = this.sessionSeatsService
                 .getSessionSeat(sessionSeatsId);
-        return ResponseEntity.ok(res);
+        return ResponseEntity.ok(new ApiResponse<>(res, "seat details"));
     }
 }

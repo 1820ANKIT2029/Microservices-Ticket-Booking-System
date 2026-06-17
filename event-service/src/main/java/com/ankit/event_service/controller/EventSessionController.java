@@ -1,5 +1,6 @@
 package com.ankit.event_service.controller;
 
+import com.ankit.event_service.dto.ApiResponse;
 import com.ankit.event_service.dto.EventSessionDTO;
 import com.ankit.event_service.service.IEventSessionService;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +15,15 @@ public class EventSessionController {
     final private IEventSessionService eventSessionService;
 
     @PostMapping("")
-    public ResponseEntity<EventSessionDTO> createEventSession(@RequestBody EventSessionDTO eventSessionDTO) {
-        System.out.println(eventSessionDTO);
+    public ResponseEntity<ApiResponse<EventSessionDTO>> createEventSession(@RequestBody EventSessionDTO eventSessionDTO) {
         EventSessionDTO eventSessionDTO1 = this.eventSessionService.createEventSession(eventSessionDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(eventSessionDTO1);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse<>(eventSessionDTO1, "event session created"));
     }
 
     @GetMapping("{eventSessionId}")
-    public ResponseEntity<EventSessionDTO> getEventSession(@PathVariable Long eventSessionId) {
+    public ResponseEntity<ApiResponse<EventSessionDTO>> getEventSession(@PathVariable Long eventSessionId) {
         EventSessionDTO eventSessionDTO = this.eventSessionService.getEventSession(eventSessionId);
-        return ResponseEntity.ok(eventSessionDTO);
+        return ResponseEntity.ok(new ApiResponse<>(eventSessionDTO, "event session details"));
     }
 }

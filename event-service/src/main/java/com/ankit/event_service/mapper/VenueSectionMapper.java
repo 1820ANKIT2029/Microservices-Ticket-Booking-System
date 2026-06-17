@@ -25,11 +25,15 @@ public class VenueSectionMapper {
                 .description(entity.getDescription())
                 .sectionType(entity.getSectionType())
                 .totalSeats(entity.getTotalSeats())
-                .rowCount(entity.getRowCount())
-                .seatsPerRow(entity.getSeatsPerRow())
-                .svgElementId(entity.getSvgElementId())
+                .x(entity.getX())
+                .y(entity.getY())
+                .width(entity.getWidth())
+                .height(entity.getHeight())
+                .rotation(entity.getRotation())
                 .seats(entity.getSeats() != null ?
-                        entity.getSeats().stream().map(seatMapper::toDto).collect(Collectors.toList()) : Collections.emptyList())
+                        entity.getSeats().stream()
+                                .map(seatMapper::toDto)
+                                .collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }
 
@@ -42,15 +46,21 @@ public class VenueSectionMapper {
                 .description(dto.getDescription())
                 .sectionType(dto.getSectionType())
                 .totalSeats(dto.getTotalSeats())
-                .rowCount(dto.getRowCount())
-                .seatsPerRow(dto.getSeatsPerRow())
-                .svgElementId(dto.getSvgElementId())
+                .x(dto.getX())
+                .y(dto.getY())
+                .width(dto.getWidth())
+                .height(dto.getHeight())
+                .rotation(dto.getRotation())
                 .seats(dto.getSeats() != null ?
-                        dto.getSeats().stream().map(seatMapper::toEntity).collect(Collectors.toList()) : Collections.emptyList())
+                        dto.getSeats().stream()
+                                .map(seatMapper::toEntity)
+                                .collect(Collectors.toList()) : Collections.emptyList())
                 .build();
 
         if(dto.getVenueId() != null){
-            section.getVenue().setId(dto.getVenueId());
+            Venue venue = new Venue();
+            venue.setId(dto.getVenueId());
+            section.setVenue(venue);
         }
 
         return section;
