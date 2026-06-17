@@ -7,29 +7,30 @@ import { useState, useMemo } from "react";
 import { TRENDING_MOVIES } from "../constants/movies-data";
 import { SectionHeader } from "@/shared/components/section-header";
 import { Button } from "@/shared/components/ui/button";
-import { useEvents } from "@/features/events/hooks/queries/useEvents";
-import type { Movie } from "@/features/events/types";
+import { useEvents } from "@/features/events";
+import type { Movie } from "@/features/movies-explorer/types";
 
 export function TrendingMovies() {
   const [page, setPage] = useState(1);
   const limit = 4;
-  const { data: apiMovies, isLoading } = useEvents("movies", page, limit);
+  const { data: events = [], isLoading } = useEvents({ category: "movies" });
 
   const displayedMovies = useMemo(() => {
-    if (apiMovies && apiMovies.length > 0) {
-      return apiMovies as Movie[];
+    
+    if (events && events.length > 0) {
+      return (events as unknown as Movie[]).map((movie) => ({ ...movie }));
     }
     // Fallback local pagination
     const start = (page - 1) * limit;
     return TRENDING_MOVIES.slice(start, start + limit) as unknown as Movie[];
-  }, [apiMovies, page, limit]);
+  }, [events, page, limit]);
 
   const hasNextPage = useMemo(() => {
-    if (apiMovies && apiMovies.length > 0) {
-      return apiMovies.length === limit;
+    if (events && events.length > 0) {
+      return events.length === limit;
     }
     return (page * limit) < TRENDING_MOVIES.length;
-  }, [apiMovies, page, limit]);
+  }, [events, page, limit]);
 
   return (
     <section className="max-w-[1280px] mx-auto px-6 md:px-16 py-10" aria-label="Trending Movies">

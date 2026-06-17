@@ -6,17 +6,17 @@ import { MapPin, Loader2 } from "lucide-react";
 import { useState, useMemo } from "react";
 import { UPCOMING_GIGS } from "../constants/music-data";
 import { Button } from "@/shared/components/ui/button";
-import { useEvents } from "@/features/events/hooks/queries/useEvents";
-import type { Concert } from "@/features/events/types";
+import { useEvents } from "@/features/events";
+import type { Concert } from "@/features/music-explorer/types";
 
 export function UpcomingGigs() {
   const [page, setPage] = useState(1);
   const limit = 4;
-  const { data: apiConcerts, isLoading } = useEvents("concerts", page, limit);
+  const { data: events = [], isLoading } = useEvents({ category: "concerts" });
 
   const displayedGigs = useMemo(() => {
-    if (apiConcerts && apiConcerts.length > 0) {
-      return apiConcerts.map((concert: any) => {
+    if (events && events.length > 0) {
+      return events.map((concert: any) => {
         return {
           id: String(concert.id),
           title: concert.title,
@@ -33,14 +33,14 @@ export function UpcomingGigs() {
     // Fallback: local pagination
     const start = (page - 1) * limit;
     return UPCOMING_GIGS.slice(start, start + limit);
-  }, [apiConcerts, page, limit]);
+  }, [events, page, limit]);
 
   const hasNextPage = useMemo(() => {
-    if (apiConcerts && apiConcerts.length > 0) {
-      return apiConcerts.length === limit;
+    if (events && events.length > 0) {
+      return events.length === limit;
     }
     return (page * limit) < UPCOMING_GIGS.length;
-  }, [apiConcerts, page, limit]);
+  }, [events, page, limit]);
 
   return (
     <section className="py-16 max-w-screen-2xl mx-auto px-6 md:px-16" aria-label="Upcoming Concerts">

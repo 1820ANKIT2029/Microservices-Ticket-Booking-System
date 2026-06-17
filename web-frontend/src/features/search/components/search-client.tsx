@@ -6,7 +6,7 @@ import { SearchSidebar } from "./search-sidebar";
 import { SearchResultsList } from "./search-results-list";
 import { SearchResultEvent, SearchFilters } from "../types/search";
 import { ChevronRight, ChevronLeft, Search, Loader2 } from "lucide-react";
-import { SearchService } from "@/features/search/services/search.service";
+import { SearchService } from "@/features/search";
 
 interface SearchClientProps {
   initialEvents: SearchResultEvent[];
@@ -33,7 +33,7 @@ export function SearchClient({ initialEvents, initialQuery = "" }: SearchClientP
   // Backend search API query
   const { data: apiEvents, isLoading } = useQuery({
     queryKey: ["search", searchQuery, filters],
-    queryFn: () => SearchService.searchEvents(searchQuery, filters).then((res) => res.data.data),
+    queryFn: () => SearchService.searchEvents(searchQuery, filters).then((res: any) => res.data.data),
   });
 
   // Local fallback filter logic

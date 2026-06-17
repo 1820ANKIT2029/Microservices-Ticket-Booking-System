@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Lock, User, Eye, EyeOff, Mail, Phone, Shield } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { AuthService } from "@/features/auth/services/auth.service";
+import { AuthService } from "@/features/auth";
 import { toast } from "sonner";
 
 export function SignUpForm() {

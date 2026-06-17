@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { MapPin, Camera, Loader2, Check, User, ArrowRight, Mail, Phone } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Footer } from "@/features/homepage/components/footer";
-import { AuthService } from "@/features/auth/services/auth.service";
+import { AuthService } from "@/features/auth";
 import { getUserIdFromToken } from "@/shared/utils";
 
 const AVAILABLE_INTERESTS = [

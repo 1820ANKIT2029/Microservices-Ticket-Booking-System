@@ -1,4 +1,20 @@
-// Auth feature public API
-export { AuthService } from "./services/auth.service";
-export type { SignupPayload, LoginPayload, LoginResponse, ProfileCreationRequest } from "./types/auth";
-// Components are internal to routes; export only if needed cross-feature
+/**
+ * Auth feature — public API.
+ */
+export { AuthService } from "./api/service";
+export type {
+  LoginPayload,
+  SignupPayload,
+  LoginResponse,
+  ProfileCreationRequest,
+} from "./types";
+export {
+  loginSchema,
+  signupSchema,
+  profileCreationSchema,
+} from "./schemas/auth.schema";
+export type {
+  LoginFormData,
+  SignupFormData,
+  ProfileCreationFormData,
+} from "./schemas/auth.schema";

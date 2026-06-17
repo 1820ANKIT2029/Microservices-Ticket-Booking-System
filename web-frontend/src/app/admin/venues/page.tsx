@@ -2,17 +2,16 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useVenues } from "@/features/admin/hooks/queries/useVenues";
+import { useAdminVenues } from "@/features/admin";
 import { VenueTable } from "@/features/admin/components/venues/VenueTable";
 import { PageHeader } from "@/features/admin/components/common/PageHeader";
 import { LoadingSpinner } from "@/features/admin/components/common/LoadingSpinner";
 import { RoleGuard } from "@/shared/components/role-guard";
-import { queryKeys } from "@/shared/hooks/keys";
 import { useRole } from "@/shared/hooks/useRole";
 
 export default function VenuesPage() {
   const { isAdmin } = useRole();
-  const { data, isLoading, error } = useVenues();
+  const { data: venues = [], isLoading, error } = useAdminVenues();
 
   return (
     <RoleGuard requiredRole="ADMIN" redirectTo="/">
@@ -32,7 +31,7 @@ export default function VenuesPage() {
           </div>
         )}
 
-        {data && <VenueTable venues={data} />}
+        {venues && <VenueTable venues={venues} />}
       </div>
     </RoleGuard>
   );

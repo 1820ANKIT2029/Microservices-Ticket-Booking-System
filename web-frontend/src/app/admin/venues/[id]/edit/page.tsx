@@ -2,16 +2,15 @@
 
 import React, { use } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useVenue } from "@/features/admin/hooks/queries/useVenue";
+import { useAdminVenue } from "@/features/admin";
 import { VenueForm } from "@/features/admin/components/venues/VenueForm";
 import { PageHeader } from "@/features/admin/components/common/PageHeader";
 import { LoadingSpinner } from "@/features/admin/components/common/LoadingSpinner";
 import { RoleGuard } from "@/shared/components/role-guard";
-import { queryKeys } from "@/shared/hooks/keys";
 
 export default function EditVenuePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { data: venue, isLoading, error } = useVenue(id);
+  const { data: venue, isLoading, error } = useAdminVenue(Number(id));
 
   return (
     <RoleGuard requiredRole="ADMIN" redirectTo="/">

@@ -1,5 +1,7 @@
-// Homepage feature public API
-export { Navbar } from "./components/navbar";
-export { Footer } from "./components/footer";
-export { HeroSection } from "./components/hero-section";
-export { MobileBottomNav } from "./components/mobile-bottom-nav";
+/**
+ * Homepage feature — public API.
+ * Contains purely presentation components for the landing page.
+ */
+// Export components here if any are shared, otherwise this file
+// just establishes the feature boundary.
+export {};

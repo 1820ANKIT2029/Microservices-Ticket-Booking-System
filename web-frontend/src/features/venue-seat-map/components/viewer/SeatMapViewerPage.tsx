@@ -4,7 +4,7 @@ import React, { useRef, useState, useCallback, useEffect } from "react";
 import { Stage, Layer, Rect } from "react-konva";
 import Konva from "konva";
 import { ViewerSeatLayer }     from "./ViewerSeatLayer";
-import { VenueSeatMapService } from "../../services/venue-seat-map.service";
+import { VenueSeatMapService } from "@/features/venue-seat-map";
 import type { LocalVenue, LocalSection, LocalSeat } from "../../types";
 
 interface SeatMapViewerPageProps {
@@ -50,7 +50,7 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
     (async () => {
       try {
         const res = await VenueSeatMapService.getVenue(venueId);
-        const dto = res.data.data;
+        const dto = res;
 
         const loadedVenue: LocalVenue = {
           id:        dto.id,
@@ -62,7 +62,7 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
 
         try {
           const secRes = await VenueSeatMapService.getSections(venueId);
-          loadedVenue.sections = (secRes.data.data ?? []).map((s): LocalSection => ({
+          loadedVenue.sections = (secRes ?? []).map((s): LocalSection => ({
             id:          s.id,
             venueId:     s.venueId,
             name:        s.name,
@@ -147,8 +147,8 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
 
   // ── Find seat by id ───────────────────────────────────────────────────────
 
-  const allSeats = venue?.sections.flatMap((s) => s.seats) ?? [];
-  const getSelectedSeats = () => allSeats.filter((s) => selectedSeatIds.includes(s.id));
+  const allSeats = venue?.sections.flatMap((s: any) => s.seats) ?? [];
+  const getSelectedSeats = () => allSeats.filter((s: any) => selectedSeatIds.includes(s.id));
 
   // ── Loading / error ───────────────────────────────────────────────────────
 
@@ -183,7 +183,7 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
         <div>
           <h1 className="text-lg font-bold text-foreground">{venue.name}</h1>
           <p className="text-xs text-muted-foreground">
-            Select your seats · {allSeats.filter((s) => s.isActive).length} seats available
+            Select your seats · {allSeats.filter((s: any) => s.isActive).length} seats available
           </p>
         </div>
 
@@ -194,7 +194,7 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
                 {selectedSeatIds.length} seat{selectedSeatIds.length > 1 ? "s" : ""} selected
               </p>
               <p className="text-[11px] text-muted-foreground">
-                {selectedSeatsDetails.map((s) => `${s.rowLabel}${s.seatNumber}`).join(", ")}
+                {selectedSeatsDetails.map((s: any) => `${s.rowLabel}${s.seatNumber}`).join(", ")}
               </p>
             </div>
             <button
@@ -302,7 +302,7 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
               </p>
             </div>
             <div className="flex-1 overflow-y-auto p-3 space-y-2 no-scrollbar">
-              {selectedSeatsDetails.map((seat) => (
+              {selectedSeatsDetails.map((seat: any) => (
                 <div
                   key={seat.id}
                   className="flex items-center justify-between px-3 py-2 rounded-xl bg-muted text-xs"

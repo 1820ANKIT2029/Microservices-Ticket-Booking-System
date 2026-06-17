@@ -5,7 +5,7 @@ import { SportsCategories } from "./sports-categories";
 import { TrendingEvents } from "./trending-events";
 import { MatchesNearYou } from "./matches-near-you";
 import { TRENDING_SPORTS_EVENTS } from "../constants/sports-data";
-import { useEvents } from "@/features/events/hooks/queries/useEvents";
+import { useEvents } from "@/features/events";
 import { SportEvent } from "../types/sports";
 
 export function SportsContentSection() {
@@ -14,12 +14,12 @@ export function SportsContentSection() {
   const limit = 3;
 
   // Load sports events from backend
-  const { data: apiEvents, isLoading } = useEvents("sports", page, limit);
+  const { data: events = [], isLoading } = useEvents({ category: "sports" });
 
   // Map API data (SportsMatch) to SportEvent structure or use local fallback
   const displayedEvents = useMemo(() => {
-    if (apiEvents && apiEvents.length > 0) {
-      return apiEvents.map((match: any) => {
+    if (events && events.length > 0) {
+      return events.map((match: any) => {
         return {
           id: String(match.id),
           title: match.title || `${match.homeTeam?.name || "Team A"} vs ${match.awayTeam?.name || "Team B"}`,
@@ -49,11 +49,11 @@ export function SportsContentSection() {
 
     const start = (page - 1) * limit;
     return filteredMock.slice(start, start + limit);
-  }, [apiEvents, activeCategory, page, limit]);
+  }, [events, activeCategory, page, limit]);
 
   const hasNextPage = useMemo(() => {
-    if (apiEvents && apiEvents.length > 0) {
-      return apiEvents.length === limit;
+    if (events && events.length > 0) {
+      return events.length === limit;
     }
     
     // Check fallback list length
@@ -70,7 +70,7 @@ export function SportsContentSection() {
     });
 
     return (page * limit) < filteredMock.length;
-  }, [apiEvents, activeCategory, page, limit]);
+  }, [events, activeCategory, page, limit]);
 
   const handleCategorySelect = (category: string) => {
     setActiveCategory(category);

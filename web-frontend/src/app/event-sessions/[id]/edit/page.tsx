@@ -1,7 +1,7 @@
 "use client";
 
 import React, { use } from "react";
-import { useSession } from "@/features/event-sessions/hooks/queries/useSession";
+import { useSession } from "@/features/event-sessions";
 import { EventSessionForm } from "@/features/event-sessions/components/EventSessionForm";
 import { PageHeader } from "@/features/admin/components/common/PageHeader";
 import { LoadingSpinner } from "@/features/admin/components/common/LoadingSpinner";

@@ -1,4 +1,4 @@
-import type { SportsMatch, Team } from "@/features/events/types";
+import type { SportsMatch, Team } from "@/features/sports-explorer/types";
 import Image from "next/image";
 import Link from "next/link";
 

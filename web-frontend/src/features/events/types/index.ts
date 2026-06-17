@@ -1,228 +1,242 @@
-// ── Homepage / catalog event types ──────────────────────────────────────────
+import type { ISODateString } from "@/shared/types";
+import type { EventStatus, EventType } from "@/shared/constants";
 
-export interface Movie {
-  id: string;
-  title: string;
-  genre: string;
-  duration: string;
-  imageUrl: string;
-  imageAlt: string;
-  gradient: string;
-  badge?: string;
+// ── API DTOs (backend shapes) ─────────────────────────────────────────────────
+
+export interface EventResponseDto {
+  id:            number;
+  title:         string;
+  slug:          string;
+  description?:  string;
+  status?:       string;
+  eventType?:    string;
+  minAge?:       number;
+  venueId:       number;
+  bannerUrl?:    string;
+  posterUrl?:    string;
+  isMultiSession?: boolean;
+  isFeatured?:   boolean;
+  createdBy:     number;
+  createdAt?:    ISODateString;
+  updatedAt?:    ISODateString;
+  performers?:   PerformerResponseDto[];
+  sessions?:     EventSessionResponseDto[];
+  ticketTypes?:  TicketTypeResponseDto[];
 }
 
-export interface Team {
-  name: string;
-  initials: string;
-  logoUrl: string;
-  gradient: string;
-  logoAlt: string;
+export interface EventRequestDto {
+  title:          string;
+  slug:           string;
+  description?:   string;
+  eventType?:     string;
+  minAge?:        number;
+  venueId:        number;
+  bannerUrl?:     string;
+  posterUrl?:     string;
+  isMultiSession?: boolean;
+  isFeatured?:    boolean;
 }
 
-export interface SportsMatch {
-  id: string;
-  league: string;
-  status: "live" | "upcoming";
-  time?: string;
-  venue?: string;
-  homeTeam: Team;
-  awayTeam: Team;
-  score?: string;
+export interface VenueResponseDto {
+  id:            number;
+  name:          string;
+  description?:  string;
+  addressLine1?: string;
+  city?:         string;
+  state?:        string;
+  country?:      string;
+  postalCode?:   string;
+  longitude?:    number;
+  latitude?:     number;
+  timezone?:     string;
+  totalCapacity?: number;
+  websiteUrl?:   string;
+  svgTemplateUrl?: string;
+  amenities?:    string;
+  isActive?:     boolean;
+  createdAt?:    ISODateString;
+  sections?:     VenueSectionResponseDto[];
 }
 
-export interface Concert {
-  id: string;
-  title: string;
-  subtitle: string;
-  description?: string;
-  imageUrl: string;
-  imageAlt: string;
-  gradient: string;
-  badge?: string;
-  variant: "featured" | "compact";
+export interface VenueRequestDto {
+  name:          string;
+  description?:  string;
+  addressLine1?: string;
+  city?:         string;
+  state?:        string;
+  country?:      string;
+  postalCode?:   string;
+  longitude?:    number;
+  latitude?:     number;
+  timezone?:     string;
+  totalCapacity?: number;
+  websiteUrl?:   string;
+  svgTemplateUrl?: string;
+  amenities?:    string;
 }
 
-export interface Step {
-  icon: string;
-  title: string;
-  description: string;
-  bgClass: string;
-  iconColorClass: string;
+export interface VenueSectionResponseDto {
+  id?:           number;
+  venueId?:      number;
+  name:          string;
+  description?:  string;
+  sectionType?:  string;
+  totalSeats?:   number;
+  rowCount?:     number;
+  seatsPerRow?:  number;
+  svgElementId?: string;
+  seats?:        SeatResponseDto[];
 }
 
-// ── Event detail / checkout types ───────────────────────────────────────────
-
-export interface EventArtist {
-  name: string;
-  role: string;
-  imageUrl: string;
-  imageAlt: string;
-}
-
-export interface EventFAQ {
-  question: string;
-  answer: string;
-}
-
-export interface EventOffer {
-  title: string;
-  description: string;
-  icon: string;
-}
-
-export interface EventVenueInfo {
-  name: string;
-  address: string;
-  mapImageUrl: string;
-  mapImageAlt: string;
-  directions: string;
-}
-
-export interface Event {
-  id: string;
-  title: string;
-  category: string;
-  date: string;
-  dateText: string;
-  time: string;
-  venue: EventVenueInfo;
-  imageUrl: string;
-  imageAlt: string;
-  heroGradient: string;
-  description: string;
-  longDescription: string;
-  ticketPrice: number;
-  ticketType: string;
-  availableSeats: number;
-  artists?: EventArtist[];
-  faqs?: EventFAQ[];
-  offers?: EventOffer[];
-  guidelines?: string[];
-}
-
-// ── Event Service Microservice DTOs (port 8081) ─────────────────────────────
-
-export interface SeatDTO {
-  id?: number;
+/** Renamed from SeatDTO to avoid collision with venue-seat-map canvas SeatDTO */
+export interface SeatResponseDto {
+  id?:           number;
   venueSectionId?: number;
-  venueId?: number;
-  seatNumber: string;
-  rowLabel?: string;
-  seatType?: string;
+  venueId?:      number;
+  seatNumber:    string;
+  rowLabel?:     string;
+  seatType?:     string;
   svgElementId?: string;
   isAccessible?: boolean;
-  isActive?: boolean;
+  isActive?:     boolean;
 }
 
-export interface VenueDTO {
-  id?: number;
-  name: string;
-  description?: string;
-  addressLine1?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  postalCode?: string;
-  longitude?: number;
-  latitude?: number;
-  timezone?: string;
-  totalCapacity?: number;
-  websiteUrl?: string;
-  svgTemplateUrl?: string;
-  amenities?: string;
-  isActive?: boolean;
-  createdAt?: string;
-  sections?: VenueSectionDTO[];
-}
-
-export interface VenueSectionDTO {
-  id?: number;
-  venueId?: number;
-  name: string;
-  description?: string;
-  sectionType?: string;
-  totalSeats?: number;
-  rowCount?: number;
-  seatsPerRow?: number;
-  svgElementId?: string;
-  seats?: SeatDTO[];
-}
-
-export interface SessionSeatDTO {
-  id?: number;
-  eventSessionId?: number;
-  seatId?: number;
-  ticketTypeDTO?: TicketTypeDTO;
-  overridePrice?: number;
-  status?: "AVAILABLE" | "RESERVED" | "SOLD";
-}
-
-export interface TicketTypeDTO {
-  id?: number;
-  eventId?: number;
-  eventSessionId?: number;
-  name: string;
-  description?: string;
-  basePrice: number;
-  totalQuantity: number;
+export interface TicketTypeResponseDto {
+  id?:               number;
+  eventId?:          number;
+  eventSessionId?:   number;
+  name:              string;
+  description?:      string;
+  basePrice:         number;
+  totalQuantity:     number;
   availableQuantity: number;
-  maxPerBooking: number;
-  isActive?: boolean;
-  saleStartAt?: string;
-  saleEndAt?: string;
+  maxPerBooking:     number;
+  isActive?:         boolean;
+  saleStartAt?:      ISODateString;
+  saleEndAt?:        ISODateString;
 }
 
-export interface PerformerDTO {
-  id?: number;
-  name: string;
-  bio?: string;
-  genre?: string;
+export interface TicketTypeRequestDto {
+  name:              string;
+  description?:      string;
+  basePrice:         number;
+  totalQuantity:     number;
+  maxPerBooking:     number;
+  saleStartAt?:      ISODateString;
+  saleEndAt?:        ISODateString;
+}
+
+export interface PerformerResponseDto {
+  id?:          number;
+  name:         string;
+  bio?:         string;
+  genre?:       string;
   nationality?: string;
-  websiteUrl?: string;
-  imageUrl?: string;
+  websiteUrl?:  string;
+  imageUrl?:    string;
   socialLink1?: string;
   socialLink2?: string;
-  isActive?: boolean;
-  createdAt?: string;
-  modifiedAt?: string;
+  isActive?:    boolean;
+  createdAt?:   ISODateString;
+  modifiedAt?:  ISODateString;
 }
 
-export interface EventDTO {
-  id?: number;
-  title: string;
-  slug: string;
-  description?: string;
-  status?: string;
-  eventType?: string;
-  minAge?: number;
-  venueId: number;
-  bannerUrl?: string;
-  posterUrl?: string;
-  isMultiSession?: boolean;
-  isFeatured?: boolean;
-  createdBy: number;
-  createdAt?: string;
-  updatedAt?: string;
-  performers?: PerformerDTO[];
-  sessions?: EventSessionDTO[];
-  ticketTypes?: TicketTypeDTO[];
-}
-
-export interface EventSessionDTO {
-  id?: number;
-  eventId?: number;
-  venueId?: number;
-  title: string;
-  description?: string;
-  status?: string;
-  streamUrl?: string;
-  language?: string;
-  totalCapacity?: number;
+export interface EventSessionResponseDto {
+  id?:               number;
+  eventId?:          number;
+  venueId?:          number;
+  title:             string;
+  description?:      string;
+  status?:           string;
+  streamUrl?:        string;
+  language?:         string;
+  totalCapacity?:    number;
   availableCapacity?: number;
-  sessionNumber: number;
-  isRecorded?: boolean;
-  startDataTime?: string;
-  endDataTime?: string;
-  createdAt?: string;
+  sessionNumber:     number;
+  isRecorded?:       boolean;
+  startDateTime?:    ISODateString;
+  endDateTime?:      ISODateString;
+  createdAt?:        ISODateString;
 }
 
+// ── Domain Models (what components consume) ───────────────────────────────────
+
+export interface Event {
+  id:            string;
+  title:         string;
+  slug:          string;
+  description:   string;
+  status:        EventStatus;
+  eventType:     EventType;
+  venueId:       string;
+  bannerUrl:     string;
+  posterUrl:     string;
+  isFeatured:    boolean;
+  isMultiSession: boolean;
+  createdAt:     ISODateString;
+  updatedAt:     ISODateString;
+  performers:    Performer[];
+  sessions:      EventSession[];
+  ticketTypes:   TicketType[];
+}
+
+export interface Performer {
+  id:          string;
+  name:        string;
+  bio:         string;
+  genre:       string;
+  nationality: string;
+  websiteUrl:  string;
+  imageUrl:    string;
+}
+
+export interface EventSession {
+  id:                string;
+  eventId:           string;
+  title:             string;
+  description:       string;
+  status:            string;
+  sessionNumber:     number;
+  totalCapacity:     number;
+  availableCapacity: number;
+  startDateTime:     ISODateString;
+  endDateTime:       ISODateString;
+}
+
+export interface TicketType {
+  id:                string;
+  name:              string;
+  description:       string;
+  basePrice:         number;
+  totalQuantity:     number;
+  availableQuantity: number;
+  maxPerBooking:     number;
+  isActive:          boolean;
+  saleStartAt:       ISODateString;
+  saleEndAt:         ISODateString;
+}
+
+export interface Venue {
+  id:            string;
+  name:          string;
+  description:   string;
+  address:       string;
+  city:          string;
+  state:         string;
+  country:       string;
+  postalCode:    string;
+  totalCapacity: number;
+  timezone:      string;
+  websiteUrl:    string;
+  isActive:      boolean;
+  addressLine1?: string;
+  latitude?:     number;
+  longitude?:    number;
+  amenities?:    string[];
+}
+
+/**
+ * @deprecated Use EventResponseDto instead.
+ * Kept for backward compatibility during migration from events/types/index.ts.
+ */
+export interface EventDTO extends EventResponseDto {}

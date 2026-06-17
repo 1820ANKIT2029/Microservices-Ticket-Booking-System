@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Check, MapPin, ZoomIn, ZoomOut, Info } from "lucide-react";
 import Image from "next/image";
 import type { CheckoutEvent } from "@/features/checkout/types/checkout";
-import { EventService } from "@/features/events/services/event.service";
+import { EventService } from "@/features/events";
 
 interface SeatsClientProps {
   event: CheckoutEvent;

@@ -3,17 +3,17 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Edit, Trash2, Clock } from "lucide-react";
-import { EventSessionDTO } from "@/features/events/types";
+import { EventSession } from "@/features/event-sessions/types";
 import { Button } from "@/shared/components/ui/button";
 import { DeleteDialog } from "@/features/admin/components/common/DeleteDialog";
 import { DataTable } from "@/features/admin/components/common/DataTable";
 import { EmptyState } from "@/features/admin/components/common/EmptyState";
 import { StatusBadge } from "@/features/admin/components/common/StatusBadge";
-import { useDeleteSession } from "@/features/event-sessions/hooks/mutations/useDeleteSession";
+import { useDeleteSession } from "@/features/event-sessions";
 import { toast } from "sonner";
 
 interface EventSessionTableProps {
-  sessions: EventSessionDTO[];
+  sessions: EventSession[];
 }
 
 export function EventSessionTable({ sessions }: EventSessionTableProps) {
@@ -54,23 +54,23 @@ export function EventSessionTable({ sessions }: EventSessionTableProps) {
   };
 
   const columns = [
-    { header: "Title", accessor: "title" as keyof EventSessionDTO },
+    { header: "Title", accessor: "title" as keyof EventSession },
     {
       header: "Start Date/Time",
-      accessor: (s: EventSessionDTO) => formatDate(s.startDataTime),
+      accessor: (s: EventSession) => formatDate(s.startDateTime),
     },
     {
       header: "Capacity",
-      accessor: (s: EventSessionDTO) => s.totalCapacity?.toLocaleString() || "N/A",
+      accessor: (s: EventSession) => s.totalCapacity?.toLocaleString() || "N/A",
     },
     {
       header: "Status",
-      accessor: (s: EventSessionDTO) => <StatusBadge status={(s.status as any) || "DRAFT"} />,
+      accessor: (s: EventSession) => <StatusBadge status={(s.status as any) || "DRAFT"} />,
     },
     {
       header: "Actions",
       className: "text-right",
-      accessor: (s: EventSessionDTO) => (
+      accessor: (s: EventSession) => (
         <div className="flex justify-end space-x-2">
           <Button variant="outline" size="sm" asChild>
             <Link href={`/event-sessions/${s.id}/edit`}>
@@ -82,7 +82,7 @@ export function EventSessionTable({ sessions }: EventSessionTableProps) {
             variant="outline"
             size="sm"
             className="text-error border-error/30 hover:bg-error/10"
-            onClick={() => setDeleteId(s.id!)}
+            onClick={() => setDeleteId(Number(s.id))}
           >
             <Trash2 className="size-4" />
           </Button>

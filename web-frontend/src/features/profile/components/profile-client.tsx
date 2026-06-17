@@ -15,8 +15,7 @@ import {
   MOCK_SAVED_CARDS,
 } from "../constants/profile-data";
 import { SecuritySettings, NotificationPreferences } from "@/features/users/types/profile";
-import { useUser } from "@/features/users/hooks/queries/useUser";
-import { useUpdateProfile } from "@/features/users/hooks/mutations/useUpdateProfile";
+import { useUser, useUpdateProfile } from "@/features/users";
 import { UserProfileData } from "@/features/users/types/profile";
 
 export function ProfileClient() {
@@ -71,7 +70,7 @@ export function ProfileClient() {
       firstName: "",
       lastName: "",
       email: "",
-      phoneNumber: "",
+      phoneNumber: "555-0100",
       avatarUrl: "",
     };
 

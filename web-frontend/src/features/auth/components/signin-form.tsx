@@ -2,7 +2,7 @@
 
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { AuthService } from "@/features/auth/services/auth.service";
+import { AuthService } from "@/features/auth";
 import { toast } from "sonner";
 
 import * as React from "react";

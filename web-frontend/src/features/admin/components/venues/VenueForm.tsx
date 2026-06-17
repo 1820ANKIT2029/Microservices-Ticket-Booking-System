@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { VenueDTO } from "@/features/events/types";
-import { useCreateVenue } from "@/features/admin/hooks/mutations/useCreateVenue";
-import { useUpdateVenue } from "@/features/admin/hooks/mutations/useUpdateVenue";
+import { Venue, VenueResponseDto } from "@/features/events/types";
+import { useCreateVenue } from "@/features/admin";
+import { useUpdateVenue } from "@/features/admin";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 
@@ -31,7 +31,7 @@ const venueSchema = z.object({
 type VenueFormValues = z.infer<typeof venueSchema>;
 
 interface VenueFormProps {
-  initialData?: VenueDTO;
+  initialData?: Venue | null;
 }
 
 export function VenueForm({ initialData }: VenueFormProps) {
@@ -54,7 +54,7 @@ export function VenueForm({ initialData }: VenueFormProps) {
       timezone: initialData?.timezone || "UTC",
       totalCapacity: initialData?.totalCapacity || 100,
       websiteUrl: initialData?.websiteUrl || "",
-      amenities: initialData?.amenities || "",
+      amenities: Array.isArray(initialData?.amenities) ? initialData?.amenities.join(', ') : (initialData?.amenities || ""),
       isActive: initialData?.isActive !== false,
     },
   });

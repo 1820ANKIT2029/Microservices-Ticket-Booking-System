@@ -1,4 +1,4 @@
-import type { Concert } from "@/features/events/types";
+import type { Concert } from "@/features/music-explorer/types";
 import Image from "next/image";
 import Link from "next/link";
 

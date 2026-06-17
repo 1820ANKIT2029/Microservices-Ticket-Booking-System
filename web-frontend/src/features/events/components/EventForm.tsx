@@ -5,10 +5,9 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { EventDTO } from "@/features/events/types";
-import { useCreateEvent } from "@/features/events/hooks/mutations/useCreateEvent";
-import { useUpdateEvent } from "@/features/events/hooks/mutations/useUpdateEvent";
-import { useVenues } from "@/features/admin/hooks/queries/useVenues";
+import { Event } from "@/features/events/types";
+import { useCreateEvent, useUpdateEvent } from "@/features/events";
+import { useAdminVenues } from "@/features/admin";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 
@@ -28,7 +27,7 @@ const eventSchema = z.object({
 type EventFormValues = z.infer<typeof eventSchema>;
 
 interface EventFormProps {
-  initialData?: EventDTO;
+  initialData?: Event | null;
 }
 
 export function EventForm({ initialData }: EventFormProps) {
@@ -37,8 +36,7 @@ export function EventForm({ initialData }: EventFormProps) {
   const updateMutation = useUpdateEvent();
   
   // Fetch venues for the dropdown
-  const { data: venuesRes } = useVenues();
-  const venues = venuesRes || [];
+  const { data: venues = [] } = useAdminVenues();
   
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventSchema),
@@ -48,7 +46,7 @@ export function EventForm({ initialData }: EventFormProps) {
       description: initialData?.description || "",
       eventType: initialData?.eventType || "CONCERT",
       status: initialData?.status || "DRAFT",
-      venueId: initialData?.venueId || 0,
+      venueId: initialData ? Number(initialData.venueId) : undefined,
       bannerUrl: initialData?.bannerUrl || "",
       posterUrl: initialData?.posterUrl || "",
       isMultiSession: initialData?.isMultiSession || false,

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { use } from "react";
-import { useAdminEvent } from "@/features/events/hooks/queries/useAdminEvent";
+import { useEvent } from "@/features/events";
 import { EventForm } from "@/features/events/components/EventForm";
 import { PageHeader } from "@/features/admin/components/common/PageHeader";
 import { LoadingSpinner } from "@/features/admin/components/common/LoadingSpinner";
@@ -9,7 +9,7 @@ import { RoleGuard } from "@/shared/components/role-guard";
 
 export default function EditEventPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
-  const { data: event, isLoading, error } = useAdminEvent(id);
+  const { data: event, isLoading, error } = useEvent(id);
 
   return (
     <RoleGuard requiredRole="ORGANIZER" redirectTo="/">

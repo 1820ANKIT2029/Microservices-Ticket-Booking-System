@@ -5,14 +5,12 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { EventSessionDTO } from "@/features/events/types";
-import { useCreateSession } from "@/features/event-sessions/hooks/mutations/useCreateSession";
-import { useUpdateSession } from "@/features/event-sessions/hooks/mutations/useUpdateSession";
-import { useAdminEvents } from "@/features/events/hooks/queries/useAdminEvents";
-import { useVenues } from "@/features/admin/hooks/queries/useVenues";
+import { EventSession } from "@/features/event-sessions/types";
+import { useCreateSession, useUpdateSession } from "@/features/event-sessions";
+import { useAdminEvents } from "@/features/events";
+import { useAdminVenues } from "@/features/admin";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
-import { queryKeys } from "@/shared/hooks/keys";
 
 const sessionSchema = z.object({
   eventId: z.number().min(1, "Event is required"),
@@ -29,7 +27,7 @@ const sessionSchema = z.object({
 type SessionFormValues = z.infer<typeof sessionSchema>;
 
 interface EventSessionFormProps {
-  initialData?: EventSessionDTO;
+  initialData?: EventSession | null;
 }
 
 export function EventSessionForm({ initialData }: EventSessionFormProps) {
@@ -39,27 +37,26 @@ export function EventSessionForm({ initialData }: EventSessionFormProps) {
 
   // Load parent entities
   const { data: eventsRes } = useAdminEvents();
-  const { data: venuesRes } = useVenues();
+  const { data: venues = [] } = useAdminVenues();
 
   const events = eventsRes || [];
-  const venues = venuesRes || [];
 
   // Parse initial dates for form
   let initDate = "";
   let initStartTime = "19:00";
   let initEndTime = "22:00";
 
-  if (initialData?.startDataTime) {
+  if (initialData?.startDateTime) {
     try {
-      const d = new Date(initialData.startDataTime);
+      const d = new Date(initialData.startDateTime);
       initDate = d.toISOString().split("T")[0];
       initStartTime = d.toISOString().substring(11, 16);
     } catch (e) {}
   }
   
-  if (initialData?.endDataTime) {
+  if (initialData?.endDateTime) {
     try {
-      const d = new Date(initialData.endDataTime);
+      const d = new Date(initialData.endDateTime);
       initEndTime = d.toISOString().substring(11, 16);
     } catch (e) {}
   }
@@ -67,15 +64,15 @@ export function EventSessionForm({ initialData }: EventSessionFormProps) {
   const form = useForm<SessionFormValues>({
     resolver: zodResolver(sessionSchema),
     defaultValues: {
-      eventId: initialData?.eventId || 0,
-      venueId: initialData?.venueId || 0,
+      eventId: initialData ? Number(initialData.eventId) : undefined,
+      venueId: initialData ? Number(initialData.venueId) : undefined,
       title: initialData?.title || "",
       description: initialData?.description || "",
       sessionDate: initDate,
       startTime: initStartTime,
       endTime: initEndTime,
       totalCapacity: initialData?.totalCapacity || 100,
-      status: (initialData?.status as any) || "SCHEDULED",
+      status: (initialData?.status as "SCHEDULED" | "OPEN" | "CLOSED" | "CANCELLED") || "SCHEDULED",
     },
   });
 
@@ -85,15 +82,15 @@ export function EventSessionForm({ initialData }: EventSessionFormProps) {
       const startDateTime = new Date(`${data.sessionDate}T${data.startTime}:00Z`).toISOString();
       const endDateTime = new Date(`${data.sessionDate}T${data.endTime}:00Z`).toISOString();
 
-      const payload: Partial<EventSessionDTO> = {
-        eventId: data.eventId,
-        venueId: data.venueId,
+      const payload: any = {
+        eventId: Number(data.eventId),
+        venueId: Number(data.venueId),
         title: data.title,
         description: data.description,
         totalCapacity: data.totalCapacity,
-        status: data.status,
-        startDataTime: startDateTime, // DTO typo spelling
-        endDataTime: endDateTime,     // DTO typo spelling
+        status: data.status as any,
+        startDateTime: startDateTime,
+        endDateTime: endDateTime,
         sessionNumber: initialData?.sessionNumber || 1,
       };
       
@@ -125,7 +122,7 @@ export function EventSessionForm({ initialData }: EventSessionFormProps) {
             className="w-full px-4 py-2 bg-surface-container-low border border-outline-variant/80 rounded-lg text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none"
           >
             <option value={0}>Select an event...</option>
-            {events.map((e) => (
+            {events.map((e: any) => (
               <option key={e.id} value={e.id}>{e.title}</option>
             ))}
           </select>
@@ -139,7 +136,7 @@ export function EventSessionForm({ initialData }: EventSessionFormProps) {
             className="w-full px-4 py-2 bg-surface-container-low border border-outline-variant/80 rounded-lg text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none"
           >
             <option value={0}>Select a venue...</option>
-            {venues.map((v) => (
+            {venues.map((v: any) => (
               <option key={v.id} value={v.id}>{v.name}</option>
             ))}
           </select>

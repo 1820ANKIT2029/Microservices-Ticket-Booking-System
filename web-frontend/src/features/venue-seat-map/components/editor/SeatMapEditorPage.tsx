@@ -5,7 +5,7 @@ import { useVenueEditor }    from "../../hooks/useVenueEditor";
 import { SidebarPanel }       from "./SidebarPanel";
 import { SeatCanvas }         from "../canvas/SeatCanvas";
 import { GenerateSeatsModal } from "./GenerateSeatsModal";
-import { VenueSeatMapService } from "../../services/venue-seat-map.service";
+import { VenueSeatMapService } from "@/features/venue-seat-map";
 import type { LocalVenue, LocalSection, LocalSeat, SeatGenerationConfig } from "../../types";
 
 interface SeatMapEditorPageProps {
@@ -29,7 +29,7 @@ export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
     (async () => {
       try {
         const res = await VenueSeatMapService.getVenue(venueId);
-        const dto = res.data.data;
+        const dto = res;
 
         const loadedVenue: LocalVenue = {
           id: dto.id,
@@ -42,7 +42,7 @@ export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
         // Load sections
         try {
           const secRes = await VenueSeatMapService.getSections(venueId);
-          const sections: LocalSection[] = (secRes.data.data ?? []).map((s) => ({
+          const sections: LocalSection[] = (Array.isArray(secRes) ? secRes : []).map((s: any) => ({
             id:          s.id,
             venueId:     s.venueId,
             name:        s.name,
@@ -52,7 +52,7 @@ export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
             width:       s.width,
             height:      s.height,
             rotation:    s.rotation,
-            seats:       (s.seats ?? []).map((seat): LocalSeat => ({
+            seats:       (s.seats ?? []).map((seat: any): LocalSeat => ({
               id:             seat.id,
               venueId:        seat.venueId,
               venueSectionId: seat.venueSectionId,
@@ -113,17 +113,18 @@ export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
         if (section.id < 0) {
           // New section — create
           const r = await VenueSeatMapService.createSection(sectionPayload);
-          savedSectionId = r.data.data.id;
+          savedSectionId = r.id;
+          savedSectionId = r.id;
         } else {
           // Existing — update
           await VenueSeatMapService.updateSection(section.id, sectionPayload);
         }
 
         // Upsert seats
-        const newSeats = section.seats.filter((s) => s.id < 0);
+        const newSeats = section.seats.filter((s: any) => s.id < 0);
         if (newSeats.length > 0) {
           await VenueSeatMapService.createSeatsBatch(
-            newSeats.map((seat) => ({
+            newSeats.map((seat: any) => ({
               venueId:        editor.venue.id ?? 0,
               venueSectionId: savedSectionId,
               rowLabel:       seat.rowLabel,
@@ -142,9 +143,9 @@ export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
         }
 
         // Update existing seats
-        const existingSeats = section.seats.filter((s) => s.id > 0);
+        const existingSeats = section.seats.filter((s: any) => s.id > 0);
         await Promise.all(
-          existingSeats.map((seat) =>
+          existingSeats.map((seat: any) =>
             VenueSeatMapService.updateSeat(seat.id, {
               rowLabel:    seat.rowLabel,
               seatNumber:  seat.seatNumber,

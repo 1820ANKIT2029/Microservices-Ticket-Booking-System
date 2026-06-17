@@ -1,7 +1,12 @@
-import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-import { logger } from "@/shared/utils/logger";
+import axios from "axios";
+import { config } from "@/shared/config";
+import { requestInterceptor, requestErrorInterceptor } from "./interceptors";
+import { handleApiError } from "./error-handler";
 
-// Custom API Error structure with clean stack traces
+/**
+ * Typed API error — thrown by the response interceptor on every failed request.
+ * Catch this in components or error boundaries for structured error handling.
+ */
 export class ApiError extends Error {
   status?: number;
   code?: string;
@@ -9,10 +14,10 @@ export class ApiError extends Error {
 
   constructor(message: string, status?: number, code?: string, data?: unknown) {
     super(message);
-    this.name = "ApiError";
+    this.name   = "ApiError";
     this.status = status;
-    this.code = code;
-    this.data = data;
+    this.code   = code;
+    this.data   = data;
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, ApiError);
@@ -20,67 +25,19 @@ export class ApiError extends Error {
   }
 }
 
-// Instantiate the base Axios client
+/**
+ * Singleton Axios instance for all API calls.
+ * Never create a second axios instance — always import `api` from here.
+ */
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: config.api.baseUrl,
 });
 
-api.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const isBrowser = typeof window !== "undefined";
-    const token = isBrowser ? localStorage.getItem("token") : null;
+// ── Request interceptor ───────────────────────────────────────────────────────
+api.interceptors.request.use(requestInterceptor, requestErrorInterceptor);
 
-    if (token) {
-      config.headers.set("Authorization", `Bearer ${token}`);
-    } else {
-      console.warn(`[Axios Warning]: No token attached to request: ${config.url}`);
-    }
-
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
+// ── Response interceptor ──────────────────────────────────────────────────────
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    let message = "An unexpected error occurred.";
-    let status: number | undefined;
-    let code: string | undefined;
-    let data: unknown;
-    let url: string | undefined;
-    let method: string | undefined;
-
-    if (axios.isAxiosError(error)) {
-      status = error.response?.status;
-      data = error.response?.data;
-      url = error.config?.url;
-      method = error.config?.method;
-
-      // Extract meaningful server messages if available
-      if (data && typeof data === "object") {
-        const responseData = data as Record<string, unknown>;
-        message = (responseData.message || responseData.error || error.message) as string;
-        code = responseData.code as string | undefined;
-      } else {
-        message = error.message;
-      }
-    } else if (error instanceof Error) {
-      message = error.message;
-    }
-
-    const apiError = new ApiError(message, status, code, data);
-
-    // Contextual application logger capture
-    logger.error(`API Call failed: ${message}`, {
-      status,
-      code,
-      url,
-      method,
-    });
-
-    return Promise.reject(apiError);
-  }
+  (error) => handleApiError(error)
 );

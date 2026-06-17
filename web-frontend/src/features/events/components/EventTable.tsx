@@ -3,17 +3,17 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Edit, Trash2, CalendarDays } from "lucide-react";
-import { EventDTO } from "@/features/events/types";
+import { Event } from "@/features/events/types";
 import { Button } from "@/shared/components/ui/button";
 import { DeleteDialog } from "@/features/admin/components/common/DeleteDialog";
 import { DataTable } from "@/features/admin/components/common/DataTable";
 import { EmptyState } from "@/features/admin/components/common/EmptyState";
 import { StatusBadge } from "@/features/admin/components/common/StatusBadge";
-import { useDeleteEvent } from "@/features/events/hooks/mutations/useDeleteEvent";
+import { useDeleteEvent } from "@/features/events";
 import { toast } from "sonner";
 
 interface EventTableProps {
-  events: EventDTO[];
+  events: Event[];
 }
 
 export function EventTable({ events }: EventTableProps) {
@@ -45,19 +45,19 @@ export function EventTable({ events }: EventTableProps) {
   }
 
   const columns = [
-    { header: "Event Name", accessor: "title" as keyof EventDTO },
+    { header: "Event Name", accessor: "title" as keyof Event },
     {
       header: "Category",
-      accessor: (e: EventDTO) => <span className="capitalize">{e.eventType?.toLowerCase() || "N/A"}</span>,
+      accessor: (e: Event) => <span className="capitalize">{e.eventType?.toLowerCase() || "N/A"}</span>,
     },
     {
       header: "Status",
-      accessor: (e: EventDTO) => <StatusBadge status={(e.status as any) || "DRAFT"} />,
+      accessor: (e: Event) => <StatusBadge status={(e.status as any) || "DRAFT"} />,
     },
     {
       header: "Actions",
       className: "text-right",
-      accessor: (e: EventDTO) => (
+      accessor: (e: Event) => (
         <div className="flex justify-end space-x-2">
           <Button variant="outline" size="sm" asChild>
             <Link href={`/events/${e.id}/edit`}>
@@ -69,7 +69,7 @@ export function EventTable({ events }: EventTableProps) {
             variant="outline"
             size="sm"
             className="text-error border-error/30 hover:bg-error/10"
-            onClick={() => setDeleteId(e.id!)}
+            onClick={() => setDeleteId(Number(e.id))}
           >
             <Trash2 className="size-4" />
           </Button>

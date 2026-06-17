@@ -3,18 +3,18 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Edit, Trash2, Map as MapIcon } from "lucide-react";
-import { VenueDTO } from "@/features/events/types";
+import { Venue, VenueResponseDto } from "@/features/events/types";
 import { Button } from "@/shared/components/ui/button";
 import { DeleteDialog } from "../common/DeleteDialog";
 import { DataTable } from "../common/DataTable";
 import { EmptyState } from "../common/EmptyState";
 import { StatusBadge } from "../common/StatusBadge";
-import { useDeleteVenue } from "@/features/admin/hooks/mutations/useDeleteVenue";
+import { useDeleteVenue } from "@/features/admin";
 import { toast } from "sonner";
 import { useRole } from "@/shared/hooks/useRole";
 
 interface VenueTableProps {
-  venues: VenueDTO[];
+  venues: Venue[];
 }
 
 export function VenueTable({ venues }: VenueTableProps) {
@@ -47,23 +47,23 @@ export function VenueTable({ venues }: VenueTableProps) {
   }
 
   const columns = [
-    { header: "Name", accessor: "name" as keyof VenueDTO },
+    { header: "Name", accessor: "name" as keyof Venue },
     {
       header: "Location",
-      accessor: (v: VenueDTO) => `${v.city}, ${v.country}`,
+      accessor: (v: Venue) => `${v.city}, ${v.country}`,
     },
     {
       header: "Capacity",
-      accessor: (v: VenueDTO) => v.totalCapacity?.toLocaleString() || "N/A",
+      accessor: (v: Venue) => v.totalCapacity?.toLocaleString() || "N/A",
     },
     {
       header: "Status",
-      accessor: (v: VenueDTO) => <StatusBadge status={v.isActive !== false ? "ACTIVE" : "INACTIVE"} />,
+      accessor: (v: Venue) => <StatusBadge status={v.isActive !== false ? "ACTIVE" : "INACTIVE"} />,
     },
     {
       header: "Actions",
       className: "text-right",
-      accessor: (v: VenueDTO) => (
+      accessor: (v: Venue) => (
         <div className="flex justify-end space-x-2">
           <Button variant="outline" size="sm" asChild>
             <Link href={`/admin/venues/${v.id}/edit`}>
@@ -80,8 +80,7 @@ export function VenueTable({ venues }: VenueTableProps) {
           <Button
             variant="outline"
             size="sm"
-            className="text-error border-error/30 hover:bg-error/10"
-            onClick={() => setDeleteId(v.id!)}
+            onClick={() => setDeleteId(Number(v.id))}
           >
             <Trash2 className="size-4" />
           </Button>

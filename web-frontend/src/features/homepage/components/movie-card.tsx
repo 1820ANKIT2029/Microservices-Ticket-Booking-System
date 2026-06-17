@@ -1,4 +1,4 @@
-import type { Movie } from "@/features/events/types";
+import type { Movie } from "@/features/movies-explorer/types";
 import Image from "next/image";
 import Link from "next/link";
 
