@@ -33,8 +33,16 @@ public class Seat {
     @Column(name = "seat_type", length = 100)
     private String seatType;
 
-    @Column(name = "svg_element_id", length = 100)
-    private String svgElementId;
+    private Double x;
+    private Double y;
+    @Builder.Default
+    private Double width = 24.0;
+    @Builder.Default
+    private Double height = 24.0;
+    @Builder.Default
+    private Double rotation = 0.0;
+    @Builder.Default
+    private String shape = "circle";
 
     @Column(name = "is_accessible")
     private Boolean isAccessible = false;

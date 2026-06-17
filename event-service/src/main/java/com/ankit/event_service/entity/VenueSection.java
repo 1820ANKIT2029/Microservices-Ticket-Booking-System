@@ -34,14 +34,12 @@ public class VenueSection {
     @Column(name = "total_seats")
     private Integer totalSeats;
 
-    @Column(name = "row_count")
-    private Integer rowCount;
-
-    @Column(name = "seats_per_row")
-    private Integer seatsPerRow;
-
-    @Column(name = "svg_element_id", length = 100)
-    private String svgElementId;
+    private Double x;
+    private Double y;
+    private Double width;
+    private Double height;
+    @Builder.Default
+    private Double rotation = 0.0;
 
     @OneToMany(mappedBy = "venueSection", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

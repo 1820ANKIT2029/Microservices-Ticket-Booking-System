@@ -26,14 +26,12 @@ public class VenueSectionDTO {
     @PositiveOrZero(message = "Component seating matrix count fields can only express positive constraints or clean zeros")
     private Integer totalSeats;
 
-    @PositiveOrZero(message = "Linear execution row configurations cannot yield negative parameters")
-    private Integer rowCount;
-
-    @PositiveOrZero(message = "Horizontal calculation seat indexes cannot process negative integers")
-    private Integer seatsPerRow;
-
-    @Size(max = 100, message = "Section svg Element ID properties type tracking text cap value limit is 100 characters")
-    private String svgElementId;
+    private Double x;
+    private Double y;
+    private Double width;
+    private Double height;
+    @Builder.Default
+    private Double rotation = 0.0;
 
     @Valid
     private List<SeatDTO> seats;

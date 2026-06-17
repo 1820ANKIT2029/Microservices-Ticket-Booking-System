@@ -56,9 +56,8 @@ public class VenueDTO {
     @Pattern(regexp = "^(https?://.*)?$", message = "Web property link requires full destination target verification formatting rules")
     private String websiteUrl;
 
-    @Size(max = 2048, message = "Web destination URL field configuration text cap is 2048 characters")
-    @Pattern(regexp = "^(https?://.*)?$", message = "Web property link requires full destination target verification formatting rules")
-    private String svgTemplateUrl;
+    private Double mapWidth;
+    private Double mapHeight;
 
     private String amenities;
     private Boolean isActive;

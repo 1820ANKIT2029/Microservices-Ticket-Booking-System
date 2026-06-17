@@ -23,8 +23,16 @@ public class SeatDTO {
     @Size(max = 100, message = "Component structural dynamic class categorizations scale limits set text boundaries to 100 characters maximum")
     private String seatType;
 
-    @Size(max = 100, message = "Section svg Element ID properties type tracking text cap value limit is 100 characters")
-    private String svgElementId;
+    private Double x;
+    private Double y;
+    @Builder.Default
+    private Double width = 24.0;
+    @Builder.Default
+    private Double height = 24.0;
+    @Builder.Default
+    private Double rotation = 0.0;
+    @Builder.Default
+    private String shape = "circle";
 
     private Boolean isAccessible;
     private Boolean isActive;
