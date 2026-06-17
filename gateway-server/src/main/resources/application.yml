@@ -58,6 +58,20 @@ spring:
                 - Path=/analytics/**
               filters:
                 - RewritePath=/analytics/(?<segment>.*), /${segment}
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - "http://localhost:3000"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders:
+                  - "*"
+                allowCredentials: true
 
     config:
       enabled: false
@@ -72,3 +86,22 @@ eureka:
 # openssl rand -hex 32
 jwt:
   secret: ${JWT_SECRET:82a3beb52b097b3fab2628cb35162a4c767833a91c257a16f6ec69de88b98284}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: Event Service
+        url: /event/v3/api-docs
+      - name: Booking Service
+        url: /booking/v3/api-docs
+      - name: User Service
+        url: /user/v3/api-docs
+      - name: Payment Service
+        url: /payment/v3/api-docs
+      - name: Notification Service
+        url: /notification/v3/api-docs
+      - name: Search Service
+        url: /search/v3/api-docs
+      - name: Analytics Service
+        url: /analytics/v3/api-docs
