@@ -117,14 +117,13 @@ export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
           savedSectionId = r.id;
         } else {
           // Existing — update
-          await VenueSeatMapService.updateSection(section.id, sectionPayload);
+          await VenueSeatMapService.updateSection(editor.venue.id ?? 0, section.id, sectionPayload);
         }
 
         // Upsert seats
         const newSeats = section.seats.filter((s: any) => s.id < 0);
         if (newSeats.length > 0) {
-          await VenueSeatMapService.createSeatsBatch(
-            newSeats.map((seat: any) => ({
+          const seatPayloads = newSeats.map((seat: any) => ({
               venueId:        editor.venue.id ?? 0,
               venueSectionId: savedSectionId,
               rowLabel:       seat.rowLabel,
@@ -138,15 +137,15 @@ export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
               shape:          seat.shape,
               isAccessible:   seat.isAccessible,
               isActive:       seat.isActive,
-            }))
-          );
+            }));
+          await VenueSeatMapService.createSeatsBatch(editor.venue.id ?? 0, savedSectionId, seatPayloads);
         }
 
         // Update existing seats
         const existingSeats = section.seats.filter((s: any) => s.id > 0);
         await Promise.all(
           existingSeats.map((seat: any) =>
-            VenueSeatMapService.updateSeat(seat.id, {
+            VenueSeatMapService.updateSeat(editor.venue.id ?? 0, savedSectionId, seat.id, {
               rowLabel:    seat.rowLabel,
               seatNumber:  seat.seatNumber,
               seatType:    seat.seatType,

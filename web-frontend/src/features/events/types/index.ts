@@ -51,7 +51,8 @@ export interface VenueResponseDto {
   timezone?:     string;
   totalCapacity?: number;
   websiteUrl?:   string;
-  svgTemplateUrl?: string;
+  mapWidth?:     number;
+  mapHeight?:    number;
   amenities?:    string;
   isActive?:     boolean;
   createdAt?:    ISODateString;
@@ -71,7 +72,8 @@ export interface VenueRequestDto {
   timezone?:     string;
   totalCapacity?: number;
   websiteUrl?:   string;
-  svgTemplateUrl?: string;
+  mapWidth?:     number;
+  mapHeight?:    number;
   amenities?:    string;
 }
 
@@ -82,9 +84,11 @@ export interface VenueSectionResponseDto {
   description?:  string;
   sectionType?:  string;
   totalSeats?:   number;
-  rowCount?:     number;
-  seatsPerRow?:  number;
-  svgElementId?: string;
+  x?:            number;
+  y?:            number;
+  width?:        number;
+  height?:       number;
+  rotation?:     number;
   seats?:        SeatResponseDto[];
 }
 
@@ -96,7 +100,12 @@ export interface SeatResponseDto {
   seatNumber:    string;
   rowLabel?:     string;
   seatType?:     string;
-  svgElementId?: string;
+  x?:            number;
+  y?:            number;
+  width?:        number;
+  height?:       number;
+  rotation?:     number;
+  shape?:        string;
   isAccessible?: boolean;
   isActive?:     boolean;
 }

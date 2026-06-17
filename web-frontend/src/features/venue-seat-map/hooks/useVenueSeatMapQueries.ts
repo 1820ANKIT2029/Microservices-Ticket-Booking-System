@@ -45,11 +45,11 @@ export function useSections(venueId: number | string) {
   });
 }
 
-export function useSeatsBySection(sectionId: number | string) {
+export function useSeatsBySection(venueId: number | string, sectionId: number | string) {
   return useQuery<SeatDTO[]>({
     queryKey: venueSeatMapKeys.seats(sectionId),
-    queryFn:  () => VenueSeatMapService.getSeatsBySection(sectionId),
-    enabled:  !!sectionId,
+    queryFn:  () => VenueSeatMapService.getSeatsBySection(venueId, sectionId),
+    enabled:  !!sectionId && !!venueId,
   });
 }
 
@@ -74,7 +74,7 @@ export function useUpdateSection(venueId: number | string) {
 
   return useMutation({
     mutationFn: ({ id, payload }: { id: number; payload: UpdateVenueSectionPayload }) =>
-      VenueSeatMapService.updateSection(id, payload).then(toLocalSection),
+      VenueSeatMapService.updateSection(venueId, id, payload).then(toLocalSection),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: venueSeatMapKeys.sections(venueId) });
@@ -86,7 +86,7 @@ export function useDeleteSection(venueId: number | string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => VenueSeatMapService.deleteSection(id),
+    mutationFn: (id: number) => VenueSeatMapService.deleteSection(venueId, id),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: venueSeatMapKeys.sections(venueId) });
@@ -107,12 +107,12 @@ export function useCreateSeat(sectionId: number | string) {
   });
 }
 
-export function useCreateSeatsBatch(sectionId: number | string) {
+export function useCreateSeatsBatch(venueId: number | string, sectionId: number | string) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (payloads: CreateSeatPayload[]) =>
-      VenueSeatMapService.createSeatsBatch(payloads),
+      VenueSeatMapService.createSeatsBatch(venueId, sectionId, payloads),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: venueSeatMapKeys.seats(sectionId) });
@@ -120,12 +120,12 @@ export function useCreateSeatsBatch(sectionId: number | string) {
   });
 }
 
-export function useUpdateSeat(sectionId: number | string) {
+export function useUpdateSeat(venueId: number | string, sectionId: number | string) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, payload }: { id: number; payload: UpdateSeatPayload }) =>
-      VenueSeatMapService.updateSeat(id, payload),
+      VenueSeatMapService.updateSeat(venueId, sectionId, id, payload),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: venueSeatMapKeys.seats(sectionId) });
@@ -133,11 +133,11 @@ export function useUpdateSeat(sectionId: number | string) {
   });
 }
 
-export function useDeleteSeat(sectionId: number | string) {
+export function useDeleteSeat(venueId: number | string, sectionId: number | string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => VenueSeatMapService.deleteSeat(id),
+    mutationFn: (id: number) => VenueSeatMapService.deleteSeat(venueId, sectionId, id),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: venueSeatMapKeys.seats(sectionId) });

@@ -30,57 +30,57 @@ export class VenueSeatMapService {
 
   static getSections(venueId: number | string) {
     return api
-      .get<ApiResponse<VenueSectionMapDTO[]>>(`/event/api/venue-sections?venueId=${venueId}`)
+      .get<ApiResponse<VenueSectionMapDTO[]>>(`/event/api/venues/${venueId}/venue-sections`)
       .then((res) => res.data.data);
   }
 
   static createSection(payload: CreateVenueSectionPayload) {
     return api
-      .post<ApiResponse<VenueSectionMapDTO>>("/event/api/venue-sections", payload)
+      .post<ApiResponse<VenueSectionMapDTO>>(`/event/api/venues/${payload.venueId}/venue-sections`, payload)
       .then((res) => res.data.data);
   }
 
-  static updateSection(id: number, payload: UpdateVenueSectionPayload) {
+  static updateSection(venueId: number | string, id: number, payload: UpdateVenueSectionPayload) {
     return api
-      .put<ApiResponse<VenueSectionMapDTO>>(`/event/api/venue-sections/${id}`, payload)
+      .put<ApiResponse<VenueSectionMapDTO>>(`/event/api/venues/${venueId}/venue-sections/${id}`, payload)
       .then((res) => res.data.data);
   }
 
-  static deleteSection(id: number) {
+  static deleteSection(venueId: number | string, id: number) {
     return api
-      .delete<ApiResponse<void>>(`/event/api/venue-sections/${id}`)
+      .delete<ApiResponse<void>>(`/event/api/venues/${venueId}/venue-sections/${id}`)
       .then((res) => res.data);
   }
 
   // ── Seats ──────────────────────────────────────────────────────────────────
 
-  static getSeatsBySection(sectionId: number | string) {
+  static getSeatsBySection(venueId: number | string, sectionId: number | string) {
     return api
-      .get<ApiResponse<SeatDTO[]>>(`/event/api/seats?venueSectionId=${sectionId}`)
+      .get<ApiResponse<SeatDTO[]>>(`/event/api/venues/${venueId}/venue-sections/${sectionId}/seats`)
       .then((res) => res.data.data);
   }
 
   static createSeat(payload: CreateSeatPayload) {
     return api
-      .post<ApiResponse<SeatDTO>>("/event/api/seats", payload)
+      .post<ApiResponse<SeatDTO>>(`/event/api/venues/${payload.venueId}/venue-sections/${payload.venueSectionId}/seats`, payload)
       .then((res) => res.data.data);
   }
 
-  static createSeatsBatch(payloads: CreateSeatPayload[]) {
+  static createSeatsBatch(venueId: number | string, sectionId: number | string, payloads: CreateSeatPayload[]) {
     return api
-      .post<ApiResponse<SeatDTO[]>>("/event/api/seats/batch", payloads)
+      .post<ApiResponse<SeatDTO[]>>(`/event/api/venues/${venueId}/venue-sections/${sectionId}/seats/batch`, payloads)
       .then((res) => res.data.data);
   }
 
-  static updateSeat(id: number, payload: UpdateSeatPayload) {
+  static updateSeat(venueId: number | string, sectionId: number | string, id: number, payload: UpdateSeatPayload) {
     return api
-      .put<ApiResponse<SeatDTO>>(`/event/api/seats/${id}`, payload)
+      .put<ApiResponse<SeatDTO>>(`/event/api/venues/${venueId}/venue-sections/${sectionId}/seats/${id}`, payload)
       .then((res) => res.data.data);
   }
 
-  static deleteSeat(id: number) {
+  static deleteSeat(venueId: number | string, sectionId: number | string, id: number) {
     return api
-      .delete<ApiResponse<void>>(`/event/api/seats/${id}`)
+      .delete<ApiResponse<void>>(`/event/api/venues/${venueId}/venue-sections/${sectionId}/seats/${id}`)
       .then((res) => res.data);
   }
 }
