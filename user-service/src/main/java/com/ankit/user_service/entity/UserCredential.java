@@ -16,9 +16,6 @@ import java.time.LocalDateTime;
 @Builder
 public class UserCredential {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "user_id", unique = true, nullable = false, length = 100)
     private String userId;
 
