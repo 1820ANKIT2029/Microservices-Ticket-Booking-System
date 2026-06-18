@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SeatRepository extends JpaRepository<Seat,Long> {
-    Optional<Seat> findByIdAndVenueIdAndVenueSectionId(
+    Optional<Seat> findByVenueIdAndVenueSectionIdAndId(
             Long venueId, Long venueSectionId, Long id
     );
 
     List<Seat> findAllByVenueIdAndVenueSectionId(Long venueId, Long venueSectionId);
-    void deleteByIdAndVenueIdAndVenueSectionId(Long id, Long venueId, Long venueSectionId);
+    void deleteByVenueIdAndVenueSectionIdAndId(Long venueId, Long venueSectionId, Long seatId);
 }
