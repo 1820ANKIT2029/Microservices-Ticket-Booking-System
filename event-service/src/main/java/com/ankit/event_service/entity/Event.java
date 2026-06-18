@@ -55,8 +55,8 @@ public class Event {
     @Column(name = "is_featured")
     private Boolean isFeatured = false;
 
-    @Column(name = "created_by")
-    private Long createdBy; // Logical pointer across boundaries to User Service
+    @Column(name = "user_id")
+    private String userId; // Logical pointer across boundaries to User Service
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

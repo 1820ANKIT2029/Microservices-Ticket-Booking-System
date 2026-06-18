@@ -43,7 +43,7 @@ public class EventDTO {
     private Boolean isFeatured;
 
     @NotNull(message = "Creator ID reference tracking is required")
-    private Long createdBy;
+    private String userId;
 
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;

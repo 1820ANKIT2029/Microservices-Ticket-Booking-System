@@ -33,7 +33,7 @@ public class EventMapper {
                 .posterUrl(entity.getPosterUrl())
                 .isMultiSession(entity.getIsMultiSession())
                 .isFeatured(entity.getIsFeatured())
-                .createdBy(entity.getCreatedBy())
+                .userId(entity.getUserId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .performers(entity.getPerformers() != null ?
@@ -60,7 +60,7 @@ public class EventMapper {
                 .posterUrl(dto.getPosterUrl())
                 .isMultiSession(dto.getIsMultiSession())
                 .isFeatured(dto.getIsFeatured())
-                .createdBy(dto.getCreatedBy())
+                .userId(dto.getUserId())
                 .createdAt(dto.getCreatedAt())
                 .updatedAt(dto.getUpdatedAt())
                 .performers(dto.getPerformers() != null ?
