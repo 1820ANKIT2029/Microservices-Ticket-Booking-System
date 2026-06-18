@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `events` (
     `poster_url` VARCHAR(2048),
     `is_multi_session` BOOLEAN DEFAULT FALSE,
     `is_featured` BOOLEAN DEFAULT FALSE,
-    `created_by` INT, -- Logical reference to User Service `users.id`
+    `user_id` VARCHAR(100) NOT NULL, -- Logical reference to User Service `users.user_id`
     `created_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`venue_id`) REFERENCES `venues` (`id`) ON DELETE SET NULL

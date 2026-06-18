@@ -1,8 +1,7 @@
 CREATE TYPE user_role AS ENUM ('CONSUMER', 'ORGANIZER', 'ADMIN');
 
 CREATE TABLE IF NOT EXISTS user_credentials (
-    id SERIAL PRIMARY KEY,
-    user_id VARCHAR(100) NOT NULL UNIQUE,
+    user_id VARCHAR(100) PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role user_role DEFAULT 'CONSUMER',
@@ -13,8 +12,7 @@ CREATE TABLE IF NOT EXISTS user_credentials (
 );
 
 CREATE TABLE IF NOT EXISTS user_profiles (
-    id SERIAL PRIMARY KEY,
-    user_id VARCHAR(100) NOT NULL UNIQUE,
+    user_id VARCHAR(100) PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
