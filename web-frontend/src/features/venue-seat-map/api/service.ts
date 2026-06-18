@@ -26,6 +26,24 @@ export class VenueSeatMapService {
       .then((res) => res.data.data);
   }
 
+  static async updateVenueMetadata(venueId: number | string, name: string, mapWidth: number, mapHeight: number) {
+    // 1. Fetch full venue to prevent overwriting other fields (backend PUT replaces)
+    const res = await api.get(`/event/api/venues/${venueId}`);
+    const fullVenue = res.data.data;
+    
+    // 2. Update canvas fields
+    const updated = {
+      ...fullVenue,
+      name,
+      mapWidth,
+      mapHeight,
+    };
+    
+    // 3. Save back
+    const putRes = await api.put(`/event/api/venues/${venueId}`, updated);
+    return putRes.data.data;
+  }
+
   // ── Sections ──────────────────────────────────────────────────────────────
 
   static getSections(venueId: number | string) {

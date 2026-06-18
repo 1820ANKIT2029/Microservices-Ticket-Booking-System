@@ -7,6 +7,42 @@ import { ViewerSeatLayer }     from "./ViewerSeatLayer";
 import { VenueSeatMapService } from "@/features/venue-seat-map";
 import type { LocalVenue, LocalSection, LocalSeat } from "../../types";
 
+// ── Shared parse helpers ──────────────────────────────────────────────────────
+
+function parseSeat(seat: any): LocalSeat {
+  return {
+    id:             seat.id,
+    venueId:        seat.venueId,
+    venueSectionId: seat.venueSectionId,
+    rowLabel:       seat.rowLabel   ?? "A",
+    seatNumber:     seat.seatNumber ?? "1",
+    seatType:       (seat.seatType  ?? "STANDARD") as LocalSeat["seatType"],
+    x:              seat.x        ?? 0,
+    y:              seat.y        ?? 0,
+    width:          seat.width    ?? 24,
+    height:         seat.height   ?? 24,
+    rotation:       seat.rotation ?? 0,
+    shape:          ((seat.shape  ?? "circle") as LocalSeat["shape"]),
+    isAccessible:   seat.isAccessible ?? false,
+    isActive:       seat.isActive     ?? true,
+  };
+}
+
+function parseSection(s: any): LocalSection {
+  return {
+    id:          s.id,
+    venueId:     s.venueId,
+    name:        s.name,
+    sectionType: s.sectionType ?? "STANDARD",
+    x:           s.x        ?? 0,
+    y:           s.y        ?? 0,
+    width:       s.width    ?? 300,
+    height:      s.height   ?? 200,
+    rotation:    s.rotation ?? 0,
+    seats:       (s.seats ?? []).map(parseSeat),
+  };
+}
+
 interface SeatMapViewerPageProps {
   venueId: number;
   /** Called when the user's selection changes */
@@ -49,40 +85,19 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
     if (!venueId) { setIsLoading(false); return; }
     (async () => {
       try {
-        const res = await VenueSeatMapService.getVenue(venueId);
-        const dto = res;
+        // Parallel fetch — venue metadata + sections (with embedded seats)
+        const [dto, secRes] = await Promise.all([
+          VenueSeatMapService.getVenue(venueId),
+          VenueSeatMapService.getSections(venueId).catch(() => []),
+        ]);
 
         const loadedVenue: LocalVenue = {
           id:        dto.id,
           name:      dto.name,
           mapWidth:  dto.mapWidth  ?? 1200,
           mapHeight: dto.mapHeight ?? 800,
-          sections:  [],
+          sections:  (Array.isArray(secRes) ? secRes : []).map(parseSection),
         };
-
-        try {
-          const secRes = await VenueSeatMapService.getSections(venueId);
-          loadedVenue.sections = (secRes ?? []).map((s): LocalSection => ({
-            id:          s.id,
-            venueId:     s.venueId,
-            name:        s.name,
-            sectionType: s.sectionType,
-            x: s.x, y: s.y, width: s.width, height: s.height, rotation: s.rotation,
-            seats: (s.seats ?? []).map((seat): LocalSeat => ({
-              id:             seat.id,
-              venueId:        seat.venueId,
-              venueSectionId: seat.venueSectionId,
-              rowLabel:       seat.rowLabel,
-              seatNumber:     seat.seatNumber,
-              seatType:       seat.seatType as LocalSeat["seatType"],
-              x: seat.x, y: seat.y, width: seat.width, height: seat.height,
-              rotation:       seat.rotation,
-              shape:          seat.shape as LocalSeat["shape"],
-              isAccessible:   seat.isAccessible,
-              isActive:       seat.isActive,
-            })),
-          }));
-        } catch { /* sections optional */ }
 
         setVenue(loadedVenue);
       } catch {

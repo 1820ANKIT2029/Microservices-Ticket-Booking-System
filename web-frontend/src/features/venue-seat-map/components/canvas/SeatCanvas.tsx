@@ -61,8 +61,9 @@ export function SeatCanvas({ editor, readOnly = false }: SeatCanvasProps) {
 
   // ── Fit to screen ─────────────────────────────────────────────────────────
 
+  const { mapWidth, mapHeight } = editor.venue;
+
   const fitToScreen = useCallback(() => {
-    const { mapWidth, mapHeight } = editor.venue;
     const padding = 40;
     const scaleX = (size.width  - padding * 2) / mapWidth;
     const scaleY = (size.height - padding * 2) / mapHeight;
@@ -72,9 +73,9 @@ export function SeatCanvas({ editor, readOnly = false }: SeatCanvasProps) {
       x: (size.width  - mapWidth  * newScale) / 2,
       y: (size.height - mapHeight * newScale) / 2,
     });
-  }, [editor.venue, size]);
+  }, [mapWidth, mapHeight, size.width, size.height]);
 
-  // Auto-fit on first load
+  // Auto-fit on first load or map resize
   useEffect(() => { fitToScreen(); }, [fitToScreen]);
 
   // ── Stage click — deselect ────────────────────────────────────────────────

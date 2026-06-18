@@ -17,48 +17,50 @@ export function toLocalVenue(
   return {
     id:        dto.id,
     name:      dto.name,
-    mapWidth:  dto.mapWidth,
-    mapHeight: dto.mapHeight,
-    sections:  sections.map(toLocalSection),
+    mapWidth:  dto.mapWidth  ?? 1200,
+    mapHeight: dto.mapHeight ?? 800,
+    sections:  (Array.isArray(sections) ? sections : []).map(toLocalSection),
   };
 }
 
 /**
  * Converts a VenueSectionMapDTO to the editor LocalSection model.
+ * All nullable fields are given safe defaults so the canvas never crashes.
  */
 export function toLocalSection(dto: VenueSectionMapDTO): LocalSection {
   return {
     id:          dto.id,
     venueId:     dto.venueId,
     name:        dto.name,
-    sectionType: dto.sectionType,
-    x:           dto.x,
-    y:           dto.y,
-    width:       dto.width,
-    height:      dto.height,
-    rotation:    dto.rotation,
+    sectionType: dto.sectionType ?? "STANDARD",
+    x:           dto.x        ?? 0,
+    y:           dto.y        ?? 0,
+    width:       dto.width    ?? 300,
+    height:      dto.height   ?? 200,
+    rotation:    dto.rotation ?? 0,
     seats:       (dto.seats ?? []).map(toLocalSeat),
   };
 }
 
 /**
  * Converts a SeatDTO (from backend) to a LocalSeat (editor canvas model).
+ * All nullable fields are given safe defaults so the canvas never crashes.
  */
 export function toLocalSeat(dto: SeatDTO): LocalSeat {
   return {
-    id:            dto.id,
-    venueId:       dto.venueId,
+    id:             dto.id,
+    venueId:        dto.venueId,
     venueSectionId: dto.venueSectionId,
-    rowLabel:      dto.rowLabel,
-    seatNumber:    dto.seatNumber,
-    seatType:      dto.seatType as LocalSeat["seatType"],
-    x:             dto.x,
-    y:             dto.y,
-    width:         dto.width,
-    height:        dto.height,
-    rotation:      dto.rotation,
-    shape:         dto.shape,
-    isAccessible:  dto.isAccessible,
-    isActive:      dto.isActive,
+    rowLabel:       dto.rowLabel   ?? "A",
+    seatNumber:     dto.seatNumber ?? "1",
+    seatType:       (dto.seatType  ?? "STANDARD") as LocalSeat["seatType"],
+    x:              dto.x        ?? 0,
+    y:              dto.y        ?? 0,
+    width:          dto.width    ?? 24,
+    height:         dto.height   ?? 24,
+    rotation:       dto.rotation ?? 0,
+    shape:          (dto.shape   ?? "circle") as LocalSeat["shape"],
+    isAccessible:   dto.isAccessible ?? false,
+    isActive:       dto.isActive     ?? true,
   };
 }

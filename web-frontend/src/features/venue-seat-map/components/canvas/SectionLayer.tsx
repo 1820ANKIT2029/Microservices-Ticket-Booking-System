@@ -119,6 +119,8 @@ function SectionGroup({
             key={seat.id}
             seat={seat}
             isSelected={selectedSeatIds.includes(seat.id)}
+            sectionWidth={section.width}
+            sectionHeight={section.height}
             onSelect={onSelectSeat}
             onDragEnd={(seatId, x, y) => onDragSeatEnd(section.id, seatId, x, y)}
             draggable

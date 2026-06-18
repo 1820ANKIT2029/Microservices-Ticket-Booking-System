@@ -18,6 +18,19 @@ interface EditorStateInternal {
   selectedSeatIds: number[];
   isGenerateModalOpen: boolean;
   isSaving: boolean;
+  /** Real IDs (> 0) of sections deleted since last load/save — sent on next save */
+  deletedSectionIds: number[];
+  /**
+   * Real IDs (> 0) of individual seats deleted from sections that still exist.
+   * Seats in deleted sections are cascade-deleted by the server — not tracked here.
+   */
+  deletedSeatIds: Array<{ sectionId: number; seatId: number }>;
+  /**
+   * Frozen snapshot of the venue exactly as it was received from the server
+   * (set on every LOAD_VENUE). Used to diff sections/seats before deciding
+   * whether to issue a PUT request — no-ops are skipped entirely.
+   */
+  savedSnapshot: LocalVenue | null;
 }
 
 // ─── Action types ─────────────────────────────────────────────────────────────
@@ -39,14 +52,26 @@ type Action =
   | { type: "TOGGLE_SELECTED_SEATS_ACCESSIBLE"; sectionId: number }
   | { type: "OPEN_GENERATE_MODAL" }
   | { type: "CLOSE_GENERATE_MODAL" }
-  | { type: "SET_SAVING"; value: boolean };
+  | { type: "SET_SAVING"; value: boolean }
+  | { type: "CLEAR_DELETED_IDS" };
 
 // ─── Reducer ──────────────────────────────────────────────────────────────────
 
 function reducer(state: EditorStateInternal, action: Action): EditorStateInternal {
   switch (action.type) {
     case "LOAD_VENUE":
-      return { ...state, venue: action.payload, selectedSectionId: null, selectedSeatIds: [] };
+      return {
+        ...state,
+        venue: action.payload,
+        // Snapshot is set to the exact payload object. Because all reducer
+        // updates create new references (immutable pattern), this reference
+        // will always point to the server-sourced venue — never the live edits.
+        savedSnapshot: action.payload,
+        selectedSectionId: null,
+        selectedSeatIds: [],
+        deletedSectionIds: [],
+        deletedSeatIds: [],
+      };
 
     case "SET_VENUE_FIELD":
       return { ...state, venue: { ...state.venue, [action.field]: action.value } };
@@ -70,7 +95,9 @@ function reducer(state: EditorStateInternal, action: Action): EditorStateInterna
         },
       };
 
-    case "DELETE_SECTION":
+    case "DELETE_SECTION": {
+      // Track real IDs so the save handler can issue DELETE calls
+      const wasAlreadySaved = action.id > 0;
       return {
         ...state,
         venue: {
@@ -79,12 +106,29 @@ function reducer(state: EditorStateInternal, action: Action): EditorStateInterna
         },
         selectedSectionId: state.selectedSectionId === action.id ? null : state.selectedSectionId,
         selectedSeatIds: [],
+        deletedSectionIds: wasAlreadySaved
+          ? [...state.deletedSectionIds, action.id]
+          : state.deletedSectionIds,
+        // Seats in a deleted section are cascade-deleted server-side — remove any
+        // individually tracked seat deletions that belong to this section to avoid
+        // redundant DELETE calls.
+        deletedSeatIds: state.deletedSeatIds.filter((d) => d.sectionId !== action.id),
       };
+    }
 
     case "SELECT_SECTION":
       return { ...state, selectedSectionId: action.id, selectedSeatIds: [] };
 
-    case "GENERATE_SEATS":
+    case "GENERATE_SEATS": {
+      // When re-generating seats for an already-saved section, the old persisted
+      // seats (id > 0) are dropped from local state but still exist on the server.
+      // Record them for deletion so Phase 1 of handleSave can clean them up.
+      const targetSection = state.venue.sections.find((s) => s.id === action.sectionId);
+      const stalePersistedSeats = targetSection
+        ? targetSection.seats
+            .filter((s) => s.id > 0)
+            .map((s) => ({ sectionId: action.sectionId, seatId: s.id }))
+        : [];
       return {
         ...state,
         venue: {
@@ -93,7 +137,9 @@ function reducer(state: EditorStateInternal, action: Action): EditorStateInterna
             s.id === action.sectionId ? { ...s, seats: action.seats } : s
           ),
         },
+        deletedSeatIds: [...state.deletedSeatIds, ...stalePersistedSeats],
       };
+    }
 
     case "UPDATE_SEAT":
       return {
@@ -113,7 +159,8 @@ function reducer(state: EditorStateInternal, action: Action): EditorStateInterna
         },
       };
 
-    case "DELETE_SEAT":
+    case "DELETE_SEAT": {
+      const wasAlreadySaved = action.seatId > 0;
       return {
         ...state,
         venue: {
@@ -125,9 +172,23 @@ function reducer(state: EditorStateInternal, action: Action): EditorStateInterna
           ),
         },
         selectedSeatIds: state.selectedSeatIds.filter((id) => id !== action.seatId),
+        deletedSeatIds: wasAlreadySaved
+          ? [...state.deletedSeatIds, { sectionId: action.sectionId, seatId: action.seatId }]
+          : state.deletedSeatIds,
       };
+    }
 
-    case "DELETE_SELECTED_SEATS":
+    case "DELETE_SELECTED_SEATS": {
+      const section = state.venue.sections.find((s) => s.id === action.sectionId);
+      const seatsToDelete = section
+        ? section.seats.filter((s) => state.selectedSeatIds.includes(s.id))
+        : [];
+      const newDeletedSeatIds = [
+        ...state.deletedSeatIds,
+        ...seatsToDelete
+          .filter((s) => s.id > 0)
+          .map((s) => ({ sectionId: action.sectionId, seatId: s.id })),
+      ];
       return {
         ...state,
         venue: {
@@ -139,7 +200,9 @@ function reducer(state: EditorStateInternal, action: Action): EditorStateInterna
           ),
         },
         selectedSeatIds: [],
+        deletedSeatIds: newDeletedSeatIds,
       };
+    }
 
     case "SELECT_SEAT":
       return {
@@ -205,6 +268,9 @@ function reducer(state: EditorStateInternal, action: Action): EditorStateInterna
     case "SET_SAVING":
       return { ...state, isSaving: action.value };
 
+    case "CLEAR_DELETED_IDS":
+      return { ...state, deletedSectionIds: [], deletedSeatIds: [] };
+
     default:
       return state;
   }
@@ -224,6 +290,9 @@ const initialState: EditorStateInternal = {
   selectedSeatIds: [],
   isGenerateModalOpen: false,
   isSaving: false,
+  deletedSectionIds: [],
+  deletedSeatIds: [],
+  savedSnapshot: null,
 };
 
 // ─── Temp ID counter ──────────────────────────────────────────────────────────
@@ -316,7 +385,7 @@ export function useVenueEditor() {
             seatNumber: String(c + 1),
             seatType: config.seatType,
             x: c * (config.seatWidth + config.horizontalGap) + config.seatWidth / 2 + 8,
-            y: r * (config.seatHeight + config.verticalGap) + config.seatHeight / 2 + 8,
+            y: r * (config.seatHeight + config.verticalGap) + config.seatHeight / 2 + 28,
             width: config.seatWidth,
             height: config.seatHeight,
             rotation: 0,
@@ -380,6 +449,12 @@ export function useVenueEditor() {
     dispatch({ type: "CLOSE_GENERATE_MODAL" });
   }, []);
 
+  // ── Deletion tracking helpers ──────────────────────────────────────────────
+
+  const clearDeletedIds = useCallback(() => {
+    dispatch({ type: "CLEAR_DELETED_IDS" });
+  }, []);
+
   // ── Convenience getters ────────────────────────────────────────────────────
 
   const selectedSection =
@@ -398,6 +473,9 @@ export function useVenueEditor() {
     selectedSeats,
     isGenerateModalOpen: state.isGenerateModalOpen,
     isSaving: state.isSaving,
+    deletedSectionIds: state.deletedSectionIds,
+    deletedSeatIds: state.deletedSeatIds,
+    savedSnapshot: state.savedSnapshot,
 
     // actions
     loadVenue,
@@ -416,6 +494,7 @@ export function useVenueEditor() {
     toggleSelectedSeatsAccessible,
     openGenerateModal,
     closeGenerateModal,
+    clearDeletedIds,
 
     // keyboard helpers
     onKeyDown,

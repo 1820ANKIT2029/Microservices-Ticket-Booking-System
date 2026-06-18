@@ -4,7 +4,11 @@ import type {
   EventResponseDto,
   EventRequestDto,
   VenueResponseDto,
+  TicketTypeRequestDto,
+  TicketTypeResponseDto,
 } from "../types";
+
+const MOCK_USER_HEADERS = { "X-User-Id": "1" };
 
 export interface EventListParams {
   category?: "movies" | "sports" | "concerts" | "featured";
@@ -41,19 +45,39 @@ export class EventService {
 
   static createEvent(data: EventRequestDto) {
     return api
-      .post<ApiResponse<EventResponseDto>>("/event/api/events", data)
+      .post<ApiResponse<EventResponseDto>>("/event/api/events", data, { headers: MOCK_USER_HEADERS })
       .then((res) => res.data.data);
   }
 
   static updateEvent(id: number | string, data: Partial<EventRequestDto>) {
     return api
-      .put<ApiResponse<EventResponseDto>>(`/event/api/events/${id}`, data)
+      .put<ApiResponse<EventResponseDto>>(`/event/api/events/${id}`, data, { headers: MOCK_USER_HEADERS })
       .then((res) => res.data.data);
   }
 
   static deleteEvent(id: number | string) {
     return api
-      .delete<ApiResponse<void>>(`/event/api/events/${id}`)
+      .delete<ApiResponse<void>>(`/event/api/events/${id}`, { headers: MOCK_USER_HEADERS })
+      .then((res) => res.data);
+  }
+
+  // ── Ticket Types ──────────────────────────────────────────────────────────
+
+  static createTicketType(data: TicketTypeRequestDto & { eventId: number; eventSessionId?: number }) {
+    return api
+      .post<ApiResponse<TicketTypeResponseDto>>("/event/api/ticket-type", data)
+      .then((res) => res.data.data);
+  }
+
+  static updateTicketType(id: number | string, data: Partial<TicketTypeRequestDto>) {
+    return api
+      .put<ApiResponse<TicketTypeResponseDto>>(`/event/api/ticket-type/${id}`, data)
+      .then((res) => res.data.data);
+  }
+
+  static deleteTicketType(id: number | string) {
+    return api
+      .delete<ApiResponse<void>>(`/event/api/ticket-type/${id}`)
       .then((res) => res.data);
   }
 
@@ -61,7 +85,7 @@ export class EventService {
 
   static getAllEvents() {
     return api
-      .get<ApiResponse<EventResponseDto[]>>("/event/api/events")
+      .get<ApiResponse<EventResponseDto[]>>("/event/api/events", { headers: MOCK_USER_HEADERS })
       .then((res) => res.data.data);
   }
 

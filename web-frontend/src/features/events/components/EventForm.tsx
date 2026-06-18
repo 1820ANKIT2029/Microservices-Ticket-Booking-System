@@ -28,9 +28,10 @@ type EventFormValues = z.infer<typeof eventSchema>;
 
 interface EventFormProps {
   initialData?: Event | null;
+  onSuccess?: (event: any) => void;
 }
 
-export function EventForm({ initialData }: EventFormProps) {
+export function EventForm({ initialData, onSuccess }: EventFormProps) {
   const router = useRouter();
   const createMutation = useCreateEvent();
   const updateMutation = useUpdateEvent();
@@ -73,15 +74,21 @@ export function EventForm({ initialData }: EventFormProps) {
         createdBy: 1, // Mock user ID for now
       };
       
+      let result;
       if (initialData?.id) {
-        await updateMutation.mutateAsync({ id: initialData.id, data: payload });
+        result = await updateMutation.mutateAsync({ id: initialData.id, data: payload });
         toast.success("Event updated successfully");
       } else {
-        await createMutation.mutateAsync(payload);
+        result = await createMutation.mutateAsync(payload);
         toast.success("Event created successfully");
       }
-      router.push("/events");
-      router.refresh();
+      
+      if (onSuccess) {
+        onSuccess(result);
+      } else {
+        router.push("/events");
+        router.refresh();
+      }
     } catch (error: any) {
       toast.error(error.message || "Failed to save event");
     }

@@ -3,48 +3,50 @@
 export interface VenueMapDTO {
   id: number;
   name: string;
-  mapWidth: number;
-  mapHeight: number;
+  mapWidth?: number;
+  mapHeight?: number;
 }
 
 export interface VenueSectionMapDTO {
   id: number;
   venueId: number;
   name: string;
-  sectionType: string;
-  totalSeats: number;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotation: number;
-  seats: SeatDTO[];
+  sectionType?: string;
+  totalSeats?: number;
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  rotation?: number;
+  seats?: SeatDTO[];
 }
 
 export interface SeatDTO {
   id: number;
   venueId: number;
   venueSectionId: number;
-  rowLabel: string;
+  rowLabel?: string;
   seatNumber: string;
-  seatType: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotation: number;
-  shape: "circle" | "rectangle";
-  isAccessible: boolean;
-  isActive: boolean;
+  seatType?: string;
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  rotation?: number;
+  shape?: "circle" | "rectangle";
+  isAccessible?: boolean;
+  isActive?: boolean;
 }
 
 // ─── Create / Update payloads ─────────────────────────────────────────────────
 
 export type CreateVenueSectionPayload = Omit<VenueSectionMapDTO, "id" | "seats">;
-export type UpdateVenueSectionPayload = Partial<CreateVenueSectionPayload>;
+/** Full section body for PUT — backend modifyVenueSection accepts VenueSectionDTO */
+export type UpdateVenueSectionPayload = Partial<VenueSectionMapDTO>;
 
 export type CreateSeatPayload = Omit<SeatDTO, "id">;
-export type UpdateSeatPayload = Partial<Omit<SeatDTO, "id" | "venueId" | "venueSectionId">>;
+/** Full seat body for PUT — backend modifySeat accepts full SeatDTO including id/venueId/venueSectionId */
+export type UpdateSeatPayload = Partial<SeatDTO>;
 
 // ─── Local editor state types ─────────────────────────────────────────────────
 
