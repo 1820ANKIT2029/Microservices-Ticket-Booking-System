@@ -97,7 +97,7 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
   const { formState: { isSubmitting, errors } } = form;
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 bg-surface border border-outline-variant/30 p-6 md:p-8 rounded-xl">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* Basic Info */}

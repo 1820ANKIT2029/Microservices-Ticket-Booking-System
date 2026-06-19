@@ -1,11 +1,11 @@
 import React from "react";
-import { EventHero } from "@/features/event-detail/components/event-hero";
-import { ActionBar } from "@/features/event-detail/components/action-bar";
-import { AboutEvent } from "@/features/event-detail/components/about-event";
-import { FeaturedLineup } from "@/features/event-detail/components/featured-lineup";
-import { OffersGuidelines } from "@/features/event-detail/components/offers-guidelines";
-import { VenueDetails } from "@/features/event-detail/components/venue-details";
-import { Recommendations } from "@/features/event-detail/components/recommendations";
+import { EventHero } from "@/features/events/components/event-hero";
+import { ActionBar } from "@/features/events/components/action-bar";
+import { AboutEvent } from "@/features/events/components/about-event";
+import { FeaturedLineup } from "@/features/events/components/featured-lineup";
+import { OffersGuidelines } from "@/features/events/components/offers-guidelines";
+import { VenueDetails } from "@/features/events/components/venue-details";
+import { Recommendations } from "@/features/events/components/recommendations";
 import { DEFAULT_EVENT_DETAIL } from "@/features/event-detail/constants/event-data";
 
 interface EventDetailPageProps {

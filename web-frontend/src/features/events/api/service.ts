@@ -6,6 +6,8 @@ import type {
   VenueResponseDto,
   TicketTypeRequestDto,
   TicketTypeResponseDto,
+  PerformerRequestDto,
+  PerformerResponseDto,
 } from "../types";
 
 const MOCK_USER_HEADERS = { "X-User-Id": "1" };
@@ -64,20 +66,21 @@ export class EventService {
   // ── Ticket Types ──────────────────────────────────────────────────────────
 
   static createTicketType(data: TicketTypeRequestDto & { eventId: number; eventSessionId?: number }) {
+    const { eventId, ...payload } = data;
     return api
-      .post<ApiResponse<TicketTypeResponseDto>>("/event/api/ticket-type", data)
+      .post<ApiResponse<TicketTypeResponseDto>>("/event/api/ticket-type", payload, { params: { eventId } })
       .then((res) => res.data.data);
   }
 
-  static updateTicketType(id: number | string, data: Partial<TicketTypeRequestDto>) {
+  static updateTicketType(id: number | string, eventId: number, data: Partial<TicketTypeRequestDto>) {
     return api
-      .put<ApiResponse<TicketTypeResponseDto>>(`/event/api/ticket-type/${id}`, data)
+      .put<ApiResponse<TicketTypeResponseDto>>(`/event/api/ticket-type/${id}`, data, { params: { eventId } })
       .then((res) => res.data.data);
   }
 
-  static deleteTicketType(id: number | string) {
+  static deleteTicketType(id: number | string, eventId: number) {
     return api
-      .delete<ApiResponse<void>>(`/event/api/ticket-type/${id}`)
+      .delete<ApiResponse<void>>(`/event/api/ticket-type/${id}`, { params: { eventId } })
       .then((res) => res.data);
   }
 
@@ -101,5 +104,29 @@ export class EventService {
     return api
       .get<ApiResponse<VenueResponseDto>>(`/event/api/venues/${id}`)
       .then((res) => res.data.data);
+  }
+
+  // ── Performers ────────────────────────────────────────────────────────────
+
+  static getAllPerformers(name: string) {
+    return api
+      .get<ApiResponse<PerformerResponseDto[]>>("/event/api/performers", { params: { name } })
+      .then((res) => res.data.data);
+  }
+
+  static createPerformer(data: PerformerRequestDto) {
+    return api
+      .post<ApiResponse<PerformerResponseDto>>("/event/api/performers", data)
+      .then((res) => res.data.data);
+  }
+
+  static async linkPerformersToEvent(eventId: number, performers: PerformerResponseDto[]) {
+    // Fetch current event to retain all other fields
+    const currentEvent = await this.getEventById(eventId);
+    const updatedData: Partial<EventRequestDto> = {
+      ...currentEvent,
+      performers,
+    };
+    return this.updateEvent(eventId, updatedData);
   }
 }

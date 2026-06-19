@@ -5,40 +5,41 @@ import type { EventSessionResponseDto, EventSessionRequestDto } from "../types";
 /**
  * EventSessionService — all HTTP calls for the event-sessions domain.
  */
+const MOCK_USER_HEADERS = { "X-User-Id": "1" };
+
 export class EventSessionService {
   static getSessions() {
     return api
-      .get<ApiResponse<EventSessionResponseDto[]>>("/event/api/event-session")
+      .get<ApiResponse<EventSessionResponseDto[]>>("/event/api/event-session", { headers: MOCK_USER_HEADERS })
       .then((res) => res.data.data);
   }
-
-  static getSessionById(id: number | string) {
-    return api
-      .get<ApiResponse<EventSessionResponseDto>>(`/event/api/event-session/${id}`)
-      .then((res) => res.data.data);
-  }
-
   static getSessionsByEvent(eventId: number | string) {
     return api
-      .get<ApiResponse<EventSessionResponseDto[]>>(`/event/api/event-session?eventId=${eventId}`)
+      .get<ApiResponse<EventSessionResponseDto[]>>(`/event/api/events/${eventId}/event-session`)
       .then((res) => res.data.data);
   }
 
-  static createSession(data: EventSessionRequestDto) {
+  static getSessionById(eventId: number | string, sessionId: number | string) {
     return api
-      .post<ApiResponse<EventSessionResponseDto>>("/event/api/event-session", data)
+      .get<ApiResponse<EventSessionResponseDto>>(`/event/api/events/${eventId}/event-session/${sessionId}`)
       .then((res) => res.data.data);
   }
 
-  static updateSession(id: number | string, data: Partial<EventSessionRequestDto>) {
+  static createSession(eventId: number | string, data: EventSessionRequestDto) {
     return api
-      .put<ApiResponse<EventSessionResponseDto>>(`/event/api/event-session/${id}`, data)
+      .post<ApiResponse<EventSessionResponseDto>>(`/event/api/events/${eventId}/event-session`, data)
       .then((res) => res.data.data);
   }
 
-  static deleteSession(id: number | string) {
+  static updateSession(eventId: number | string, sessionId: number | string, data: Partial<EventSessionRequestDto>) {
     return api
-      .delete<ApiResponse<void>>(`/event/api/event-session/${id}`)
+      .put<ApiResponse<EventSessionResponseDto>>(`/event/api/events/${eventId}/event-session/${sessionId}`, data)
+      .then((res) => res.data.data);
+  }
+
+  static deleteSession(eventId: number | string, sessionId: number | string) {
+    return api
+      .delete<ApiResponse<void>>(`/event/api/events/${eventId}/event-session/${sessionId}`)
       .then((res) => res.data);
   }
 }

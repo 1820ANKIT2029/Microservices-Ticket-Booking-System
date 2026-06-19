@@ -35,6 +35,7 @@ export interface EventRequestDto {
   posterUrl?:     string;
   isMultiSession?: boolean;
   isFeatured?:    boolean;
+  performers?:    PerformerResponseDto[];
 }
 
 export interface VenueResponseDto {
@@ -148,6 +149,18 @@ export interface PerformerResponseDto {
   isActive?:    boolean;
   createdAt?:   ISODateString;
   modifiedAt?:  ISODateString;
+}
+
+export interface PerformerRequestDto {
+  name:         string;
+  bio?:         string;
+  genre?:       string;
+  nationality?: string;
+  websiteUrl?:  string;
+  imageUrl?:    string;
+  socialLink1?: string;
+  socialLink2?: string;
+  isActive?:    boolean;
 }
 
 export interface EventSessionResponseDto {

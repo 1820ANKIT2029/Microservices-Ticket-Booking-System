@@ -9,10 +9,11 @@ import { useRouter } from "next/navigation";
 
 interface TicketTypeStepProps {
   event: EventResponseDto;
-  onBack: () => void;
+  onBack?: () => void;
+  onNext?: () => void;
 }
 
-export function TicketTypeStep({ event: initialEvent, onBack }: TicketTypeStepProps) {
+export function TicketTypeStep({ event: initialEvent, onBack, onNext }: TicketTypeStepProps) {
   const router = useRouter();
   const [event, setEvent] = useState<EventResponseDto>(initialEvent);
   const [isLoading, setIsLoading] = useState(false);
@@ -98,7 +99,7 @@ export function TicketTypeStep({ event: initialEvent, onBack }: TicketTypeStepPr
   const handleDelete = async (ticketTypeId: number) => {
     if (!confirm("Are you sure you want to delete this ticket type?")) return;
     try {
-      await EventService.deleteTicketType(ticketTypeId);
+      await EventService.deleteTicketType(ticketTypeId, event.id);
       toast.success("Ticket type deleted");
       await fetchEvent();
     } catch (err: any) {
@@ -106,17 +107,17 @@ export function TicketTypeStep({ event: initialEvent, onBack }: TicketTypeStepPr
     }
   };
 
-  const inputCls = "w-full px-3 py-2 bg-surface-container-low border border-outline-variant/80 rounded-lg text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary";
+  const inputCls = "w-full px-4 py-2 bg-surface-container-low border border-outline-variant/80 rounded-lg text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all";
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold">Ticket Types</h2>
           <p className="text-sm text-muted-foreground">Configure tickets for {event.title}</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" onClick={onBack}>Back to Event</Button>
+          {onBack && <Button variant="outline" onClick={onBack}>Back to Event</Button>}
           {!showForm && (
             <Button onClick={() => setShowForm(true)}>Add Ticket Type</Button>
           )}
@@ -127,33 +128,33 @@ export function TicketTypeStep({ event: initialEvent, onBack }: TicketTypeStepPr
         <form onSubmit={handleSubmit} className="p-6 bg-surface border border-outline-variant rounded-xl space-y-4">
           <h3 className="font-bold border-b border-outline-variant pb-2">New Ticket Type</h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-muted-foreground">Name *</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-label-md font-bold text-on-surface">Name *</label>
               <input required name="name" value={formData.name} onChange={handleChange} className={inputCls} placeholder="e.g. VIP, Early Bird" />
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-muted-foreground">Base Price ($) *</label>
+            <div className="space-y-2">
+              <label className="text-label-md font-bold text-on-surface">Base Price ($) *</label>
               <input required type="number" step="0.01" min="0" name="basePrice" value={formData.basePrice} onChange={handleChange} className={inputCls} />
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-muted-foreground">Total Quantity *</label>
+            <div className="space-y-2">
+              <label className="text-label-md font-bold text-on-surface">Total Quantity *</label>
               <input required type="number" min="1" name="totalQuantity" value={formData.totalQuantity} onChange={handleChange} className={inputCls} />
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-muted-foreground">Max Per Booking *</label>
+            <div className="space-y-2">
+              <label className="text-label-md font-bold text-on-surface">Max Per Booking *</label>
               <input required type="number" min="1" name="maxPerBooking" value={formData.maxPerBooking} onChange={handleChange} className={inputCls} />
             </div>
-            <div className="space-y-1 md:col-span-2">
-              <label className="text-xs font-bold text-muted-foreground">Description</label>
+            <div className="space-y-2 md:col-span-2">
+              <label className="text-label-md font-bold text-on-surface">Description</label>
               <textarea name="description" value={formData.description} onChange={handleChange} className={inputCls} rows={2} />
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-muted-foreground">Sale Start At (Optional)</label>
+            <div className="space-y-2">
+              <label className="text-label-md font-bold text-on-surface">Sale Start At (Optional)</label>
               <input type="datetime-local" name="saleStartAt" value={formData.saleStartAt} onChange={handleChange} className={inputCls} />
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-muted-foreground">Sale End At (Optional)</label>
+            <div className="space-y-2">
+              <label className="text-label-md font-bold text-on-surface">Sale End At (Optional)</label>
               <input type="datetime-local" name="saleEndAt" value={formData.saleEndAt} onChange={handleChange} className={inputCls} />
             </div>
           </div>
@@ -186,9 +187,11 @@ export function TicketTypeStep({ event: initialEvent, onBack }: TicketTypeStepPr
               </div>
             </div>
           ))}
-          <div className="flex justify-end pt-8">
-            <Button onClick={() => router.push("/events")} size="lg">Complete Setup</Button>
-          </div>
+          {onNext && (
+            <div className="flex justify-end pt-8">
+              <Button onClick={onNext} size="lg">Complete Setup</Button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="py-12 text-center bg-surface-container-low rounded-xl border border-dashed border-outline-variant space-y-3">

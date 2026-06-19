@@ -1,22 +1,38 @@
 "use client";
 
-import React, { use } from "react";
-import { useEvent } from "@/features/events";
+import React, { use, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { EventService } from "@/features/events/api/service";
+import { toEvent } from "@/features/events/mapper";
 import { EventForm } from "@/features/events/components/EventForm";
+import { TicketTypeStep } from "@/features/events/components/TicketTypeStep";
+import { EventSessionStep } from "@/features/events/components/EventSessionStep";
 import { PageHeader } from "@/features/admin/components/common/PageHeader";
 import { LoadingSpinner } from "@/features/admin/components/common/LoadingSpinner";
 import { RoleGuard } from "@/shared/components/role-guard";
 
 export default function EditEventPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
-  const { data: event, isLoading, error } = useEvent(id);
+  
+  const { data: eventDto, isLoading, error } = useQuery({
+    queryKey: ["event", "dto", id],
+    queryFn: () => EventService.getEventById(id),
+  });
+
+  const [activeTab, setActiveTab] = useState<"overview" | "sessions" | "tickets">("overview");
+
+  const tabs = [
+    { id: "overview", label: "Overview" },
+    { id: "sessions", label: "Sessions" },
+    { id: "tickets", label: "Ticket Types" },
+  ] as const;
 
   return (
     <RoleGuard requiredRole="ORGANIZER" redirectTo="/">
-      <div className="max-w-4xl mx-auto p-4 md:p-8">
+      <div className="w-full min-h-[101vh] max-w-4xl mx-auto p-4 pt-20 md:p-8 md:pt-24">
         <PageHeader
           title="Edit Event"
-          subtitle={event ? `Editing ${event.title}` : "Loading event details..."}
+          subtitle={eventDto ? `Editing ${eventDto.title}` : "Loading event details..."}
         />
 
         {isLoading && <LoadingSpinner message="Loading event details..." />}
@@ -27,7 +43,45 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
           </div>
         )}
 
-        {event && <EventForm initialData={event} />}
+        {eventDto && (
+          <div className="w-full mt-6 bg-surface border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm">
+            {/* Tabs Navigation */}
+            <div className="flex items-center gap-6 border-b border-outline-variant/50 bg-surface-container-low px-6 pt-4">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as "overview" | "sessions" | "tickets")}
+                  className={`pb-3 text-sm font-bold transition-colors border-b-2 ${
+                    activeTab === tab.id
+                      ? "border-primary text-primary"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab Content */}
+            <div className="w-full p-6 md:p-8 min-h-[850px]">
+              {activeTab === "overview" && (
+                <div>
+                  <div className="mb-6">
+                    <h2 className="text-xl font-bold">Event Details</h2>
+                    <p className="text-sm text-muted-foreground">Update the basic information for your event.</p>
+                  </div>
+                  <EventForm initialData={toEvent(eventDto)} />
+                </div>
+              )}
+              {activeTab === "sessions" && (
+                <EventSessionStep event={eventDto} />
+              )}
+              {activeTab === "tickets" && (
+                <TicketTypeStep event={eventDto} />
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </RoleGuard>
   );

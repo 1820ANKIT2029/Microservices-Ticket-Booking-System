@@ -6,6 +6,7 @@ import { sessionKeys } from "../query-keys";
 import { toEventSessionList } from "../mapper";
 import type { EventSession } from "../types";
 
+
 export function useSessions() {
   return useQuery<EventSession[]>({
     queryKey: sessionKeys.list(),

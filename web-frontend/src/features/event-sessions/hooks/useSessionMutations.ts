@@ -10,8 +10,8 @@ export function useCreateSession() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: EventSessionRequestDto) =>
-      EventSessionService.createSession(data).then(toEventSession),
+    mutationFn: ({ eventId, data }: { eventId: string | number; data: EventSessionRequestDto }) =>
+      EventSessionService.createSession(eventId, data).then(toEventSession),
 
     onSuccess: (session) => {
       queryClient.invalidateQueries({ queryKey: sessionKeys.all });
@@ -25,12 +25,14 @@ export function useUpdateSession() {
 
   return useMutation({
     mutationFn: ({
+      eventId,
       id,
       data,
     }: {
+      eventId: string | number;
       id: string | number;
       data: Partial<EventSessionRequestDto>;
-    }) => EventSessionService.updateSession(id, data).then(toEventSession),
+    }) => EventSessionService.updateSession(eventId, id, data).then(toEventSession),
 
     onSuccess: (session) => {
       queryClient.invalidateQueries({ queryKey: sessionKeys.detail(session.id) });
@@ -43,7 +45,8 @@ export function useDeleteSession() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string | number) => EventSessionService.deleteSession(id),
+    mutationFn: ({ eventId, id }: { eventId: string | number; id: string | number }) => 
+      EventSessionService.deleteSession(eventId, id),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: sessionKeys.all });

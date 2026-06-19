@@ -28,9 +28,12 @@ type SessionFormValues = z.infer<typeof sessionSchema>;
 
 interface EventSessionFormProps {
   initialData?: EventSession | null;
+  eventId?: number | string;
+  onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
-export function EventSessionForm({ initialData }: EventSessionFormProps) {
+export function EventSessionForm({ initialData, eventId, onSuccess, onCancel }: EventSessionFormProps) {
   const router = useRouter();
   const createMutation = useCreateSession();
   const updateMutation = useUpdateSession();
@@ -64,7 +67,7 @@ export function EventSessionForm({ initialData }: EventSessionFormProps) {
   const form = useForm<SessionFormValues>({
     resolver: zodResolver(sessionSchema),
     defaultValues: {
-      eventId: initialData ? Number(initialData.eventId) : undefined,
+      eventId: initialData ? Number(initialData.eventId) : eventId ? Number(eventId) : undefined,
       venueId: initialData ? Number(initialData.venueId) : undefined,
       title: initialData?.title || "",
       description: initialData?.description || "",
@@ -95,14 +98,19 @@ export function EventSessionForm({ initialData }: EventSessionFormProps) {
       };
       
       if (initialData?.id) {
-        await updateMutation.mutateAsync({ id: initialData.id, data: payload });
+        await updateMutation.mutateAsync({ eventId: payload.eventId, id: initialData.id, data: payload });
         toast.success("Session updated successfully");
       } else {
-        await createMutation.mutateAsync(payload);
+        await createMutation.mutateAsync({ eventId: payload.eventId, data: payload });
         toast.success("Session created successfully");
       }
-      router.push("/event-sessions");
-      router.refresh();
+      
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.push("/event-sessions");
+        router.refresh();
+      }
     } catch (error: any) {
       toast.error(error.message || "Failed to save session");
     }
@@ -119,7 +127,8 @@ export function EventSessionForm({ initialData }: EventSessionFormProps) {
           <label className="text-label-md font-bold text-on-surface">Event *</label>
           <select
             {...form.register("eventId", { valueAsNumber: true })}
-            className="w-full px-4 py-2 bg-surface-container-low border border-outline-variant/80 rounded-lg text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none"
+            disabled={!!eventId}
+            className="w-full px-4 py-2 bg-surface-container-low border border-outline-variant/80 rounded-lg text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none disabled:opacity-50"
           >
             <option value={0}>Select an event...</option>
             {events.map((e: any) => (
@@ -229,7 +238,7 @@ export function EventSessionForm({ initialData }: EventSessionFormProps) {
       </div>
 
       <div className="flex justify-end gap-4 pt-6 border-t border-outline-variant/30">
-        <Button variant="outline" type="button" onClick={() => router.push("/event-sessions")} disabled={isSubmitting}>
+        <Button variant="outline" type="button" onClick={() => onCancel ? onCancel() : router.push("/event-sessions")} disabled={isSubmitting}>
           Cancel
         </Button>
         <Button type="submit" disabled={isSubmitting}>

@@ -14,21 +14,22 @@ import { toast } from "sonner";
 
 interface EventSessionTableProps {
   sessions: EventSession[];
+  onEdit?: (session: EventSession) => void;
 }
 
-export function EventSessionTable({ sessions }: EventSessionTableProps) {
-  const [deleteId, setDeleteId] = useState<number | null>(null);
+export function EventSessionTable({ sessions, onEdit }: EventSessionTableProps) {
+  const [deleteData, setDeleteData] = useState<{ id: number; eventId: number } | null>(null);
   const deleteMutation = useDeleteSession();
 
   const handleDelete = async () => {
-    if (!deleteId) return;
+    if (!deleteData) return;
     try {
-      await deleteMutation.mutateAsync(deleteId);
+      await deleteMutation.mutateAsync({ id: deleteData.id, eventId: deleteData.eventId });
       toast.success("Session deleted successfully");
     } catch (error) {
       toast.error("Failed to delete session");
     } finally {
-      setDeleteId(null);
+      setDeleteData(null);
     }
   };
 
@@ -72,17 +73,24 @@ export function EventSessionTable({ sessions }: EventSessionTableProps) {
       className: "text-right",
       accessor: (s: EventSession) => (
         <div className="flex justify-end space-x-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/event-sessions/${s.id}/edit`}>
+          {onEdit ? (
+            <Button variant="outline" size="sm" onClick={() => onEdit(s)}>
               <Edit className="size-4 mr-2" />
               Edit
-            </Link>
-          </Button>
+            </Button>
+          ) : (
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`/event-sessions/${s.id}/edit?eventId=${s.eventId}`}>
+                <Edit className="size-4 mr-2" />
+                Edit
+              </Link>
+            </Button>
+          )}
           <Button
             variant="outline"
             size="sm"
             className="text-error border-error/30 hover:bg-error/10"
-            onClick={() => setDeleteId(Number(s.id))}
+            onClick={() => setDeleteData({ id: Number(s.id), eventId: Number(s.eventId) })}
           >
             <Trash2 className="size-4" />
           </Button>
@@ -96,8 +104,8 @@ export function EventSessionTable({ sessions }: EventSessionTableProps) {
       <DataTable columns={columns} data={sessions} keyExtractor={(s) => String(s.id)} />
 
       <DeleteDialog
-        isOpen={!!deleteId}
-        onOpenChange={(open) => !open && setDeleteId(null)}
+        isOpen={!!deleteData}
+        onOpenChange={(open) => !open && setDeleteData(null)}
         onConfirm={handleDelete}
         title="Delete Session"
         description="Are you sure you want to delete this session? All associated tickets and seat maps might be affected."

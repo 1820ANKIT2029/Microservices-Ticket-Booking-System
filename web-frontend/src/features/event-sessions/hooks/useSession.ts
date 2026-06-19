@@ -6,13 +6,13 @@ import { sessionKeys } from "../query-keys";
 import { toEventSession } from "../mapper";
 import type { EventSession } from "../types";
 
-export function useSession(id: string | number) {
+export function useSession(eventId: string | number, sessionId: string | number) {
   return useQuery<EventSession>({
-    queryKey: sessionKeys.detail(id),
+    queryKey: sessionKeys.detail(sessionId),
     queryFn:  async () => {
-      const dto = await EventSessionService.getSessionById(id);
+      const dto = await EventSessionService.getSessionById(eventId, sessionId);
       return toEventSession(dto);
     },
-    enabled: !!id,
+    enabled: !!eventId && !!sessionId,
   });
 }

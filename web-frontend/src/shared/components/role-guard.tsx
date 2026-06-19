@@ -28,13 +28,20 @@ export function RoleGuard({
   const { hasRole } = useRole();
   const router = useRouter();
   const allowed = hasRole(requiredRole);
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Handle redirect in an effect so hooks are always called unconditionally
   React.useEffect(() => {
-    if (!allowed && redirectTo) {
+    if (isMounted && !allowed && redirectTo) {
       router.replace(redirectTo);
     }
-  }, [allowed, redirectTo, router]);
+  }, [isMounted, allowed, redirectTo, router]);
+
+  if (!isMounted) return null; // Prevent hydration mismatch
 
   if (!allowed) {
     if (redirectTo) return null;
