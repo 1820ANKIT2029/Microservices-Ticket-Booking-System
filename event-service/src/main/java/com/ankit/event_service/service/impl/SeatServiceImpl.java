@@ -20,7 +20,7 @@ public class SeatServiceImpl implements ISeatService {
     @Override
     public SeatDTO getSeat(Long venueId, Long venueSectionId, Long seatId) {
         Seat seat = this.seatRepository
-                .findByIdAndVenueIdAndVenueSectionId(venueId, venueSectionId, seatId)
+                .findByVenueIdAndVenueSectionIdAndId(venueId, venueSectionId, seatId)
                 .orElseThrow(() -> new ResourceNotFoundException("Seat not found!"));
         return this.seatMapper.toDto(seat);
     }
@@ -54,7 +54,7 @@ public class SeatServiceImpl implements ISeatService {
     @Override
     public SeatDTO modifySeat(Long venueId, Long venueSectionId, Long seatId, SeatDTO seatDTO) {
         Seat seat = this.seatRepository
-                .findByIdAndVenueIdAndVenueSectionId(venueId, venueSectionId, seatId)
+                .findByVenueIdAndVenueSectionIdAndId(venueId, venueSectionId, seatId)
                 .orElseThrow(() -> new ResourceNotFoundException("Seat not found!"));
 
         if(seatDTO.getSeatNumber() != null) seat.setSeatNumber(seatDTO.getSeatNumber());
@@ -75,6 +75,6 @@ public class SeatServiceImpl implements ISeatService {
 
     @Override
     public void deleteSeat(Long venueId, Long venueSectionId, Long seatId) {
-        this.seatRepository.deleteByIdAndVenueIdAndVenueSectionId(seatId, venueId, venueSectionId);
+        this.seatRepository.deleteByVenueIdAndVenueSectionIdAndId(venueId, venueSectionId, seatId);
     }
 }

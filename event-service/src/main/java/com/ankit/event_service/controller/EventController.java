@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/events")
 @RequiredArgsConstructor
@@ -15,10 +17,21 @@ public class EventController {
     private final IEventService eventService;
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse<EventDTO>> createEvent(@RequestBody EventDTO eventdto){
-        EventDTO eventDTO = this.eventService.createEvent(eventdto);
+    public ResponseEntity<ApiResponse<EventDTO>> createEvent(
+            @RequestBody EventDTO eventdto,
+            @RequestHeader("X-User-Id") String userId
+    ){
+        EventDTO eventDTO = this.eventService.createEvent(eventdto, userId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(eventDTO, "event created"));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<Iterable<EventDTO>>> getAllEventsOfUser(
+            @RequestHeader("X-User-Id") String userId
+    ){
+        List<EventDTO> eventDTOS = this.eventService.getEventOfUser(userId);
+        return ResponseEntity.ok(new ApiResponse<>(eventDTOS, "events details"));
     }
 
     @GetMapping("/{eventId}")
@@ -27,4 +40,24 @@ public class EventController {
         return ResponseEntity.ok(new ApiResponse<>(eventDTO, "event details"));
     }
 
+    @PutMapping("/{eventId}")
+    public ResponseEntity<ApiResponse<EventDTO>> modifyEvent(
+            @PathVariable Long eventId,
+            @RequestBody EventDTO eventDTO,
+            @RequestHeader("X-User-Id") String userId
+    ) {
+        EventDTO eventDTO1 = this.eventService.modifyEvent(eventId, eventDTO, userId);
+        return ResponseEntity.ok(
+                new ApiResponse<>(eventDTO1, "event updated")
+        );
+    }
+
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<ApiResponse<EventDTO>> deleteEvent(
+            @PathVariable Long eventId,
+            @RequestHeader("X-User-Id") String userId
+    ) {
+        this.eventService.deleteEvent(eventId, userId);
+        return ResponseEntity.ok(new ApiResponse<>(null, "event deleted"));
+    }
 }

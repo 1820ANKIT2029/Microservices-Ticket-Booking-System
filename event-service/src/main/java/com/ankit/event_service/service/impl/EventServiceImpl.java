@@ -8,6 +8,9 @@ import com.ankit.event_service.repository.EventRepository;
 import com.ankit.event_service.service.IEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,19 +19,10 @@ public class EventServiceImpl implements IEventService {
     private final EventMapper eventMapper;
 
     @Override
-    public EventDTO createEvent(EventDTO eventDTO) {
+    @Transactional
+    public EventDTO createEvent(EventDTO eventDTO, String userId) {
+        eventDTO.setUserId(userId);
         Event event = this.eventMapper.toEntity(eventDTO);
-        if (event.getSessions() != null) {
-            event.getSessions().forEach(session -> {
-                session.setEvent(event);
-            });
-        }
-
-        if (event.getTicketTypes() != null) {
-            event.getTicketTypes().forEach(ticketType -> {
-                ticketType.setEvent(event);
-            });
-        }
 
         Event savedEvent = this.eventRepository.save(event);
         return eventMapper.toDto(savedEvent);
@@ -39,5 +33,41 @@ public class EventServiceImpl implements IEventService {
         Event event = this.eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found!"));
         return this.eventMapper.toDto(event);
+    }
+
+    @Override
+    public List<EventDTO> getEventOfUser(String userId) {
+        List<Event> events = this.eventRepository.findAllByUserId(userId);
+        if (events != null) {
+            return events.stream().map(eventMapper::toDto).toList();
+        }
+        return List.of();
+    }
+
+    @Override
+    @Transactional
+    public void deleteEvent(Long eventId, String userId) {
+        this.eventRepository.deleteByIdAndUserId(eventId, userId);
+    }
+
+    @Override
+    @Transactional
+    public EventDTO modifyEvent(Long eventId, EventDTO eventDTO, String userId) {
+        Event event = this.eventRepository.findByIdAndUserId(eventId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found!"));
+
+        if(eventDTO.getTitle() != null) event.setTitle(eventDTO.getTitle());
+        if(eventDTO.getDescription() != null) event.setDescription(eventDTO.getDescription());
+        if(eventDTO.getStatus() != null) event.setStatus(eventDTO.getStatus());
+        if(eventDTO.getSlug() != null) event.setSlug(eventDTO.getSlug());
+        if(eventDTO.getEventType() != null) event.setEventType(eventDTO.getEventType());
+        if(eventDTO.getIsFeatured() != null) event.setIsFeatured(eventDTO.getIsFeatured());
+        if(eventDTO.getIsMultiSession() != null) event.setIsMultiSession(eventDTO.getIsMultiSession());
+        if(eventDTO.getBannerUrl() != null) event.setBannerUrl(eventDTO.getBannerUrl());
+        if(eventDTO.getPosterUrl() != null) event.setPosterUrl(eventDTO.getPosterUrl());
+        if(eventDTO.getMinAge() != null) event.setMinAge(eventDTO.getMinAge());
+
+        Event event1 = this.eventRepository.save(event);
+        return this.eventMapper.toDto(event1);
     }
 }

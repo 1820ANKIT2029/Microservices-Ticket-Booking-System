@@ -11,6 +11,7 @@ public interface SeatRepository extends JpaRepository<Seat,Long> {
             Long venueId, Long venueSectionId, Long id
     );
 
+    List<Seat> findAllByVenueId(Long venueId);
     List<Seat> findAllByVenueIdAndVenueSectionId(Long venueId, Long venueSectionId);
     void deleteByVenueIdAndVenueSectionIdAndId(Long venueId, Long venueSectionId, Long seatId);
 }

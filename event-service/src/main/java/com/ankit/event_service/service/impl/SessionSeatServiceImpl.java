@@ -1,10 +1,14 @@
 package com.ankit.event_service.service.impl;
 
 import com.ankit.event_service.dto.SessionSeatDTO;
+import com.ankit.event_service.entity.EventSession;
+import com.ankit.event_service.entity.Seat;
 import com.ankit.event_service.entity.SessionSeat;
+import com.ankit.event_service.entity.SessionSeatStatus;
 import com.ankit.event_service.exception.ResourceNotFoundException;
 import com.ankit.event_service.exception.SeatAlreadyBookedException;
 import com.ankit.event_service.mapper.SessionSeatMapper;
+import com.ankit.event_service.repository.SeatRepository;
 import com.ankit.event_service.repository.SessionSeatsRepository;
 import com.ankit.event_service.service.ISessionSeatService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SessionSeatServiceImpl implements ISessionSeatService {
     private final SessionSeatsRepository sessionSeatsRepository;
+    private final SeatRepository seatRepository;
     private final SessionSeatMapper sessionSeatMapper;
 
     @Override
@@ -45,5 +50,28 @@ public class SessionSeatServiceImpl implements ISessionSeatService {
         return updatedSeats.stream()
                 .map(this.sessionSeatMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void initializeSessionSeats(EventSession eventSession) {
+
+        List<Seat> seats = seatRepository.findAllByVenueId(
+                eventSession.getVenue().getId()
+        );
+
+        List<SessionSeat> sessionSeats = seats.stream()
+                .map(seat -> SessionSeat.builder()
+                        .eventSession(eventSession)
+                        .seat(seat)
+                        .status(SessionSeatStatus.AVAILABLE)
+                        .build()
+                )
+                .toList();
+
+        sessionSeatsRepository.saveAll(sessionSeats);
+
+        eventSession.setTotalCapacity(seats.size());
+        eventSession.setAvailableCapacity(seats.size());
     }
 }
