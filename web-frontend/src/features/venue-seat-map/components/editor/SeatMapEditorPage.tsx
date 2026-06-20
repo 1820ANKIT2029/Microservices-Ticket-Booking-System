@@ -6,8 +6,7 @@ import { SidebarPanel }       from "./SidebarPanel";
 import { SeatCanvas }         from "../canvas/SeatCanvas";
 import { GenerateSeatsModal } from "./GenerateSeatsModal";
 import { VenueSeatMapService } from "@/features/venue-seat-map";
-import { toLocalSection }      from "@/features/venue-seat-map";
-import type { LocalVenue, LocalSection, LocalSeat, SeatGenerationConfig } from "../../types";
+import type { LocalVenue, LocalSection, LocalSeat, SeatGenerationConfig, SeatDTO, VenueSectionMapDTO } from "../../types";
 
 interface SeatMapEditorPageProps {
   venueId: number;
@@ -16,7 +15,7 @@ interface SeatMapEditorPageProps {
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
 /** Parse a raw API section response into a LocalSection with safe defaults. */
-function parseSection(s: any): LocalSection {
+function parseSection(s: VenueSectionMapDTO): LocalSection {
   return {
     id:          s.id,
     venueId:     s.venueId,
@@ -32,7 +31,7 @@ function parseSection(s: any): LocalSection {
 }
 
 /** Parse a raw API seat response into a LocalSeat with safe defaults. */
-function parseSeat(seat: any): LocalSeat {
+function parseSeat(seat: SeatDTO): LocalSeat {
   return {
     id:             seat.id,
     venueId:        seat.venueId,
@@ -56,15 +55,19 @@ function parseSeat(seat: any): LocalSeat {
 export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
   const editor = useVenueEditor();
   const [toast, setToast] = React.useState<{ type: "success" | "error"; msg: string } | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(!!venueId);
+
+  // ── Toast helper ───────────────────────────────────────────────────────────
+
+  const showToast = useCallback((type: "success" | "error", msg: string) => {
+    setToast({ type, msg });
+    setTimeout(() => setToast(null), 3500);
+  }, []);
 
   // ── Load venue on mount (parallel: getVenue + getSections) ────────────────
 
   React.useEffect(() => {
-    if (!venueId) {
-      setIsLoading(false);
-      return;
-    }
+    if (!venueId) return;
 
     (async () => {
       try {
@@ -74,12 +77,16 @@ export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
           VenueSeatMapService.getSections(venueId).catch(() => []),
         ]);
 
+        const sectionsData = dto.sections && dto.sections.length > 0
+          ? dto.sections
+          : (Array.isArray(secRes) ? secRes : []);
+
         const loadedVenue: LocalVenue = {
           id:        dto.id,
           name:      dto.name,
           mapWidth:  dto.mapWidth  ?? 1200,
           mapHeight: dto.mapHeight ?? 800,
-          sections:  (Array.isArray(secRes) ? secRes : []).map(parseSection),
+          sections:  sectionsData.map(parseSection),
         };
 
         editor.loadVenue(loadedVenue);
@@ -90,14 +97,7 @@ export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [venueId]);
-
-  // ── Toast helper ───────────────────────────────────────────────────────────
-
-  const showToast = useCallback((type: "success" | "error", msg: string) => {
-    setToast({ type, msg });
-    setTimeout(() => setToast(null), 3500);
-  }, []);
+  }, [venueId, showToast]);
 
   // ── Optimized save ────────────────────────────────────────────────────────
   //

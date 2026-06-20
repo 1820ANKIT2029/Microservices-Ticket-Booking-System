@@ -28,7 +28,7 @@ export function useVenue(venueId: number | string) {
     queryFn:  async () => {
       const [venue, sections] = await Promise.all([
         VenueSeatMapService.getVenue(venueId),
-        VenueSeatMapService.getSections(venueId),
+        VenueSeatMapService.getSections(venueId).catch(() => []),
       ]);
       return toLocalVenue(venue, sections);
     },

@@ -12,14 +12,18 @@ import type {
  */
 export function toLocalVenue(
   dto: VenueMapDTO,
-  sections: VenueSectionMapDTO[]
+  sections?: VenueSectionMapDTO[]
 ): LocalVenue {
+  const sectionsData = dto.sections && dto.sections.length > 0
+    ? dto.sections
+    : (sections || []);
+
   return {
     id:        dto.id,
     name:      dto.name,
     mapWidth:  dto.mapWidth  ?? 1200,
     mapHeight: dto.mapHeight ?? 800,
-    sections:  (Array.isArray(sections) ? sections : []).map(toLocalSection),
+    sections:  (Array.isArray(sectionsData) ? sectionsData : []).map(toLocalSection),
   };
 }
 

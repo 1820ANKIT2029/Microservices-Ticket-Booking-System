@@ -7,9 +7,11 @@ import Link from "next/link";
 interface ActionBarProps {
   priceText: string;
   eventId: string;
+  selectedSessionId?: string | number | null;
+  selectedSessionText?: string;
 }
 
-export function ActionBar({ priceText, eventId }: ActionBarProps) {
+export function ActionBar({ priceText, eventId, selectedSessionId, selectedSessionText }: ActionBarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -31,12 +33,19 @@ export function ActionBar({ priceText, eventId }: ActionBarProps) {
       aria-label="Ticket booking bar"
     >
       <div className="max-w-[1280px] mx-auto px-4 md:px-16 h-16 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <span className="text-on-surface-variant text-label-md font-semibold">From</span>
-          <span className="text-primary font-bold text-headline-md">{priceText}</span>
+        <div className="flex flex-col text-left">
+          <div className="flex items-center gap-2">
+            <span className="text-on-surface-variant text-label-md font-semibold">From</span>
+            <span className="text-primary font-bold text-headline-md">{priceText}</span>
+          </div>
+          {selectedSessionText && (
+            <span className="text-[10px] md:text-xs text-muted-foreground font-semibold">
+              Selected Session: {selectedSessionText}
+            </span>
+          )}
         </div>
         <Link
-          href={`/events/${eventId}/seats`}
+          href={selectedSessionId ? `/events/${eventId}/seats?sessionId=${selectedSessionId}` : `/events/${eventId}/seats`}
           className="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold text-label-md hover:bg-primary-container hover:text-on-primary-container hover:scale-105 active:scale-95 transition-all shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary inline-flex items-center justify-center"
         >
           Book Tickets

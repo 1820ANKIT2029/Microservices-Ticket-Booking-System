@@ -3,7 +3,15 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 import type { EventDetail } from "../types/event-detail";
 
 interface EventHeroProps {
-  event: EventDetail;
+  event: {
+    title: string;
+    category: string;
+    dateText: string;
+    timeText: string;
+    locationText: string;
+    imageUrl: string;
+    imageAlt: string;
+  };
 }
 
 export function EventHero({ event }: EventHeroProps) {

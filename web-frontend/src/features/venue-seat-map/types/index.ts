@@ -5,6 +5,7 @@ export interface VenueMapDTO {
   name: string;
   mapWidth?: number;
   mapHeight?: number;
+  sections?: VenueSectionMapDTO[];
 }
 
 export interface VenueSectionMapDTO {
