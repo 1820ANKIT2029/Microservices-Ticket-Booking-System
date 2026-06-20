@@ -32,7 +32,7 @@ export function ActionBar({ priceText, eventId, selectedSessionId, selectedSessi
       role="region"
       aria-label="Ticket booking bar"
     >
-      <div className="max-w-[1280px] mx-auto px-4 md:px-16 h-16 flex justify-between items-center">
+      <div className="max-w-[1280px] mx-auto px-4 md:px-16 h-16 flex items-center">
         <div className="flex flex-col text-left">
           <div className="flex items-center gap-2">
             <span className="text-on-surface-variant text-label-md font-semibold">From</span>
@@ -44,12 +44,6 @@ export function ActionBar({ priceText, eventId, selectedSessionId, selectedSessi
             </span>
           )}
         </div>
-        <Link
-          href={selectedSessionId ? `/events/${eventId}/seats?sessionId=${selectedSessionId}` : `/events/${eventId}/seats`}
-          className="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold text-label-md hover:bg-primary-container hover:text-on-primary-container hover:scale-105 active:scale-95 transition-all shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary inline-flex items-center justify-center"
-        >
-          Book Tickets
-        </Link>
       </div>
     </div>
   );

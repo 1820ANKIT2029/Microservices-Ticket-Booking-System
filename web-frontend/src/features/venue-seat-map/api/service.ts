@@ -9,6 +9,7 @@ import type {
   UpdateVenueSectionPayload,
   CreateSeatPayload,
   UpdateSeatPayload,
+  SessionSeatDTO,
 } from "../types";
 
 /**
@@ -133,5 +134,31 @@ export class VenueSeatMapService {
     return api
       .delete<ApiResponse<void>>(`/event/api/venues/${venueId}/venue-sections/${sectionId}/seats/${id}`)
       .then((res) => res.data);
+  }
+
+  // ── Session Seats ──────────────────────────────────────────────────────────
+
+  static getSessionSeats(eventSessionId: number | string) {
+    return api
+      .get<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats`)
+      .then((res) => res.data.data);
+  }
+
+  static lockSeats(eventSessionId: number | string, seats: Omit<SessionSeatDTO, "id">[]) {
+    return api
+      .post<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats/batch/lock`, seats)
+      .then((res) => res.data.data);
+  }
+
+  static unlockSeats(eventSessionId: number | string, seats: Omit<SessionSeatDTO, "id">[]) {
+    return api
+      .post<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats/batch/unlock`, seats)
+      .then((res) => res.data.data);
+  }
+
+  static bookSeats(eventSessionId: number | string, seats: Omit<SessionSeatDTO, "id">[]) {
+    return api
+      .post<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats/batch/booked`, seats)
+      .then((res) => res.data.data);
   }
 }

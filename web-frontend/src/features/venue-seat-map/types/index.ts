@@ -39,6 +39,14 @@ export interface SeatDTO {
   isActive?: boolean;
 }
 
+export interface SessionSeatDTO {
+  id: number;
+  eventSessionId: number;
+  seatId: number;
+  overridePrice?: number;
+  status: "AVAILABLE" | "RESERVED" | "SOLD";
+}
+
 // ─── Create / Update payloads ─────────────────────────────────────────────────
 
 export type CreateVenueSectionPayload = Omit<VenueSectionMapDTO, "id" | "seats">;

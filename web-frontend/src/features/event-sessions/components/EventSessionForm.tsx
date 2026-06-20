@@ -50,18 +50,29 @@ export function EventSessionForm({ initialData, eventId, onSuccess, onCancel }: 
   let initEndTime = "22:00";
 
   if (initialData?.startDateTime) {
-    try {
-      const d = new Date(initialData.startDateTime);
-      initDate = d.toISOString().split("T")[0];
-      initStartTime = d.toISOString().substring(11, 16);
-    } catch (e) {}
+    const parts = initialData.startDateTime.split(" ");
+    if (parts.length === 2) {
+      initDate = parts[0];
+      initStartTime = parts[1].substring(0, 5);
+    } else {
+      try {
+        const d = new Date(initialData.startDateTime);
+        initDate = d.toISOString().split("T")[0];
+        initStartTime = d.toISOString().substring(11, 16);
+      } catch (e) {}
+    }
   }
   
   if (initialData?.endDateTime) {
-    try {
-      const d = new Date(initialData.endDateTime);
-      initEndTime = d.toISOString().substring(11, 16);
-    } catch (e) {}
+    const parts = initialData.endDateTime.split(" ");
+    if (parts.length === 2) {
+      initEndTime = parts[1].substring(0, 5);
+    } else {
+      try {
+        const d = new Date(initialData.endDateTime);
+        initEndTime = d.toISOString().substring(11, 16);
+      } catch (e) {}
+    }
   }
   
   const form = useForm<SessionFormValues>({
@@ -81,9 +92,9 @@ export function EventSessionForm({ initialData, eventId, onSuccess, onCancel }: 
 
   const onSubmit = async (data: SessionFormValues) => {
     try {
-      // Reconstruct dates to match backend DTO
-      const startDateTime = new Date(`${data.sessionDate}T${data.startTime}:00Z`).toISOString();
-      const endDateTime = new Date(`${data.sessionDate}T${data.endTime}:00Z`).toISOString();
+      // Reconstruct dates to match backend DTO: ISO 8601 (YYYY-MM-DDTHH:mm:ss.SSSZ)
+      const startDataTime = new Date(`${data.sessionDate}T${data.startTime}:00Z`).toISOString();
+      const endDataTime = new Date(`${data.sessionDate}T${data.endTime}:00Z`).toISOString();
 
       const payload: any = {
         eventId: Number(data.eventId),
@@ -92,8 +103,8 @@ export function EventSessionForm({ initialData, eventId, onSuccess, onCancel }: 
         description: data.description,
         totalCapacity: data.totalCapacity,
         status: data.status as any,
-        startDateTime: startDateTime,
-        endDateTime: endDateTime,
+        startDataTime: startDataTime,
+        endDataTime: endDataTime,
         sessionNumber: initialData?.sessionNumber || 1,
       };
       

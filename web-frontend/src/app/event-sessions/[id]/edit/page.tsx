@@ -6,6 +6,8 @@ import { EventSessionForm } from "@/features/event-sessions/components/EventSess
 import { PageHeader, LoadingSpinner, RoleGuard } from "@/shared/components";
 import { useSearchParams } from "next/navigation";
 
+import { SessionTicketTypesManager } from "@/features/events/components/SessionTicketTypesManager";
+
 function EditSessionContent({ id }: { id: string }) {
   const searchParams = useSearchParams();
   const eventId = searchParams.get("eventId") || 0;
@@ -13,7 +15,7 @@ function EditSessionContent({ id }: { id: string }) {
   const { data: session, isLoading, error } = useSession(eventId, id);
 
   return (
-    <div className="max-w-4xl mx-auto p-4 pt-20 md:p-8 md:pt-24">
+    <div className="max-w-4xl mx-auto p-4 pt-20 md:p-8 md:pt-24 space-y-6">
       <PageHeader
         title="Edit Session"
         subtitle={session ? `Editing ${session.title}` : "Loading session details..."}
@@ -27,7 +29,14 @@ function EditSessionContent({ id }: { id: string }) {
         </div>
       )}
 
-      {session && <EventSessionForm initialData={session} eventId={eventId} />}
+      {session && (
+        <div className="space-y-8">
+          <EventSessionForm initialData={session} eventId={eventId} />
+          <div className="bg-surface border border-outline-variant/30 p-6 md:p-8 rounded-xl shadow-sm">
+            <SessionTicketTypesManager eventSession={session} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

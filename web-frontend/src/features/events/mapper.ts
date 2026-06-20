@@ -32,14 +32,16 @@ export function toEventSession(dto: EventSessionResponseDto): EventSession {
   return {
     id:                String(dto.id ?? ""),
     eventId:           String(dto.eventId ?? ""),
+    venueId:           String(dto.venueId ?? ""),
     title:             dto.title ?? "",
     description:       dto.description ?? "",
     status:            dto.status ?? "SCHEDULED",
     sessionNumber:     dto.sessionNumber ?? 1,
     totalCapacity:     dto.totalCapacity ?? 0,
     availableCapacity: dto.availableCapacity ?? 0,
-    startDateTime:     dto.startDateTime ?? dto.startDateTime ?? "",
-    endDateTime:       dto.endDateTime ?? dto.endDateTime ?? "",
+    startDateTime:     dto.startDataTime ?? "",
+    endDateTime:       dto.endDataTime ?? "",
+    ticketTypes:       (dto.ticketTypes ?? []).map(toTicketType),
   };
 }
 
@@ -57,6 +59,8 @@ export function toTicketType(dto: TicketTypeResponseDto): TicketType {
     isActive:          dto.isActive ?? true,
     saleStartAt:       dto.saleStartAt ?? "",
     saleEndAt:         dto.saleEndAt ?? "",
+    eventSessionId:    dto.eventSessionId ? String(dto.eventSessionId) : undefined,
+    venueSectionIds:   dto.venueSectionIds ?? [],
   };
 }
 
@@ -98,7 +102,6 @@ export function toEvent(dto: EventResponseDto): Event {
     updatedAt:      dto.updatedAt ?? "",
     performers:     (dto.performers ?? []).map(toPerformer),
     sessions:       (dto.sessions ?? []).map(toEventSession),
-    ticketTypes:    (dto.ticketTypes ?? []).map(toTicketType),
   };
 }
 

@@ -65,23 +65,28 @@ export class EventService {
 
   // ── Ticket Types ──────────────────────────────────────────────────────────
 
-  static createTicketType(data: TicketTypeRequestDto & { eventId: number; eventSessionId?: number }) {
-    const { eventId, ...payload } = data;
+  static createTicketType(eventSessionId: number | string, data: TicketTypeRequestDto) {
     return api
-      .post<ApiResponse<TicketTypeResponseDto>>("/event/api/ticket-type", payload, { params: { eventId } })
+      .post<ApiResponse<TicketTypeResponseDto>>(`/event/api/event-sessions/${eventSessionId}/ticket-type`, data)
       .then((res) => res.data.data);
   }
 
-  static updateTicketType(id: number | string, eventId: number, data: Partial<TicketTypeRequestDto>) {
+  static updateTicketType(eventSessionId: number | string, ticketTypeId: number | string, data: Partial<TicketTypeRequestDto>) {
     return api
-      .put<ApiResponse<TicketTypeResponseDto>>(`/event/api/ticket-type/${id}`, data, { params: { eventId } })
+      .put<ApiResponse<TicketTypeResponseDto>>(`/event/api/event-sessions/${eventSessionId}/ticket-type/${ticketTypeId}`, data)
       .then((res) => res.data.data);
   }
 
-  static deleteTicketType(id: number | string, eventId: number) {
+  static deleteTicketType(eventSessionId: number | string, ticketTypeId: number | string) {
     return api
-      .delete<ApiResponse<void>>(`/event/api/ticket-type/${id}`, { params: { eventId } })
+      .delete<ApiResponse<void>>(`/event/api/event-sessions/${eventSessionId}/ticket-type/${ticketTypeId}`)
       .then((res) => res.data);
+  }
+
+  static getTicketTypesBySession(eventSessionId: number | string) {
+    return api
+      .get<ApiResponse<TicketTypeResponseDto[]>>(`/event/api/event-sessions/${eventSessionId}/ticket-type`)
+      .then((res) => res.data.data);
   }
 
   // ── Admin — All events (no category filter) ───────────────────────────────

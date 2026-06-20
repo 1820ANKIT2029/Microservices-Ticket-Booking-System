@@ -21,7 +21,6 @@ export interface EventResponseDto {
   updatedAt?:    ISODateString;
   performers?:   PerformerResponseDto[];
   sessions?:     EventSessionResponseDto[];
-  ticketTypes?:  TicketTypeResponseDto[];
 }
 
 export interface EventRequestDto {
@@ -113,7 +112,6 @@ export interface SeatResponseDto {
 
 export interface TicketTypeResponseDto {
   id?:               number;
-  eventId?:          number;
   eventSessionId?:   number;
   name:              string;
   description?:      string;
@@ -124,6 +122,7 @@ export interface TicketTypeResponseDto {
   isActive?:         boolean;
   saleStartAt?:      ISODateString;
   saleEndAt?:        ISODateString;
+  venueSectionIds?:  number[];
 }
 
 export interface TicketTypeRequestDto {
@@ -134,6 +133,7 @@ export interface TicketTypeRequestDto {
   maxPerBooking:     number;
   saleStartAt?:      ISODateString;
   saleEndAt?:        ISODateString;
+  venueSectionIds?:  number[];
 }
 
 export interface PerformerResponseDto {
@@ -176,9 +176,10 @@ export interface EventSessionResponseDto {
   availableCapacity?: number;
   sessionNumber:     number;
   isRecorded?:       boolean;
-  startDateTime?:    ISODateString;
-  endDateTime?:      ISODateString;
+  startDataTime?:    ISODateString;
+  endDataTime?:      ISODateString;
   createdAt?:        ISODateString;
+  ticketTypes?:      TicketTypeResponseDto[];
 }
 
 // ── Domain Models (what components consume) ───────────────────────────────────
@@ -199,7 +200,6 @@ export interface Event {
   updatedAt:     ISODateString;
   performers:    Performer[];
   sessions:      EventSession[];
-  ticketTypes:   TicketType[];
 }
 
 export interface Performer {
@@ -215,6 +215,7 @@ export interface Performer {
 export interface EventSession {
   id:                string;
   eventId:           string;
+  venueId:           string;
   title:             string;
   description:       string;
   status:            string;
@@ -223,6 +224,7 @@ export interface EventSession {
   availableCapacity: number;
   startDateTime:     ISODateString;
   endDateTime:       ISODateString;
+  ticketTypes?:      TicketType[];
 }
 
 export interface TicketType {
@@ -236,6 +238,8 @@ export interface TicketType {
   isActive:          boolean;
   saleStartAt:       ISODateString;
   saleEndAt:         ISODateString;
+  eventSessionId?:   string;
+  venueSectionIds?:  number[];
 }
 
 export interface Venue {

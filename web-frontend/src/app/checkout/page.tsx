@@ -5,7 +5,14 @@ import { CheckoutClient } from "@/features/checkout/components/checkout-client";
 import { getCheckoutEventById, calculateOrderBreakdown } from "@/features/checkout/constants/checkout-data";
 
 interface PageProps {
-  searchParams: Promise<{ eventId?: string; qty?: string; seats?: string; fail?: string }>;
+  searchParams: Promise<{
+    eventId?: string;
+    qty?: string;
+    seats?: string;
+    fail?: string;
+    sessionId?: string;
+    seatIds?: string;
+  }>;
 }
 
 export default function CheckoutPage({ searchParams }: PageProps) {
@@ -14,6 +21,11 @@ export default function CheckoutPage({ searchParams }: PageProps) {
   const qty = resolvedParams?.qty;
   const seats = resolvedParams?.seats;
   const fail = resolvedParams?.fail;
+  const sessionId = resolvedParams?.sessionId;
+  const seatIds = resolvedParams?.seatIds;
+
+  // Parse selected seat IDs
+  const seatIdsList = seatIds ? seatIds.split(",").map((id) => Number(id)) : [];
   
   // Parse selected seats list
   const seatsList = seats ? seats.split(",") : [];
@@ -44,6 +56,8 @@ export default function CheckoutPage({ searchParams }: PageProps) {
       breakdown={breakdown} 
       seats={seats} 
       fail={fail === "true"} 
+      sessionId={sessionId}
+      seatIdsList={seatIdsList}
     />
   );
 }

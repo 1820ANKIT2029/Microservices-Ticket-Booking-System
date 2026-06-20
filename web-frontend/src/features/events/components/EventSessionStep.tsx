@@ -7,6 +7,7 @@ import { EventSessionForm } from "@/features/event-sessions/components/EventSess
 import { EventSessionTable } from "@/features/event-sessions/components/EventSessionTable";
 import { useSessionsByEvent } from "@/features/event-sessions/hooks/useSessions";
 import { EventSession } from "@/features/event-sessions/types";
+import { SessionTicketTypesManager } from "./SessionTicketTypesManager";
 
 interface EventSessionStepProps {
   event: EventResponseDto;
@@ -56,13 +57,18 @@ export function EventSessionStep({ event, onBack, onNext }: EventSessionStepProp
       </div>
 
       {showForm && (
-        <div className="bg-surface-container-low border border-outline-variant p-1 rounded-xl">
+        <div className="bg-surface-container-low border border-outline-variant p-6 rounded-xl space-y-6">
            <EventSessionForm 
              eventId={event.id}
              initialData={editingSession} 
              onSuccess={handleSuccess} 
              onCancel={handleCancel} 
            />
+           {editingSession && (
+             <div className="border-t border-outline-variant/30 pt-6 mt-6">
+               <SessionTicketTypesManager eventSession={editingSession} />
+             </div>
+           )}
         </div>
       )}
 

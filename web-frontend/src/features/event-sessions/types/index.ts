@@ -1,5 +1,6 @@
 import type { ISODateString } from "@/shared/types";
 import type { SessionStatus } from "@/shared/constants";
+import type { TicketTypeResponseDto, TicketType } from "@/features/events/types";
 
 // ── API DTOs ──────────────────────────────────────────────────────────────────
 
@@ -16,9 +17,10 @@ export interface EventSessionResponseDto {
   availableCapacity?: number;
   sessionNumber:      number;
   isRecorded?:        boolean;
-  startDateTime?:     ISODateString;
-  endDateTime?:       ISODateString;
+  startDataTime?:     ISODateString;
+  endDataTime?:       ISODateString;
   createdAt?:         ISODateString;
+  ticketTypes?:      TicketTypeResponseDto[];
 }
 
 export interface EventSessionRequestDto {
@@ -31,8 +33,8 @@ export interface EventSessionRequestDto {
   totalCapacity?:     number;
   sessionNumber:      number;
   isRecorded?:        boolean;
-  startDateTime?:     ISODateString;
-  endDateTime?:       ISODateString;
+  startDataTime?:     ISODateString;
+  endDataTime?:       ISODateString;
 }
 
 // ── Domain Model ──────────────────────────────────────────────────────────────
@@ -51,6 +53,7 @@ export interface EventSession {
   endDateTime:       ISODateString;
   isRecorded:        boolean;
   createdAt:         ISODateString;
+  ticketTypes?:      TicketType[];
 }
 
 /**

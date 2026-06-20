@@ -10,36 +10,36 @@ const MOCK_USER_HEADERS = { "X-User-Id": "1" };
 export class EventSessionService {
   static getSessions() {
     return api
-      .get<ApiResponse<EventSessionResponseDto[]>>("/event/api/event-session", { headers: MOCK_USER_HEADERS })
+      .get<ApiResponse<EventSessionResponseDto[]>>("/event/api/event-sessions", { headers: MOCK_USER_HEADERS })
       .then((res) => res.data.data);
   }
   static getSessionsByEvent(eventId: number | string) {
     return api
-      .get<ApiResponse<EventSessionResponseDto[]>>(`/event/api/events/${eventId}/event-session`)
+      .get<ApiResponse<EventSessionResponseDto[]>>(`/event/api/events/${eventId}/event-sessions`)
       .then((res) => res.data.data);
   }
 
   static getSessionById(eventId: number | string, sessionId: number | string) {
     return api
-      .get<ApiResponse<EventSessionResponseDto>>(`/event/api/events/${eventId}/event-session/${sessionId}`)
+      .get<ApiResponse<EventSessionResponseDto>>(`/event/api/events/${eventId}/event-sessions/${sessionId}`)
       .then((res) => res.data.data);
   }
 
   static createSession(eventId: number | string, data: EventSessionRequestDto) {
     return api
-      .post<ApiResponse<EventSessionResponseDto>>(`/event/api/events/${eventId}/event-session`, data)
+      .post<ApiResponse<EventSessionResponseDto>>(`/event/api/events/${eventId}/event-sessions`, data)
       .then((res) => res.data.data);
   }
 
   static updateSession(eventId: number | string, sessionId: number | string, data: Partial<EventSessionRequestDto>) {
     return api
-      .put<ApiResponse<EventSessionResponseDto>>(`/event/api/events/${eventId}/event-session/${sessionId}`, data)
+      .put<ApiResponse<EventSessionResponseDto>>(`/event/api/events/${eventId}/event-sessions/${sessionId}`, data)
       .then((res) => res.data.data);
   }
 
   static deleteSession(eventId: number | string, sessionId: number | string) {
     return api
-      .delete<ApiResponse<void>>(`/event/api/events/${eventId}/event-session/${sessionId}`)
+      .delete<ApiResponse<void>>(`/event/api/events/${eventId}/event-sessions/${sessionId}`)
       .then((res) => res.data);
   }
 }

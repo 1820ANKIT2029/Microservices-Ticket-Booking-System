@@ -13,6 +13,7 @@ import { useSessionsByEvent } from "@/features/event-sessions";
 import { useAdminVenue } from "@/features/venue-seat-map";
 import { LoadingSpinner } from "@/shared/components";
 import { cn } from "@/shared/utils/cn";
+import Link from "next/link";
 
 interface EventDetailPageProps {
   params: Promise<{ id: string }>;
@@ -105,8 +106,9 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
     descriptionParagraphs: event.description ? event.description.split("\n") : [],
   };
 
-  const priceText = event.ticketTypes && event.ticketTypes.length > 0
-    ? `₹${Math.min(...event.ticketTypes.map((t) => t.basePrice))}`
+  const allTicketTypes = sessions.flatMap((s) => s.ticketTypes || []);
+  const priceText = allTicketTypes.length > 0
+    ? `₹${Math.min(...allTicketTypes.map((t) => t.basePrice))}`
     : "₹1,200";
 
   const selectedSessionText = activeSession
@@ -208,13 +210,11 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
                   const isSellingFast = session.availableCapacity > 0 && session.availableCapacity < 20;
 
                   return (
-                    <button
+                    <div
                       key={session.id}
-                      type="button"
-                      disabled={isSoldOut}
-                      onClick={() => setSelectedSessionId(session.id)}
+                      onClick={() => !isSoldOut && setSelectedSessionId(session.id)}
                       className={cn(
-                        "flex items-center justify-between p-4 rounded-xl border text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                        "flex flex-col p-4 rounded-xl border text-left transition-all duration-200 cursor-pointer",
                         isSoldOut
                           ? "bg-muted border-border opacity-50 cursor-not-allowed"
                           : isSelected
@@ -222,36 +222,50 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
                             : "bg-surface border-border hover:border-primary/50 hover:shadow-sm"
                       )}
                     >
-                      <div className="space-y-1">
-                        <p className="font-bold text-on-surface text-label-md">
-                          {formatSessionDate(session.startDateTime)}
-                        </p>
-                        <p className="text-xs text-on-surface-variant font-medium">
-                          {formatSessionTime(session.startDateTime)}
-                        </p>
-                        <p className="text-[10px] text-muted-foreground">
-                          {session.title || `Session ${session.sessionNumber}`}
-                        </p>
+                      <div className="flex items-center justify-between w-full">
+                        <div className="space-y-1">
+                          <p className="font-bold text-on-surface text-label-md">
+                            {formatSessionDate(session.startDateTime)}
+                          </p>
+                          <p className="text-xs text-on-surface-variant font-medium">
+                            {formatSessionTime(session.startDateTime)}
+                          </p>
+                          <p className="text-[10px] text-muted-foreground">
+                            {session.title || `Session ${session.sessionNumber}`}
+                          </p>
+                        </div>
+                        <div className="text-right flex flex-col items-end gap-1.5">
+                          {isSoldOut ? (
+                            <span className="bg-destructive/10 text-destructive text-[9px] font-bold px-2 py-0.5 rounded uppercase">
+                              Sold Out
+                            </span>
+                          ) : isSellingFast ? (
+                            <span className="bg-amber-500/10 text-amber-600 text-[9px] font-bold px-2 py-0.5 rounded uppercase animate-pulse">
+                              Selling Fast
+                            </span>
+                          ) : (
+                            <span className="bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2 py-0.5 rounded uppercase">
+                              Available
+                            </span>
+                          )}
+                          <span className="text-[10px] font-medium text-on-surface-variant">
+                            {session.availableCapacity} seats left
+                          </span>
+                        </div>
                       </div>
-                      <div className="text-right flex flex-col items-end gap-1.5">
-                        {isSoldOut ? (
-                          <span className="bg-destructive/10 text-destructive text-[9px] font-bold px-2 py-0.5 rounded uppercase">
-                            Sold Out
-                          </span>
-                        ) : isSellingFast ? (
-                          <span className="bg-amber-500/10 text-amber-600 text-[9px] font-bold px-2 py-0.5 rounded uppercase animate-pulse">
-                            Selling Fast
-                          </span>
-                        ) : (
-                          <span className="bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2 py-0.5 rounded uppercase">
-                            Available
-                          </span>
-                        )}
-                        <span className="text-[10px] font-medium text-on-surface-variant">
-                          {session.availableCapacity} seats left
-                        </span>
-                      </div>
-                    </button>
+
+                      {isSelected && !isSoldOut && (
+                        <div className="mt-4 pt-3 border-t border-primary/20">
+                          <Link
+                            href={`/events/${event.id}/seats?sessionId=${session.id}`}
+                            className="w-full bg-primary text-on-primary py-2 px-4 rounded-lg font-bold text-sm hover:bg-primary-container hover:text-on-primary-container transition-all shadow-md text-center block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Book Tickets
+                          </Link>
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>

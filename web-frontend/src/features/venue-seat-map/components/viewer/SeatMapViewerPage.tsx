@@ -7,7 +7,11 @@ import { useRouter } from "next/navigation";
 import { ViewerSeatLayer } from "./ViewerSeatLayer";
 import { VenueSeatMapService } from "@/features/venue-seat-map";
 import { useSeatMapStore } from "../../store/seat-map.store";
-import type { LocalVenue, LocalSection, LocalSeat, SeatDTO, VenueSectionMapDTO } from "../../types";
+import type { LocalVenue, LocalSection, LocalSeat, SeatDTO, VenueSectionMapDTO, SessionSeatDTO } from "../../types";
+import { EventService } from "@/features/events/api/service";
+import type { TicketTypeResponseDto } from "@/features/events/types";
+import type { ApiResponse } from "@/shared/types";
+import { toast } from "sonner";
 
 // ── Shared parse helpers ──────────────────────────────────────────────────────
 
@@ -48,6 +52,7 @@ function parseSection(s: VenueSectionMapDTO): LocalSection {
 interface SeatMapViewerPageProps {
   venueId: number;
   eventId: string;
+  sessionId?: string;
   /** Called when the user's selection changes */
   onSelectionChange?: (selectedSeatIds: number[]) => void;
 }
@@ -56,7 +61,7 @@ const MIN_SCALE = 0.05;
 const MAX_SCALE = 4;
 const SCALE_BY  = 1.08;
 
-export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatMapViewerPageProps) {
+export function SeatMapViewerPage({ venueId, eventId, sessionId, onSelectionChange }: SeatMapViewerPageProps) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef     = useRef<Konva.Stage>(null);
@@ -71,7 +76,11 @@ export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatM
   const selectedSeatIds = useSeatMapStore((s) => s.selectedSeatIds);
   const setSelectedSeatIds = useSeatMapStore((s) => s.setSelectedSeatIds);
 
+  const [sessionSeats, setSessionSeats] = useState<SessionSeatDTO[]>([]);
+  const [ticketTypes, setTicketTypes] = useState<TicketTypeResponseDto[]>([]);
+
   const [isLoading, setIsLoading]     = useState(!!venueId);
+  const [isProceeding, setIsProceeding] = useState(false);
   const [lastLoadedVenueId, setLastLoadedVenueId] = useState<number | null>(null);
   const [error, setError]             = useState<string | null>(null);
   const [size, setSize]               = useState({ width: 800, height: 600 });
@@ -94,12 +103,13 @@ export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatM
     return () => ro.disconnect();
   }, []);
 
-  // ── Load venue ────────────────────────────────────────────────────────────
+  // ── Load venue & session details ────────────────────────────────────────────
 
   useEffect(() => {
     if (!venueId) return;
     (async () => {
       try {
+        setIsLoading(true);
         // Parallel fetch — venue metadata + sections (with embedded seats)
         const [dto, secRes] = await Promise.all([
           VenueSeatMapService.getVenue(venueId),
@@ -119,13 +129,27 @@ export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatM
         };
 
         loadVenue(loadedVenue);
+
+        // Fetch session-specific seats and ticket types if sessionId is provided
+        if (sessionId) {
+          try {
+            const [seatsRes, ticketTypesRes] = await Promise.all([
+              VenueSeatMapService.getSessionSeats(sessionId).catch(() => []),
+              EventService.getTicketTypesBySession(sessionId).catch(() => []),
+            ]);
+            setSessionSeats(seatsRes || []);
+            setTicketTypes(ticketTypesRes || []);
+          } catch (err) {
+            console.error("Failed to load session seats or ticket types:", err);
+          }
+        }
       } catch {
         setError("Could not load venue map. Please try again.");
       } finally {
         setIsLoading(false);
       }
     })();
-  }, [venueId, loadVenue]);
+  }, [venueId, sessionId, loadVenue]);
 
   // ── Fit to screen ─────────────────────────────────────────────────────────
 
@@ -187,26 +211,62 @@ export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatM
     onSelectionChange?.([]);
   }, [setSelectedSeatIds, onSelectionChange]);
 
-  // ── Find seat by id ───────────────────────────────────────────────────────
+  // ── Find seat details and compile sold list ────────────────────────────────
 
   const allSeats = venue.sections.flatMap((s) => s.seats) ?? [];
   const selectedSeatsDetails = allSeats.filter((s) => selectedSeatIds.includes(s.id));
 
+  const soldSeatIds = sessionSeats
+    .filter((ss) => ss.status === "SOLD" || ss.status === "RESERVED")
+    .map((ss) => ss.seatId);
+
+  // Compute total price of selected seats
+  const totalPrice = selectedSeatsDetails.reduce((sum, seat) => {
+    // Find section of this seat
+    const section = venue.sections.find((s) => s.seats.some((seatItem) => seatItem.id === seat.id));
+    const ticketType = section ? ticketTypes.find((t) => t.venueSectionIds?.includes(section.id)) : undefined;
+    return sum + (ticketType?.basePrice ?? 1200); // Default to 1200 as fallback
+  }, 0);
+
   // ── Checkout Action ───────────────────────────────────────────────────────
 
-  const handleProceed = useCallback(() => {
-    if (selectedSeatIds.length === 0) return;
+  const handleProceed = useCallback(async () => {
+    if (selectedSeatIds.length === 0 || !sessionId) return;
 
-    const seats = venue.sections.flatMap((s) => s.seats);
-    const selected = seats.filter((s) => selectedSeatIds.includes(s.id));
-    const seatKeys = selected.map((seat) => {
-      const isPremiumOrVip = seat.seatType === "VIP" || seat.seatType === "PREMIUM";
-      const prefix = isPremiumOrVip ? "P" : "G";
-      return `${prefix}-${seat.rowLabel}-${seat.seatNumber}`;
-    });
+    setIsProceeding(true);
+    const toastId = toast.loading("Locking your selected seats...");
 
-    router.push(`/checkout?eventId=${eventId}&seats=${seatKeys.join(",")}`);
-  }, [selectedSeatIds, venue.sections, eventId, router]);
+    try {
+      const seats = venue.sections.flatMap((s) => s.seats);
+      const selected = seats.filter((s) => selectedSeatIds.includes(s.id));
+      
+      // Prepare lock payload
+      const lockPayload = selected.map((seat) => ({
+        eventSessionId: Number(sessionId),
+        seatId: Number(seat.id),
+        status: "RESERVED" as const,
+      }));
+
+      // Call batch lock API
+      await VenueSeatMapService.lockSeats(sessionId, lockPayload);
+
+      toast.success("Seats locked! Proceeding to checkout...", { id: toastId });
+
+      const seatKeys = selected.map((seat) => {
+        const isPremiumOrVip = seat.seatType === "VIP" || seat.seatType === "PREMIUM";
+        const prefix = isPremiumOrVip ? "P" : "G";
+        return `${prefix}-${seat.rowLabel}-${seat.seatNumber}`;
+      });
+
+      const seatIdsQuery = selectedSeatIds.join(",");
+      router.push(`/checkout?eventId=${eventId}&seats=${seatKeys.join(",")}&seatIds=${seatIdsQuery}${sessionId ? `&sessionId=${sessionId}` : ""}`);
+    } catch (err: any) {
+      console.error("Failed to lock seats:", err);
+      toast.error(err.message || "Failed to lock seats. They may have already been taken.", { id: toastId });
+    } finally {
+      setIsProceeding(false);
+    }
+  }, [selectedSeatIds, venue.sections, eventId, sessionId, router]);
 
   // ── Loading / error ───────────────────────────────────────────────────────
 
@@ -239,7 +299,7 @@ export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatM
         <div>
           <h1 className="text-lg font-bold text-foreground">{venue.name}</h1>
           <p className="text-xs text-muted-foreground">
-            Select your seats · {allSeats.filter((s) => s.isActive).length} seats available
+            Select your seats · {allSeats.filter((s) => s.isActive && !soldSeatIds.includes(s.id)).length} seats available
           </p>
         </div>
 
@@ -247,7 +307,7 @@ export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatM
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-bold text-primary">
-                {selectedSeatIds.length} seat{selectedSeatIds.length > 1 ? "s" : ""} selected
+                {selectedSeatIds.length} seat{selectedSeatIds.length > 1 ? "s" : ""} selected (Total: ₹{totalPrice})
               </p>
               <p className="text-[11px] text-muted-foreground">
                 {selectedSeatsDetails.map((s) => `${s.rowLabel}${s.seatNumber}`).join(", ")}
@@ -261,9 +321,10 @@ export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatM
             </button>
             <button
               onClick={handleProceed}
-              className="px-4 py-1.5 text-xs font-bold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+              disabled={isProceeding}
+              className="px-4 py-1.5 text-xs font-bold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Proceed →
+              {isProceeding ? "Locking..." : "Proceed →"}
             </button>
           </div>
         )}
@@ -294,7 +355,7 @@ export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatM
               { color: "#22c55e", label: "Available" },
               { color: "#3b82f6", label: "Selected" },
               { color: "#a855f7", label: "Accessible" },
-              { color: "#6b7280", label: "Unavailable" },
+              { color: "#cbd5e1", label: "Sold Out" },
               { color: "#f59e0b", label: "VIP" },
               { color: "#ec4899", label: "Premium" },
             ].map(({ color, label }) => (
@@ -346,6 +407,8 @@ export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatM
             <ViewerSeatLayer
               sections={venue.sections}
               selectedSeatIds={selectedSeatIds}
+              soldSeatIds={soldSeatIds}
+              ticketTypes={ticketTypes}
               onSeatSelect={handleSeatSelect}
             />
           </Stage>
@@ -353,43 +416,60 @@ export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatM
 
         {/* Right panel — selected seats summary */}
         {selectedSeatIds.length > 0 && (
-          <aside className="w-64 shrink-0 border-l border-border bg-sidebar flex flex-col overflow-hidden">
-            <div className="px-4 py-3 border-b border-border">
-              <h2 className="text-sm font-bold text-foreground">Your Selection</h2>
-              <p className="text-xs text-muted-foreground">
-                {selectedSeatIds.length} seat{selectedSeatIds.length > 1 ? "s" : ""}
+          <aside className="w-68 shrink-0 border-l border-border bg-sidebar flex flex-col overflow-hidden">
+            <div className="px-4 py-3 border-b border-border bg-muted/40">
+              <h2 className="text-sm font-bold text-foreground font-sans">Your Selection</h2>
+              <p className="text-xs text-muted-foreground font-semibold mt-0.5">
+                {selectedSeatIds.length} seat{selectedSeatIds.length > 1 ? "s" : ""} selected
               </p>
             </div>
-            <div className="flex-1 overflow-y-auto p-3 space-y-2 no-scrollbar">
-              {selectedSeatsDetails.map((seat) => (
-                <div
-                  key={seat.id}
-                  className="flex items-center justify-between px-3 py-2 rounded-xl bg-muted text-xs"
-                >
-                  <div>
-                    <p className="font-bold text-foreground">
-                      Row {seat.rowLabel} · Seat {seat.seatNumber}
-                    </p>
-                    <p className="text-muted-foreground capitalize">
-                      {seat.seatType.toLowerCase()}
-                      {seat.isAccessible ? " · ♿" : ""}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => handleSeatSelect(seat.id)}
-                    className="text-muted-foreground hover:text-destructive transition-colors"
+            <div className="flex-1 overflow-y-auto p-3 space-y-2.5 no-scrollbar">
+              {selectedSeatsDetails.map((seat) => {
+                const section = venue.sections.find((s) => s.seats.some((seatItem) => seatItem.id === seat.id));
+                const ticketType = section ? ticketTypes.find((t) => t.venueSectionIds?.includes(section.id)) : undefined;
+                const price = ticketType?.basePrice ?? 1200;
+
+                return (
+                  <div
+                    key={seat.id}
+                    className="flex flex-col gap-1 p-3 rounded-xl bg-surface-container border border-outline-variant/35 text-xs text-left"
                   >
-                    ✕
-                  </button>
-                </div>
-              ))}
+                    <div className="flex items-center justify-between">
+                      <p className="font-bold text-foreground">
+                        Row {seat.rowLabel} · Seat {seat.seatNumber}
+                      </p>
+                      <button
+                        onClick={() => handleSeatSelect(seat.id)}
+                        disabled={isProceeding}
+                        className="text-muted-foreground hover:text-destructive transition-colors text-sm font-bold disabled:opacity-50"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-1">
+                      <span className="capitalize">
+                        {ticketType?.name || seat.seatType.toLowerCase()}
+                        {seat.isAccessible ? " · ♿" : ""}
+                      </span>
+                      <span className="font-bold text-primary font-sans text-sm">
+                        ₹{price}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className="p-3 border-t border-border">
+            <div className="p-4 border-t border-border bg-muted/20 space-y-3">
+              <div className="flex justify-between items-center text-sm">
+                <span className="font-bold text-on-surface">Total Pay</span>
+                <span className="font-bold text-primary text-base font-sans">₹{totalPrice}</span>
+              </div>
               <button
                 onClick={handleProceed}
-                className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm"
+                disabled={isProceeding}
+                className="w-full py-3 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-all active:scale-[0.98] shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Proceed to Checkout
+                {isProceeding ? "Locking seats..." : "Proceed to Checkout"}
               </button>
             </div>
           </aside>

@@ -7,10 +7,12 @@ import { useEvent } from "@/features/events/hooks/useEvent";
 
 interface PageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ sessionId?: string }>;
 }
 
-export default function SeatsPage({ params }: PageProps) {
+export default function SeatsPage({ params, searchParams }: PageProps) {
   const { id } = React.use(params);
+  const { sessionId } = React.use(searchParams);
 
   if (!id) {
     return notFound();
@@ -41,7 +43,7 @@ export default function SeatsPage({ params }: PageProps) {
 
   return (
     <div className="h-[calc(100vh-4rem)] mt-16">
-      <SeatMapViewerPage venueId={venueId} eventId={id} />
+      <SeatMapViewerPage venueId={venueId} eventId={id} sessionId={sessionId} />
     </div>
   );
 }
