@@ -6,7 +6,7 @@ import { FeaturedLineup } from "@/features/events/components/featured-lineup";
 import { OffersGuidelines } from "@/features/events/components/offers-guidelines";
 import { VenueDetails } from "@/features/events/components/venue-details";
 import { Recommendations } from "@/features/events/components/recommendations";
-import { DEFAULT_EVENT_DETAIL } from "@/features/event-detail/constants/event-data";
+import { DEFAULT_EVENT_DETAIL } from "@/features/events/constants/event-data";
 
 interface EventDetailPageProps {
   params: Promise<{ id: string }>;

@@ -2,8 +2,7 @@
 
 import React from "react";
 import { EventSessionForm } from "@/features/event-sessions/components/EventSessionForm";
-import { PageHeader } from "@/features/admin/components/common/PageHeader";
-import { RoleGuard } from "@/shared/components/role-guard";
+import { PageHeader, RoleGuard } from "@/shared/components";
 
 export default function NewEventSessionPage() {
   return (

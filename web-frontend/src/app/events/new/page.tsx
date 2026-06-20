@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { RoleGuard } from "@/shared/components/role-guard";
+import { PageHeader, RoleGuard } from "@/shared/components";
 import { EventSetupWizard } from "@/features/events/components/EventSetupWizard";
-import { PageHeader } from "@/features/admin/components/common/PageHeader";
 
 export default function CreateEventPage() {
   return (

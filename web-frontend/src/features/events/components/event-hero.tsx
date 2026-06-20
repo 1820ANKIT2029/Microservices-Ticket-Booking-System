@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Calendar, Clock, MapPin } from "lucide-react";
-import type { EventDetail } from "../types/event";
+import type { EventDetail } from "../types/event-detail";
 
 interface EventHeroProps {
   event: EventDetail;

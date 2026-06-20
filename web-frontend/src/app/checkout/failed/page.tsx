@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { FailedClient } from "@/features/failed/components/failed-client";
+import { FailedClient } from "@/features/checkout";
 import { getCheckoutEventById } from "@/features/checkout/constants/checkout-data";
 
 interface PageProps {

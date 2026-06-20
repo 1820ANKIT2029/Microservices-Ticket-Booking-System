@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ConfirmedClient } from "@/features/confirmed/components/confirmed-client";
+import { ConfirmedClient } from "@/features/checkout";
 import { getCheckoutEventById } from "@/features/checkout/constants/checkout-data";
 
 interface PageProps {

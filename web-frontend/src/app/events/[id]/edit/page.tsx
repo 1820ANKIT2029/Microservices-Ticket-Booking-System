@@ -7,9 +7,7 @@ import { toEvent } from "@/features/events/mapper";
 import { EventForm } from "@/features/events/components/EventForm";
 import { TicketTypeStep } from "@/features/events/components/TicketTypeStep";
 import { EventSessionStep } from "@/features/events/components/EventSessionStep";
-import { PageHeader } from "@/features/admin/components/common/PageHeader";
-import { LoadingSpinner } from "@/features/admin/components/common/LoadingSpinner";
-import { RoleGuard } from "@/shared/components/role-guard";
+import { PageHeader, LoadingSpinner, RoleGuard } from "@/shared/components";
 
 export default function EditEventPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);

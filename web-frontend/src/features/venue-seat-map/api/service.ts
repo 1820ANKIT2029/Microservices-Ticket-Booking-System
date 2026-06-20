@@ -1,5 +1,6 @@
 import { api } from "@/shared/api";
 import type { ApiResponse } from "@/shared/types";
+import type { VenueResponseDto, VenueRequestDto } from "@/features/events/types";
 import type {
   VenueMapDTO,
   VenueSectionMapDTO,
@@ -11,14 +12,46 @@ import type {
 } from "../types";
 
 /**
- * VenueSeatMapService — all HTTP calls for the venue canvas editor.
+ * VenueSeatMapService — all HTTP calls for venues and the venue canvas editor.
  *
  * NOTE: Uses VenueMapDTO / VenueSectionMapDTO / SeatDTO — these are
  * canvas-specific projections, distinct from the admin-facing VenueResponseDto.
  * The shared ApiResponse<T> from @/shared/types is used — no local redeclaration.
  */
 export class VenueSeatMapService {
-  // ── Venue ─────────────────────────────────────────────────────────────────
+  // ── Venue CRUD ─────────────────────────────────────────────────────────────
+
+  static getVenues() {
+    return api
+      .get<ApiResponse<VenueResponseDto[]>>("/event/api/venues")
+      .then((res) => res.data.data);
+  }
+
+  static getVenueById(id: number | string) {
+    return api
+      .get<ApiResponse<VenueResponseDto>>(`/event/api/venues/${id}`)
+      .then((res) => res.data.data);
+  }
+
+  static createVenue(data: VenueRequestDto) {
+    return api
+      .post<ApiResponse<VenueResponseDto>>("/event/api/venues", data)
+      .then((res) => res.data.data);
+  }
+
+  static updateVenue(id: number | string, data: Partial<VenueRequestDto>) {
+    return api
+      .put<ApiResponse<VenueResponseDto>>(`/event/api/venues/${id}`, data)
+      .then((res) => res.data.data);
+  }
+
+  static deleteVenue(id: number | string) {
+    return api
+      .delete<ApiResponse<void>>(`/event/api/venues/${id}`)
+      .then((res) => res.data);
+  }
+
+  // ── Venue Canvas ──────────────────────────────────────────────────────────
 
   static getVenue(venueId: number | string) {
     return api

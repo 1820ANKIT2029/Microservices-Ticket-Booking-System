@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { SeatMapEditorPage } from "@/features/venue-seat-map/components/editor/SeatMapEditorPage";
-import { RoleGuard } from "@/shared/components/role-guard";
+import { SeatMapEditorPage } from "@/features/venue-seat-map";
+import { RoleGuard } from "@/shared/components";
 
 interface PageProps {
   params: Promise<{ id: string }>;

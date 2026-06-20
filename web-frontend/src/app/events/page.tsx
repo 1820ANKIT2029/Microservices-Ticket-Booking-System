@@ -3,9 +3,7 @@
 import React from "react";
 import { useAdminEvents } from "@/features/events";
 import { EventTable } from "@/features/events/components/EventTable";
-import { PageHeader } from "@/features/admin/components/common/PageHeader";
-import { LoadingSpinner } from "@/features/admin/components/common/LoadingSpinner";
-import { RoleGuard } from "@/shared/components/role-guard";
+import { PageHeader, LoadingSpinner, RoleGuard } from "@/shared/components";
 
 export default function EventsPage() {
   const { data, isLoading, error } = useAdminEvents();

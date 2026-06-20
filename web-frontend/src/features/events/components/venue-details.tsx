@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { MapPin, Bus } from "lucide-react";
-import type { VenueInfo } from "../types/event";
+import type { VenueInfo } from "../types/event-detail";
 
 interface VenueDetailsProps {
   venue: VenueInfo;

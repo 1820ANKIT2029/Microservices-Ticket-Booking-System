@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
-import { Navbar } from "@/features/homepage/components/navbar";
+import { Navbar } from "@/shared/components";
 import { AppProvider } from "@/shared/providers/app-provider";
 import "./globals.css";
 

@@ -3,9 +3,7 @@
 import React, { use, Suspense } from "react";
 import { useSession } from "@/features/event-sessions";
 import { EventSessionForm } from "@/features/event-sessions/components/EventSessionForm";
-import { PageHeader } from "@/features/admin/components/common/PageHeader";
-import { LoadingSpinner } from "@/features/admin/components/common/LoadingSpinner";
-import { RoleGuard } from "@/shared/components/role-guard";
+import { PageHeader, LoadingSpinner, RoleGuard } from "@/shared/components";
 import { useSearchParams } from "next/navigation";
 
 function EditSessionContent({ id }: { id: string }) {

@@ -3,8 +3,10 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import { Stage, Layer, Rect } from "react-konva";
 import Konva from "konva";
-import { ViewerSeatLayer }     from "./ViewerSeatLayer";
+import { useRouter } from "next/navigation";
+import { ViewerSeatLayer } from "./ViewerSeatLayer";
 import { VenueSeatMapService } from "@/features/venue-seat-map";
+import { useSeatMapStore } from "../../store/seat-map.store";
 import type { LocalVenue, LocalSection, LocalSeat } from "../../types";
 
 // ── Shared parse helpers ──────────────────────────────────────────────────────
@@ -45,6 +47,7 @@ function parseSection(s: any): LocalSection {
 
 interface SeatMapViewerPageProps {
   venueId: number;
+  eventId: string;
   /** Called when the user's selection changes */
   onSelectionChange?: (selectedSeatIds: number[]) => void;
 }
@@ -53,18 +56,17 @@ const MIN_SCALE = 0.05;
 const MAX_SCALE = 4;
 const SCALE_BY  = 1.08;
 
-export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerPageProps) {
+export function SeatMapViewerPage({ venueId, eventId, onSelectionChange }: SeatMapViewerPageProps) {
+  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef     = useRef<Konva.Stage>(null);
 
-  const [venue, setVenue]             = useState<LocalVenue | null>(null);
-  const [isLoading, setIsLoading]     = useState(true);
+  // Zustand Store
+  const store = useSeatMapStore();
+
+  const [isLoading, setIsLoading]     = useState(!!venueId);
   const [error, setError]             = useState<string | null>(null);
-  const [selectedSeatIds, setSelectedSeatIds] = useState<number[]>([]);
   const [size, setSize]               = useState({ width: 800, height: 600 });
-  const [scale, setScale]             = useState(1);
-  const [pos, setPos]                 = useState({ x: 0, y: 0 });
-  const [tooltip, setTooltip]         = useState<{ seat: LocalSeat; px: number; py: number } | null>(null);
 
   // ── Container resize observer ──────────────────────────────────────────────
 
@@ -82,7 +84,8 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
   // ── Load venue ────────────────────────────────────────────────────────────
 
   useEffect(() => {
-    if (!venueId) { setIsLoading(false); return; }
+    if (!venueId) return;
+    setIsLoading(true);
     (async () => {
       try {
         // Parallel fetch — venue metadata + sections (with embedded seats)
@@ -99,7 +102,7 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
           sections:  (Array.isArray(secRes) ? secRes : []).map(parseSection),
         };
 
-        setVenue(loadedVenue);
+        store.loadVenue(loadedVenue);
       } catch {
         setError("Could not load venue map. Please try again.");
       } finally {
@@ -111,17 +114,17 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
   // ── Fit to screen ─────────────────────────────────────────────────────────
 
   const fitToScreen = useCallback(() => {
-    if (!venue) return;
+    if (!store.venue.id) return;
     const padding = 40;
-    const scaleX  = (size.width  - padding * 2) / venue.mapWidth;
-    const scaleY  = (size.height - padding * 2) / venue.mapHeight;
+    const scaleX  = (size.width  - padding * 2) / store.venue.mapWidth;
+    const scaleY  = (size.height - padding * 2) / store.venue.mapHeight;
     const ns = Math.min(scaleX, scaleY, 1);
-    setScale(ns);
-    setPos({
-      x: (size.width  - venue.mapWidth  * ns) / 2,
-      y: (size.height - venue.mapHeight * ns) / 2,
+    store.setScale(ns);
+    store.setPos({
+      x: (size.width  - store.venue.mapWidth  * ns) / 2,
+      y: (size.height - store.venue.mapHeight * ns) / 2,
     });
-  }, [venue, size]);
+  }, [store, size]);
 
   useEffect(() => { fitToScreen(); }, [fitToScreen]);
 
@@ -136,34 +139,56 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
     const mp = { x: (pointer.x - stage.x()) / oldScale, y: (pointer.y - stage.y()) / oldScale };
     const dir      = e.evt.deltaY < 0 ? 1 : -1;
     const ns = Math.min(MAX_SCALE, Math.max(MIN_SCALE, oldScale * (dir > 0 ? SCALE_BY : 1 / SCALE_BY)));
-    setScale(ns);
-    setPos({ x: pointer.x - mp.x * ns, y: pointer.y - mp.y * ns });
-  }, []);
+    store.setScale(ns);
+    store.setPos({ x: pointer.x - mp.x * ns, y: pointer.y - mp.y * ns });
+  }, [store]);
 
   // ── Seat selection ────────────────────────────────────────────────────────
 
   const handleSeatSelect = useCallback(
     (seatId: number) => {
-      setSelectedSeatIds((prev) => {
-        const next = prev.includes(seatId) ? prev.filter((id) => id !== seatId) : [...prev, seatId];
-        onSelectionChange?.(next);
-        return next;
-      });
-      setTooltip(null);
+      const isSelected = store.selectedSeatIds.includes(seatId);
+      let nextSelected: number[];
+      if (isSelected) {
+        nextSelected = store.selectedSeatIds.filter((id) => id !== seatId);
+      } else {
+        if (store.selectedSeatIds.length >= 6) {
+          alert("Maximum of 6 seats allowed per transaction");
+          return;
+        }
+        nextSelected = [...store.selectedSeatIds, seatId];
+      }
+      store.setSelectedSeatIds(nextSelected);
+      onSelectionChange?.(nextSelected);
     },
-    [onSelectionChange]
+    [store, onSelectionChange]
   );
 
   const clearSelection = useCallback(() => {
-    setSelectedSeatIds([]);
+    store.setSelectedSeatIds([]);
     onSelectionChange?.([]);
-    setTooltip(null);
-  }, [onSelectionChange]);
+  }, [store, onSelectionChange]);
 
   // ── Find seat by id ───────────────────────────────────────────────────────
 
-  const allSeats = venue?.sections.flatMap((s: any) => s.seats) ?? [];
-  const getSelectedSeats = () => allSeats.filter((s: any) => selectedSeatIds.includes(s.id));
+  const allSeats = store.venue.sections.flatMap((s) => s.seats) ?? [];
+  const selectedSeatsDetails = allSeats.filter((s) => store.selectedSeatIds.includes(s.id));
+
+  // ── Checkout Action ───────────────────────────────────────────────────────
+
+  const handleProceed = useCallback(() => {
+    if (store.selectedSeatIds.length === 0) return;
+
+    const seats = store.venue.sections.flatMap((s) => s.seats);
+    const selected = seats.filter((s) => store.selectedSeatIds.includes(s.id));
+    const seatKeys = selected.map((seat) => {
+      const isPremiumOrVip = seat.seatType === "VIP" || seat.seatType === "PREMIUM";
+      const prefix = isPremiumOrVip ? "P" : "G";
+      return `${prefix}-${seat.rowLabel}-${seat.seatNumber}`;
+    });
+
+    router.push(`/checkout?eventId=${eventId}&seats=${seatKeys.join(",")}`);
+  }, [store.selectedSeatIds, store.venue.sections, eventId, router]);
 
   // ── Loading / error ───────────────────────────────────────────────────────
 
@@ -178,7 +203,7 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
     );
   }
 
-  if (error || !venue) {
+  if (error || !store.venue.id) {
     return (
       <div className="flex h-full items-center justify-center bg-background">
         <div className="text-center space-y-2">
@@ -189,27 +214,25 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
     );
   }
 
-  const selectedSeatsDetails = getSelectedSeats();
-
   return (
     <div className="flex flex-col h-full bg-background">
       {/* Header */}
       <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-background to-muted/30 flex items-center justify-between">
         <div>
-          <h1 className="text-lg font-bold text-foreground">{venue.name}</h1>
+          <h1 className="text-lg font-bold text-foreground">{store.venue.name}</h1>
           <p className="text-xs text-muted-foreground">
-            Select your seats · {allSeats.filter((s: any) => s.isActive).length} seats available
+            Select your seats · {allSeats.filter((s) => s.isActive).length} seats available
           </p>
         </div>
 
-        {selectedSeatIds.length > 0 && (
+        {store.selectedSeatIds.length > 0 && (
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-bold text-primary">
-                {selectedSeatIds.length} seat{selectedSeatIds.length > 1 ? "s" : ""} selected
+                {store.selectedSeatIds.length} seat{store.selectedSeatIds.length > 1 ? "s" : ""} selected
               </p>
               <p className="text-[11px] text-muted-foreground">
-                {selectedSeatsDetails.map((s: any) => `${s.rowLabel}${s.seatNumber}`).join(", ")}
+                {selectedSeatsDetails.map((s) => `${s.rowLabel}${s.seatNumber}`).join(", ")}
               </p>
             </div>
             <button
@@ -218,7 +241,10 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
             >
               Clear
             </button>
-            <button className="px-4 py-1.5 text-xs font-bold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm">
+            <button
+              onClick={handleProceed}
+              className="px-4 py-1.5 text-xs font-bold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+            >
               Proceed →
             </button>
           </div>
@@ -240,7 +266,7 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
               Fit
             </button>
             <span className="flex items-center px-2 py-1.5 rounded-lg text-xs font-mono bg-white/80 backdrop-blur border border-border shadow-sm">
-              {Math.round(scale * 100)}%
+              {Math.round(store.scale * 100)}%
             </span>
           </div>
 
@@ -268,10 +294,10 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
             ref={stageRef}
             width={size.width}
             height={size.height}
-            scaleX={scale}
-            scaleY={scale}
-            x={pos.x}
-            y={pos.y}
+            scaleX={store.scale}
+            scaleY={store.scale}
+            x={store.pos.x}
+            y={store.pos.y}
             draggable
             onWheel={handleWheel}
             style={{ background: "#f3ebfc", cursor: "grab" }}
@@ -284,8 +310,8 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
               <Rect
                 x={0}
                 y={0}
-                width={venue.mapWidth}
-                height={venue.mapHeight}
+                width={store.venue.mapWidth}
+                height={store.venue.mapHeight}
                 fill="#ffffff"
                 stroke="#ccc3da"
                 strokeWidth={2}
@@ -300,24 +326,24 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
 
             {/* Seats */}
             <ViewerSeatLayer
-              sections={venue.sections}
-              selectedSeatIds={selectedSeatIds}
+              sections={store.venue.sections}
+              selectedSeatIds={store.selectedSeatIds}
               onSeatSelect={handleSeatSelect}
             />
           </Stage>
         </div>
 
         {/* Right panel — selected seats summary */}
-        {selectedSeatIds.length > 0 && (
+        {store.selectedSeatIds.length > 0 && (
           <aside className="w-64 shrink-0 border-l border-border bg-sidebar flex flex-col overflow-hidden">
             <div className="px-4 py-3 border-b border-border">
               <h2 className="text-sm font-bold text-foreground">Your Selection</h2>
               <p className="text-xs text-muted-foreground">
-                {selectedSeatIds.length} seat{selectedSeatIds.length > 1 ? "s" : ""}
+                {store.selectedSeatIds.length} seat{store.selectedSeatIds.length > 1 ? "s" : ""}
               </p>
             </div>
             <div className="flex-1 overflow-y-auto p-3 space-y-2 no-scrollbar">
-              {selectedSeatsDetails.map((seat: any) => (
+              {selectedSeatsDetails.map((seat) => (
                 <div
                   key={seat.id}
                   className="flex items-center justify-between px-3 py-2 rounded-xl bg-muted text-xs"
@@ -341,7 +367,10 @@ export function SeatMapViewerPage({ venueId, onSelectionChange }: SeatMapViewerP
               ))}
             </div>
             <div className="p-3 border-t border-border">
-              <button className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm">
+              <button
+                onClick={handleProceed}
+                className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm"
+              >
                 Proceed to Checkout
               </button>
             </div>

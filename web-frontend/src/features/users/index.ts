@@ -9,7 +9,7 @@ export { UserService } from "./api/service";
 // Hooks
 export { useUser }          from "./hooks/useUser";
 export { useUsers }         from "./hooks/useUsers";
-export { useUpdateProfile } from "./hooks/useUpdateProfile";
+export { useUpdateProfile } from "./hooks/useUserMutations";
 
 // Types
 export type {
@@ -31,3 +31,7 @@ export { userKeys } from "./query-keys";
 // Schemas
 export { updateProfileSchema } from "./schemas/user.schema";
 export type { UpdateProfileFormData } from "./schemas/user.schema";
+
+// Components
+export { ProfileClient } from "./components/profile/profile-client";
+export { OnboardingClient } from "./components/onboarding/onboarding-client";

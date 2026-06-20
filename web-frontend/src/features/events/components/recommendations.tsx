@@ -29,7 +29,7 @@ export function Recommendations() {
         </div>
 
         <div className="flex gap-6 overflow-x-auto pb-6 no-scrollbar snap-x scroll-smooth">
-          {RECOMMENDED_EVENTS.map((event) => (
+          {RECOMMENDED_EVENTS.map((event: { id: string; title: string; category: string; location: string; priceText: string; imageUrl: string; imageAlt: string }) => (
             <Link
               key={event.id}
               href="#"

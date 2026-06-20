@@ -357,9 +357,35 @@ export function SeatMapEditorPage({ venueId }: SeatMapEditorPageProps) {
               )}
             </p>
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-            <kbd className="px-1.5 py-0.5 rounded border border-border bg-muted font-mono">Ctrl</kbd>
-            <span>+click seats to multi-select</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={editor.undo}
+                disabled={editor.past.length === 0}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-background border border-border shadow-sm hover:bg-accent disabled:opacity-40 disabled:hover:bg-background transition-colors"
+                title="Undo (Ctrl+Z)"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                </svg>
+                Undo
+              </button>
+              <button
+                onClick={editor.redo}
+                disabled={editor.future.length === 0}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-background border border-border shadow-sm hover:bg-accent disabled:opacity-40 disabled:hover:bg-background transition-colors"
+                title="Redo (Ctrl+Y)"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10H11a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" />
+                </svg>
+                Redo
+              </button>
+            </div>
+            <div className="flex items-center gap-2 text-[11px] text-muted-foreground border-l border-border pl-4">
+              <kbd className="px-1.5 py-0.5 rounded border border-border bg-muted font-mono">Ctrl</kbd>
+              <span>+click seats to multi-select</span>
+            </div>
           </div>
         </div>
 

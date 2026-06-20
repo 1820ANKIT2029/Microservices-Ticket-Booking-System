@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { OnboardingClient } from "@/features/onboarding/components/onboarding-client";
+import { OnboardingClient } from "@/features/users";
 
 export default function OnboardingPage() {
   return (

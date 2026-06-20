@@ -2,8 +2,10 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { VenueSeatMapService } from "../api/service";
-import { venueSeatMapKeys } from "../query-keys";
-import { toLocalVenue, toLocalSection, toLocalSeat } from "../mapper";
+import { venueSeatMapKeys, venueKeys } from "../query-keys";
+import { toLocalVenue, toLocalSection } from "../mapper";
+import { toVenue } from "@/features/events/mapper";
+import type { Venue, VenueRequestDto } from "@/features/events/types";
 import type {
   LocalVenue,
   LocalSection,
@@ -141,6 +143,69 @@ export function useDeleteSeat(venueId: number | string, sectionId: number | stri
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: venueSeatMapKeys.seats(sectionId) });
+    },
+  });
+}
+
+// ── Venue CRUD Hooks (Consolidated from admin) ────────────────────────────────
+
+export function useAdminVenues() {
+  return useQuery<Venue[]>({
+    queryKey: venueKeys.list(),
+    queryFn:  async () => {
+      const dtos = await VenueSeatMapService.getVenues();
+      return dtos.map(toVenue);
+    },
+  });
+}
+
+export function useAdminVenue(id: string | number) {
+  return useQuery<Venue>({
+    queryKey: venueKeys.detail(id),
+    queryFn:  async () => {
+      const dto = await VenueSeatMapService.getVenueById(id);
+      return toVenue(dto);
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateVenue() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: VenueRequestDto) =>
+      VenueSeatMapService.createVenue(data).then(toVenue),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: venueKeys.all });
+    },
+  });
+}
+
+export function useUpdateVenue() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string | number; data: Partial<VenueRequestDto> }) =>
+      VenueSeatMapService.updateVenue(id, data).then(toVenue),
+
+    onSuccess: (venue) => {
+      queryClient.invalidateQueries({ queryKey: venueKeys.detail(venue.id) });
+      queryClient.invalidateQueries({ queryKey: venueKeys.list() });
+    },
+  });
+}
+
+export function useDeleteVenue() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string | number) => VenueSeatMapService.deleteVenue(id),
+
+    onSuccess: (_data, id) => {
+      queryClient.removeQueries({ queryKey: venueKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: venueKeys.list() });
     },
   });
 }

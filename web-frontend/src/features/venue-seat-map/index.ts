@@ -16,11 +16,22 @@ export {
   useCreateSeatsBatch,
   useUpdateSeat,
   useDeleteSeat,
+  useAdminVenues,
+  useAdminVenue,
+  useCreateVenue,
+  useUpdateVenue,
+  useDeleteVenue,
 } from "./hooks/useVenueSeatMapQueries";
 
 // Canvas editor hook (local reducer state — not TanStack Query)
 export { useVenueEditor } from "./hooks/useVenueEditor";
 export type { VenueEditorAPI } from "./hooks/useVenueEditor";
+
+// Venue Components
+export { VenueForm } from "./components/venue/VenueForm";
+export { VenueTable } from "./components/venue/VenueTable";
+export { SeatMapViewerPage } from "./components/viewer/SeatMapViewerPage";
+export { SeatMapEditorPage } from "./components/editor/SeatMapEditorPage";
 
 // Types
 export type {
@@ -43,4 +54,4 @@ export type {
 export { toLocalVenue, toLocalSection, toLocalSeat } from "./mapper";
 
 // Query keys
-export { venueSeatMapKeys } from "./query-keys";
+export { venueSeatMapKeys, venueKeys } from "./query-keys";

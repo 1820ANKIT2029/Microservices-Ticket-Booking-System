@@ -2,11 +2,8 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAdminVenues } from "@/features/admin";
-import { VenueTable } from "@/features/admin/components/venues/VenueTable";
-import { PageHeader } from "@/features/admin/components/common/PageHeader";
-import { LoadingSpinner } from "@/features/admin/components/common/LoadingSpinner";
-import { RoleGuard } from "@/shared/components/role-guard";
+import { useAdminVenues, VenueTable } from "@/features/venue-seat-map";
+import { PageHeader, LoadingSpinner, RoleGuard } from "@/shared/components";
 import { useRole } from "@/shared/hooks/useRole";
 
 export default function VenuesPage() {

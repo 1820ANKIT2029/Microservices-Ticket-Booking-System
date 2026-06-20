@@ -262,3 +262,5 @@ export interface Venue {
  * Kept for backward compatibility during migration from events/types/index.ts.
  */
 export interface EventDTO extends EventResponseDto {}
+
+export type { EventDetail, CastMember, VenueInfo, OfferCoupon, GuidelineItem } from "./event-detail";

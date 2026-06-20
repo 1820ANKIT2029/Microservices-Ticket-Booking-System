@@ -1,13 +1,9 @@
 "use client";
 
-import { HeroSection } from "@/features/homepage/components/hero-section";
-import { FeaturedMovies } from "@/features/homepage/components/featured-movies";
-import { LiveSports } from "@/features/homepage/components/live-sports";
-import { ConcertsSection } from "@/features/homepage/components/concerts-section";
-import { HowItWorks } from "@/features/homepage/components/how-it-works";
-import { PremierClub } from "@/features/homepage/components/premier-club";
-import { Footer } from "@/features/homepage/components/footer";
-import { MobileBottomNav } from "@/features/homepage/components/mobile-bottom-nav";
+import { HeroSection, HowItWorks, PremierClub, Footer, MobileBottomNav } from "@/shared/components";
+import { FeaturedMovies } from "@/features/movies-explorer/components/featured-movies";
+import { LiveSports } from "@/features/sports-explorer/components/live-sports";
+import { ConcertsSection } from "@/features/music-explorer/components/concerts-section";
 
 export default function HomePage() {
   return (

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DEFAULT_EVENT_DETAIL } from "@/features/event-detail/constants/event-data";
+import { DEFAULT_EVENT_DETAIL } from "@/features/events/constants/event-data";
 
 interface LayoutProps {
   params: Promise<{ id: string }>;

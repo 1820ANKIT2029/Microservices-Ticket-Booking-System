@@ -2,11 +2,8 @@
 
 import React, { use } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAdminVenue } from "@/features/admin";
-import { VenueForm } from "@/features/admin/components/venues/VenueForm";
-import { PageHeader } from "@/features/admin/components/common/PageHeader";
-import { LoadingSpinner } from "@/features/admin/components/common/LoadingSpinner";
-import { RoleGuard } from "@/shared/components/role-guard";
+import { useAdminVenue, VenueForm } from "@/features/venue-seat-map";
+import { PageHeader, LoadingSpinner, RoleGuard } from "@/shared/components";
 
 export default function EditVenuePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

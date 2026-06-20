@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Footer } from "@/features/homepage/components/footer";
-import { MobileBottomNav } from "@/features/homepage/components/mobile-bottom-nav";
-import { ProfileClient } from "@/features/profile/components/profile-client";
+import { Footer, MobileBottomNav } from "@/shared/components";
+import { ProfileClient } from "@/features/users";
 
 export default function ProfilePage() {
   return (

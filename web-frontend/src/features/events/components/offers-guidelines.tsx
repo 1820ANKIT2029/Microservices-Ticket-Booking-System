@@ -3,7 +3,7 @@
 import { Tag, Info, CameraOff, Clock, FileText, Share2, Heart } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/shared/utils/cn";
-import type { OfferCoupon, GuidelineItem } from "../types/event";
+import type { OfferCoupon, GuidelineItem } from "../types/event-detail";
 
 interface OffersGuidelinesProps {
   offers: OfferCoupon[];

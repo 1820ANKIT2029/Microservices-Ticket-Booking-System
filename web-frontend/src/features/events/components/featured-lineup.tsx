@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { CastMember } from "../types/event";
+import type { CastMember } from "../types/event-detail";
 
 interface FeaturedLineupProps {
   lineup: CastMember[];

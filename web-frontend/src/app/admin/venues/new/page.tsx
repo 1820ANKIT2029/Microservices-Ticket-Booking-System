@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { VenueForm } from "@/features/admin/components/venues/VenueForm";
-import { PageHeader } from "@/features/admin/components/common/PageHeader";
-import { RoleGuard } from "@/shared/components/role-guard";
+import { VenueForm } from "@/features/venue-seat-map";
+import { PageHeader, RoleGuard } from "@/shared/components";
 
 export default function CreateVenuePage() {
   return (
