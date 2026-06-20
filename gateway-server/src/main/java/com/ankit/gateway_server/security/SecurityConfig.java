@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers("/auth/login", "/auth/signup").permitAll()
                         .pathMatchers("/*/actuator/**", "/actuator/**").permitAll()
+                        .pathMatchers("/payment/api/payment/webhook/**").permitAll()
                         // Role-Based Access Control
                         .pathMatchers("/admin/**").hasRole("ADMIN")
                         // Every other route requires a valid token
