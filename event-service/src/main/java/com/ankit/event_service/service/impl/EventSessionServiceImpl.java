@@ -29,11 +29,11 @@ public class EventSessionServiceImpl implements IEventSessionService {
     ) {
         eventSessionDTO.setEventId(eventId);
         EventSession eventSession = this.eventSessionMapper.toEntity(eventSessionDTO);
+        EventSession savedEventSession = this.eventSessionRepository.save(eventSession);
 
         // CREATE SESSION SEATS FOR SEATS IN VENUE
-        this.sessionSeatServiceImpl.initializeSessionSeats(eventSession);
+        this.sessionSeatServiceImpl.initializeSessionSeats(savedEventSession);
 
-        EventSession savedEventSession = this.eventSessionRepository.save(eventSession);
         return this.eventSessionMapper.toDto(savedEventSession);
     }
 

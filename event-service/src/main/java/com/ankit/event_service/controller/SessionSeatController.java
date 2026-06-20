@@ -10,18 +10,31 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/session-seats")
+@RequestMapping("/api/event-sessions/{eventSessionId}/session-seats")
 @AllArgsConstructor
 public class SessionSeatController {
     private final ISessionSeatService sessionSeatsService;
 
     @PostMapping("/batch/lock")
     public ResponseEntity<ApiResponse<List<SessionSeatDTO>>> LockSeats(
-            @RequestBody List<SessionSeatDTO> sessionSeats
+            @RequestBody List<SessionSeatDTO> sessionSeats,
+            @RequestHeader("X-User-Id") String userId
     ) {
-        List<SessionSeatDTO> res = this.sessionSeatsService
-                .lockSessionSeats(sessionSeats);
-        return ResponseEntity.ok(new ApiResponse<>(res, "seats locked"));
+       this.sessionSeatsService.lockSessionSeats(sessionSeats, userId);
+        return ResponseEntity.ok(
+                new ApiResponse<>(null, "seats locked")
+        );
+    }
+
+    @PostMapping("/batch/unlock")
+    public ResponseEntity<ApiResponse<List<SessionSeatDTO>>> UnlockSeats(
+            @RequestBody List<SessionSeatDTO> sessionSeats,
+            @RequestHeader("X-User-Id") String userId
+    ) {
+       this.sessionSeatsService.unlockSessionSeats(sessionSeats, userId);
+       return ResponseEntity.ok(
+                new ApiResponse<>(null, "seats unlocked")
+        );
     }
 
     @GetMapping("/{sessionSeatsId}")
@@ -31,5 +44,16 @@ public class SessionSeatController {
         SessionSeatDTO res = this.sessionSeatsService
                 .getSessionSeat(sessionSeatsId);
         return ResponseEntity.ok(new ApiResponse<>(res, "seat details"));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<List<SessionSeatDTO>>> GetSessionSeats(
+            @PathVariable Long eventSessionId
+    ) {
+        List<SessionSeatDTO> sessionSeatDTOS = this.sessionSeatsService
+                .getSessionSeats(eventSessionId);
+        return ResponseEntity.ok(
+                new ApiResponse<>(sessionSeatDTOS, "seats details")
+        );
     }
 }

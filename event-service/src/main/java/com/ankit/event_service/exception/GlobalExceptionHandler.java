@@ -38,7 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(SeatAlreadyBookedException.class)
     public ResponseEntity<ErrorResponseWrapper<String>> handleSeatAlreadyBooked(
-            ResourceNotFoundException ex, HttpServletRequest request) {
+            SeatAlreadyBookedException ex, HttpServletRequest request) {
 
         ErrorResponseWrapper<String> error = ErrorResponseWrapper.<String>builder()
                 .status(HttpStatus.CONFLICT.value())

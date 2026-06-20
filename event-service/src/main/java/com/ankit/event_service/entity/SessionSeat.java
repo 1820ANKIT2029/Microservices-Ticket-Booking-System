@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -38,6 +39,13 @@ public class SessionSeat {
 
     @Column(name = "override_price", precision = 10, scale = 2)
     private BigDecimal overridePrice;
+
+    @Column(name = "locked_by")
+    private String lockedByUserId;
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
 
     @Enumerated(EnumType.STRING)
     @Builder.Default

@@ -12,9 +12,11 @@ import com.ankit.event_service.repository.SeatRepository;
 import com.ankit.event_service.repository.SessionSeatsRepository;
 import com.ankit.event_service.service.ISessionSeatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,23 +35,51 @@ public class SessionSeatServiceImpl implements ISessionSeatService {
     }
 
     @Override
+    public List<SessionSeatDTO> getSessionSeats(Long eventSessionId) {
+        List<SessionSeat> sessionSeats = this.sessionSeatsRepository
+                .findAllByEventSessionId(eventSessionId);
+        if(!sessionSeats.isEmpty()) return sessionSeats.stream().map(sessionSeatMapper::toDto).toList();
+        return List.of();
+    }
+
+
+    @Override
     @Transactional // Ankit: this ensures that the database transaction is rolled back if any error occurs
-    public List<SessionSeatDTO> lockSessionSeats(List<SessionSeatDTO> sessionSeatsDTO) {
-        List<Long> seatIdsToLock = sessionSeatsDTO.stream()
+    public void lockSessionSeats(List<SessionSeatDTO> sessionSeatsDTO, String userId) {
+        List<Long> idsToLock = sessionSeatsDTO.stream()
                 .map(SessionSeatDTO::getId)
                 .toList();
 
-        int updatedCount = sessionSeatsRepository.lockAvailableSeats(seatIdsToLock);
+        LocalDateTime tilDate = LocalDateTime.now().plusMinutes(10);
+
+        int updatedCount = sessionSeatsRepository
+                .lockAvailableSeats(idsToLock, userId, tilDate);
 
         // Ankit: roll back the transaction if any seat is not available
-        if (updatedCount != seatIdsToLock.size()) {
+        if (updatedCount != idsToLock.size()) {
             throw new SeatAlreadyBookedException("One or more selected seats are no longer available.");
         }
+    }
 
-        List<SessionSeat> updatedSeats = sessionSeatsRepository.findAllById(seatIdsToLock);
-        return updatedSeats.stream()
-                .map(this.sessionSeatMapper::toDto)
+    @Override
+    public void unlockSessionSeats(
+            List<SessionSeatDTO> sessionSeatsDTO,
+            String userId
+    ) {
+        List<Long> idsToLock = sessionSeatsDTO.stream()
+                .map(SessionSeatDTO::getId)
                 .toList();
+
+        int updatedCount = sessionSeatsRepository
+                .unlockReservedSeats(idsToLock, userId);
+        System.out.println("Unlocked seats: " + updatedCount);
+    }
+
+    @Scheduled(fixedRate = 60000)
+    @Transactional
+    public void releaseExpiredLocks() {
+        int data = this.sessionSeatsRepository.releaseExpiredSeats(LocalDateTime.now());
+        System.out.println("Expired locks released: " + data);
     }
 
     @Override
