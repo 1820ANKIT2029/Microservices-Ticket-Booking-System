@@ -16,7 +16,6 @@ public class SessionSeatDTO {
     private Long id;
     private Long eventSessionId;
     private Long seatId;
-    private TicketTypeDTO ticketTypeDTO;
     private BigDecimal overridePrice;
     private SessionSeatStatus status;
 }

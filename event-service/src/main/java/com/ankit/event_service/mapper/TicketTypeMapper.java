@@ -1,10 +1,12 @@
 package com.ankit.event_service.mapper;
 
 import com.ankit.event_service.dto.TicketTypeDTO;
-import com.ankit.event_service.entity.Event;
 import com.ankit.event_service.entity.EventSession;
 import com.ankit.event_service.entity.TicketType;
+import com.ankit.event_service.entity.VenueSection;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 public class TicketTypeMapper {
@@ -14,8 +16,15 @@ public class TicketTypeMapper {
 
         return TicketTypeDTO.builder()
                 .id(entity.getId())
-                .eventId(entity.getEvent() != null ? entity.getEvent().getId() : null)
-                .eventSessionId(entity.getEventSession() != null ? entity.getEventSession().getId() : null)
+                .eventSessionId(entity.getEventSession() != null
+                        ? entity.getEventSession().getId()
+                        : null
+                )
+                .venueSectionIds(entity.getVenueSections()
+                        .stream()
+                        .map(VenueSection::getId)
+                        .collect(Collectors.toSet())
+                )
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .basePrice(entity.getBasePrice())
@@ -42,13 +51,16 @@ public class TicketTypeMapper {
                 .isActive(dto.getIsActive())
                 .saleStartAt(dto.getSaleStartAt())
                 .saleEndAt(dto.getSaleEndAt())
+                .venueSections(dto.getVenueSectionIds()
+                        .stream()
+                        .map(id -> {
+                            VenueSection section = new VenueSection();
+                            section.setId(id);
+                            return section;
+                        })
+                        .collect(Collectors.toSet()))
                 .build();
 
-        if (dto.getEventId() != null) {
-            Event event = new Event();
-            event.setId(dto.getEventId());
-            ticketType.setEvent(event);
-        }
         if (dto.getEventSessionId() != null) {
             EventSession session = new EventSession();
             session.setId(dto.getEventSessionId());

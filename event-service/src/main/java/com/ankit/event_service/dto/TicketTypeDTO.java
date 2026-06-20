@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -13,9 +14,8 @@ public class TicketTypeDTO {
 
     private Long id;
 
-    private Long eventId;
-
     private Long eventSessionId;
+    private Set<Long> venueSectionIds;
 
     @NotBlank(message = "Ticket tier designation tier name is required")
     @Size(max = 255, message = "Ticket type name must not exceed 255 characters")

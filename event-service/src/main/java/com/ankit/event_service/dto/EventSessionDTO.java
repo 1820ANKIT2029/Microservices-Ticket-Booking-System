@@ -1,8 +1,10 @@
 package com.ankit.event_service.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -45,4 +47,7 @@ public class EventSessionDTO {
     private ZonedDateTime startDataTime;
     private ZonedDateTime endDataTime;
     private ZonedDateTime createdAt;
+
+    @Valid
+    private List<TicketTypeDTO> ticketTypes;
 }

@@ -4,10 +4,17 @@ import com.ankit.event_service.dto.EventSessionDTO;
 import com.ankit.event_service.entity.Event;
 import com.ankit.event_service.entity.EventSession;
 import com.ankit.event_service.entity.Venue;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.stream.Collectors;
+
 @Component
+@RequiredArgsConstructor
 public class EventSessionMapper {
+
+    private final TicketTypeMapper ticketTypeMapper;
 
     public EventSessionDTO toDto(EventSession entity) {
         if (entity == null) return null;
@@ -25,9 +32,11 @@ public class EventSessionMapper {
                 .availableCapacity(entity.getAvailableCapacity())
                 .sessionNumber(entity.getSessionNumber())
                 .isRecorded(entity.getIsRecorded())
-                .startDataTime(entity.getStartDataTime())
-                .endDataTime(entity.getEndDataTime())
+                .startDataTime(entity.getStartDateTime())
+                .endDataTime(entity.getEndDateTime())
                 .createdAt(entity.getCreatedAt())
+                .ticketTypes(entity.getTicketTypes() != null ?
+                        entity.getTicketTypes().stream().map(ticketTypeMapper::toDto).collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }
 
@@ -45,9 +54,11 @@ public class EventSessionMapper {
                 .availableCapacity(dto.getAvailableCapacity())
                 .sessionNumber(dto.getSessionNumber())
                 .isRecorded(dto.getIsRecorded())
-                .startDataTime(dto.getStartDataTime())
-                .endDataTime(dto.getEndDataTime())
+                .startDateTime(dto.getStartDataTime())
+                .endDateTime(dto.getEndDataTime())
                 .createdAt(dto.getCreatedAt())
+                .ticketTypes(dto.getTicketTypes() != null ?
+                        dto.getTicketTypes().stream().map(ticketTypeMapper::toEntity).collect(Collectors.toList()) : Collections.emptyList())
                 .build();
 
         if (dto.getEventId() != null) {

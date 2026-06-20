@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "ticket_types")
@@ -19,11 +21,7 @@ public class TicketType {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id", nullable = false)
-    private Event event;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_session_id")
+    @JoinColumn(name = "event_session_id", nullable = false, updatable = false)
     private EventSession eventSession;
 
     @Column(nullable = false, length = 255)
@@ -52,4 +50,12 @@ public class TicketType {
 
     @Column(name = "sale_end_at")
     private ZonedDateTime saleEndAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "ticket_type_sections",
+            joinColumns = @JoinColumn(name = "ticket_type_id"),
+            inverseJoinColumns = @JoinColumn(name = "venue_section_id")
+    )
+    private Set<VenueSection> venueSections = new HashSet<>();
 }

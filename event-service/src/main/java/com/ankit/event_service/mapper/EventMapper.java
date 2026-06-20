@@ -15,7 +15,6 @@ public class EventMapper {
 
     private final PerformerMapper performerMapper;
     private final EventSessionMapper eventSessionMapper;
-    private final TicketTypeMapper ticketTypeMapper;
 
     public EventDTO toDto(Event entity) {
         if (entity == null) return null;
@@ -40,8 +39,6 @@ public class EventMapper {
                         entity.getPerformers().stream().map(performerMapper::toDto).collect(Collectors.toList()) : Collections.emptyList())
                 .sessions(entity.getSessions() != null ?
                         entity.getSessions().stream().map(eventSessionMapper::toDto).collect(Collectors.toList()) : Collections.emptyList())
-                .ticketTypes(entity.getTicketTypes() != null ?
-                        entity.getTicketTypes().stream().map(ticketTypeMapper::toDto).collect(Collectors.toList()) : Collections.emptyList())
                 .build();
     }
 
@@ -67,8 +64,6 @@ public class EventMapper {
                         dto.getPerformers().stream().map(performerMapper::toEntity).collect(Collectors.toList()) : Collections.emptyList())
                 .sessions(dto.getSessions() != null ?
                         dto.getSessions().stream().map(eventSessionMapper::toEntity).collect(Collectors.toList()) : Collections.emptyList())
-                .ticketTypes(dto.getTicketTypes() != null ?
-                        dto.getTicketTypes().stream().map(ticketTypeMapper::toEntity).collect(Collectors.toList()) : Collections.emptyList())
                 .build();
 
         if (dto.getVenueId() != null) {

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "event_sessions")
@@ -54,12 +56,16 @@ public class EventSession {
     private Boolean isRecorded = false;
 
     @Column(name = "start_data_time")
-    private ZonedDateTime startDataTime;
+    private ZonedDateTime startDateTime;
 
     @Column(name = "end_data_time")
-    private ZonedDateTime endDataTime;
+    private ZonedDateTime endDateTime;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private ZonedDateTime createdAt;
+
+    @OneToMany(mappedBy = "eventSession", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<TicketType> ticketTypes = new ArrayList<>();
 }

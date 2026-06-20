@@ -1,23 +1,28 @@
 package com.ankit.event_service.mapper;
 
 import com.ankit.event_service.dto.SessionSeatDTO;
-import com.ankit.event_service.entity.*;
-import lombok.RequiredArgsConstructor;
+import com.ankit.event_service.entity.EventSession;
+import com.ankit.event_service.entity.Seat;
+import com.ankit.event_service.entity.SessionSeat;
+import com.ankit.event_service.entity.SessionSeatStatus;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class SessionSeatMapper {
-    private final TicketTypeMapper ticketTypeMapper;
 
     public SessionSeatDTO toDto(SessionSeat entity) {
         if (entity == null) return null;
 
         return SessionSeatDTO.builder()
                 .id(entity.getId())
-                .eventSessionId(entity.getEventSession() != null ? entity.getEventSession().getId() : null)
-                .seatId(entity.getSeat() != null ? entity.getSeat().getId() : null)
-                .ticketTypeDTO(this.ticketTypeMapper.toDto(entity.getTicketType()))
+                .eventSessionId(
+                        entity.getEventSession() != null
+                                ? entity.getEventSession().getId()
+                                : null)
+                .seatId(
+                        entity.getSeat() != null
+                                ? entity.getSeat().getId()
+                                : null)
                 .overridePrice(entity.getOverridePrice())
                 .status(entity.getStatus())
                 .build();
@@ -29,8 +34,10 @@ public class SessionSeatMapper {
         SessionSeat sessionSeat = SessionSeat.builder()
                 .id(dto.getId())
                 .overridePrice(dto.getOverridePrice())
-                .status(dto.getStatus() != null ? dto.getStatus() : SessionSeatStatus.AVAILABLE)
-                .ticketType(dto.getTicketTypeDTO() != null ? this.ticketTypeMapper.toEntity(dto.getTicketTypeDTO()) : null)
+                .status(
+                        dto.getStatus() != null
+                                ? dto.getStatus()
+                                : SessionSeatStatus.AVAILABLE)
                 .build();
 
         if (dto.getEventSessionId() != null) {

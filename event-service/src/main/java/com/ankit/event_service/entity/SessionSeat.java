@@ -6,7 +6,17 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "session_seat_availabilities")
+@Table(
+        name = "session_seats",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = {
+                                "event_session_id",
+                                "seat_id"
+                        }
+                )
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,15 +36,10 @@ public class SessionSeat {
     @JoinColumn(name = "seat_id", nullable = false, updatable = false)
     private Seat seat;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ticket_type_id", updatable = false)
-    private TicketType ticketType;
-
     @Column(name = "override_price", precision = 10, scale = 2)
     private BigDecimal overridePrice;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50)
     @Builder.Default
     private SessionSeatStatus status = SessionSeatStatus.AVAILABLE;
 }

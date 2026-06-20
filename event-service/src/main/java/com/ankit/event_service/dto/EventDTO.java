@@ -54,7 +54,4 @@ public class EventDTO {
 
     @Valid
     private List<EventSessionDTO> sessions;
-
-    @Valid
-    private List<TicketTypeDTO> ticketTypes;
 }
