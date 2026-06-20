@@ -9,13 +9,17 @@ CREATE TABLE IF NOT EXISTS `venues` (
     `state` VARCHAR(100),
     `country` VARCHAR(100),
     `postal_code` VARCHAR(20),
+
     `longitude` DECIMAL(9, 6),
     `latitude` DECIMAL(8, 6),
+
     `timezone` VARCHAR(100),
     `total_capacity` INT,
     `website_url` VARCHAR(2048),
+
     `map_width` DECIMAL(10,2),
     `map_height` DECIMAL(10,2),
+
     `amenities` TEXT,
     `is_active` BOOLEAN DEFAULT TRUE,
     `created_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -76,18 +80,23 @@ CREATE TABLE IF NOT EXISTS `performers` (
 
 CREATE TABLE IF NOT EXISTS `events` (
     `id` SERIAL PRIMARY KEY,
+
     `title` VARCHAR(255) NOT NULL,
     `slug` VARCHAR(255) NOT NULL UNIQUE,
     `description` TEXT,
     `status` VARCHAR(50),
     `event_type` VARCHAR(100),
     `min_age` INT,
+
     `venue_id` INT,
+    `user_id` VARCHAR(100) NOT NULL, -- Logical reference to User Service `users.user_id`
+
     `banner_url` VARCHAR(2048),
     `poster_url` VARCHAR(2048),
+
     `is_multi_session` BOOLEAN DEFAULT FALSE,
     `is_featured` BOOLEAN DEFAULT FALSE,
-    `user_id` VARCHAR(100) NOT NULL, -- Logical reference to User Service `users.user_id`
+
     `created_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`venue_id`) REFERENCES `venues` (`id`) ON DELETE SET NULL
@@ -107,47 +116,73 @@ CREATE TABLE IF NOT EXISTS `event_sessions` (
     `id` SERIAL PRIMARY KEY,
     `event_id` INT NOT NULL,
     `venue_id` INT,
+
     `title` VARCHAR(255),
     `description` TEXT,
+
     `status` VARCHAR(50),
+
     `stream_url` VARCHAR(2048),
     `language` VARCHAR(100),
+
     `total_capacity` INT,
     `available_capacity` INT,
     `session_number` INT,
     `is_recorded` BOOLEAN DEFAULT FALSE,
+
     `start_data_time` TIMESTAMP WITH TIME ZONE,
     `end_data_time` TIMESTAMP WITH TIME ZONE,
     `created_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
     FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
     FOREIGN KEY (`venue_id`) REFERENCES `venues` (`id`) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS `ticket_types` (
     `id` SERIAL PRIMARY KEY,
-    `event_id` INT NOT NULL,
-    `event_session_id` INT,
+    `event_session_id` INT NOT NULL,
+
     `name` VARCHAR(255) NOT NULL,
     `description` TEXT,
+
     `base_price` DECIMAL(10, 2) NOT NULL,
+
     `total_quantity` INT,
     `available_quantity` INT,
     `max_per_booking` INT,
+
     `is_active` BOOLEAN DEFAULT TRUE,
     `sale_start_at` TIMESTAMP WITH TIME ZONE,
     `sale_end_at` TIMESTAMP WITH TIME ZONE,
-    FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
+
     FOREIGN KEY (`event_session_id`) REFERENCES `event_sessions` (`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `ticket_type_sections` (
+    `ticket_type_id` INT NOT NULL,
+    `venue_section_id` INT NOT NULL,
+
+    PRIMARY KEY(ticket_type_id, venue_section_id),
+
+    FOREIGN KEY (ticket_type_id)
+        REFERENCES ticket_types(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (venue_section_id)
+        REFERENCES venue_sections(id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `session_seats` (
     `id` SERIAL PRIMARY KEY,
     `event_session_id` INT NOT NULL,
     `seat_id` INT NOT NULL,
-    `ticket_type_id` INT,
+
     `override_price` DECIMAL(10, 2),
     status item_status DEFAULT 'AVAILABLE', -- e.g., AVAILABLE, RESERVED, SOLD
+
+    UNIQUE(event_session_id, seat_id),
+
     FOREIGN KEY (`event_session_id`) REFERENCES `event_sessions` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`seat_id`) REFERENCES `seats` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`ticket_type_id`) REFERENCES `ticket_types` (`id`) ON DELETE SET NULL
+    FOREIGN KEY (`seat_id`) REFERENCES `seats` (`id`) ON DELETE CASCADE
 );
