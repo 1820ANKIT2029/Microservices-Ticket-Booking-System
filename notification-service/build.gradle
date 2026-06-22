@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.0.6'
 	id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.google.cloud.tools.jib' version '3.5.1'
 }
 
 group = 'com.ankit'
@@ -18,12 +19,17 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+    set('springCloudVersion', "2025.1.1")
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.boot:spring-boot-starter-kafka'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
@@ -37,6 +43,23 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-h2console'
     // Source: https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+jar {
+    enabled = true
+}
+
+jib {
+    to {
+        def registry = System.getenv('DOCKER_REGISTRY') ?: 'agentveer'
+        image = "${registry}/${project.name}:${project.version}"
+    }
 }
 
 tasks.named('test') {
