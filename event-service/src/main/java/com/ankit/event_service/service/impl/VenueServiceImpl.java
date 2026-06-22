@@ -1,16 +1,17 @@
 package com.ankit.event_service.service.impl;
 
 import com.ankit.event_service.dto.VenueDTO;
+import com.ankit.event_service.dto.VenueSearchResponse;
 import com.ankit.event_service.entity.Venue;
 import com.ankit.event_service.exception.ResourceNotFoundException;
 import com.ankit.event_service.mapper.VenueMapper;
 import com.ankit.event_service.repository.VenueRepository;
 import com.ankit.event_service.service.IVenueService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,10 +36,22 @@ public class VenueServiceImpl implements IVenueService {
     }
 
     @Override
-    public List<VenueDTO> getAllVenues() {
-        List<Venue> venues = this.venueRepository.findAll();
-        if(!venues.isEmpty()) return venues.stream().map(venueMapper::toDto).toList();
-        return List.of();
+    public Page<VenueSearchResponse> searchVenues(String keyword, Pageable pageable) {
+        Page<Venue> venuePage;
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            venuePage = this.venueRepository.findByNameContainingIgnoreCase(keyword, pageable);
+        }
+        else {
+            venuePage = this.venueRepository.findAll(pageable);
+        }
+
+        return venuePage.map(venue -> {
+            return VenueSearchResponse.builder()
+                    .id(venue.getId())
+                    .name(venue.getName())
+                    .build();
+        });
     }
 
     @Override
