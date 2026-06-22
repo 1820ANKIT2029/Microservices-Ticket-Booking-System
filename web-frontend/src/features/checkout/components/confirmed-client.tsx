@@ -9,12 +9,14 @@ interface ConfirmedClientProps {
   event: CheckoutEvent;
   seatsList: string[];
   totalAmount: number;
+  bookingRef?: string;
 }
 
 export function ConfirmedClient({
   event,
   seatsList,
   totalAmount,
+  bookingRef,
 }: ConfirmedClientProps) {
   const formatPrice = (val: number) => {
     return new Intl.NumberFormat("en-IN", {
@@ -50,7 +52,7 @@ export function ConfirmedClient({
             Booking Successful!
           </h1>
           <p className="text-[10px] font-extrabold text-on-surface-variant tracking-widest uppercase">
-            Booking ID: EP-TX-8492067
+            Booking ID: {bookingRef || "EP-TX-8492067"}
           </p>
         </section>
 
@@ -118,7 +120,7 @@ export function ConfirmedClient({
                 <Image 
                   alt="Ticket Entry QR Code Scanner Link" 
                   className="w-32 h-32 md:w-36 md:h-36 object-contain" 
-                  src={`https://placehold.co/200x200/5400c3/ffffff/png?text=TICKET+EP-TX-8492067`}
+                  src={`https://placehold.co/200x200/5400c3/ffffff/png?text=TICKET+${bookingRef || "EP-TX-8492067"}`}
                   unoptimized
                   width={144}
                   height={144}

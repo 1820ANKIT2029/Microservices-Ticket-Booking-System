@@ -12,6 +12,26 @@ import { EventService } from "@/features/events/api/service";
 import type { TicketTypeResponseDto } from "@/features/events/types";
 import type { ApiResponse } from "@/shared/types";
 import { toast } from "sonner";
+import { useAuthStore } from "@/shared/store/auth.store";
+
+function loadRazorpayScript(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (typeof window === "undefined") {
+      resolve(false);
+      return;
+    }
+    if ((window as any).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
 
 // ── Shared parse helpers ──────────────────────────────────────────────────────
 
@@ -75,6 +95,7 @@ export function SeatMapViewerPage({ venueId, eventId, sessionId, onSelectionChan
   const setPos = useSeatMapStore((s) => s.setPos);
   const selectedSeatIds = useSeatMapStore((s) => s.selectedSeatIds);
   const setSelectedSeatIds = useSeatMapStore((s) => s.setSelectedSeatIds);
+  const user = useAuthStore((s) => s.user);
 
   const [sessionSeats, setSessionSeats] = useState<SessionSeatDTO[]>([]);
   const [ticketTypes, setTicketTypes] = useState<TicketTypeResponseDto[]>([]);
@@ -234,23 +255,47 @@ export function SeatMapViewerPage({ venueId, eventId, sessionId, onSelectionChan
     if (selectedSeatIds.length === 0 || !sessionId) return;
 
     setIsProceeding(true);
-    const toastId = toast.loading("Locking your selected seats...");
+    const toastId = toast.loading("Booking your selected seats...");
 
     try {
       const seats = venue.sections.flatMap((s) => s.seats);
       const selected = seats.filter((s) => selectedSeatIds.includes(s.id));
       
-      // Prepare lock payload
-      const lockPayload = selected.map((seat) => ({
-        eventSessionId: Number(sessionId),
-        seatId: Number(seat.id),
-        status: "RESERVED" as const,
-      }));
+      const bookingRef = crypto.randomUUID();
+      const userId = user?.userId || "1";
+      const eventSessionId = Number(sessionId);
 
-      // Call batch lock API
-      await VenueSeatMapService.lockSeats(sessionId, lockPayload);
+      const seatsPayload = selected.map((seat) => {
+        const sSeat = sessionSeats.find((ss) => ss.seatId === Number(seat.id));
+        const section = venue.sections.find((s) => s.seats.some((seatItem) => seatItem.id === seat.id));
+        const ticketType = section ? ticketTypes.find((t) => t.venueSectionIds?.includes(section.id)) : undefined;
 
-      toast.success("Seats locked! Proceeding to checkout...", { id: toastId });
+        return {
+          sessionSeatId: sSeat ? Number(sSeat.id) : 0,
+          eventSessionId: Number(sessionId),
+          seatId: Number(seat.id),
+          ticketTypeId: ticketType ? Number(ticketType.id) : 0,
+        };
+      });
+
+      const bookingPayload = {
+        bookingRef,
+        userId,
+        eventSessionId,
+        seats: seatsPayload,
+      };
+
+      // Call direct booking API
+      const bookingRes = await VenueSeatMapService.createEventBooking(bookingPayload);
+
+      // Load Razorpay script
+      const sdkLoaded = await loadRazorpayScript();
+      if (!sdkLoaded) {
+        toast.error("Failed to load Razorpay Payment Gateway SDK.", { id: toastId });
+        return;
+      }
+
+      toast.success("Connecting to Razorpay Secure...", { id: toastId });
 
       const seatKeys = selected.map((seat) => {
         const isPremiumOrVip = seat.seatType === "VIP" || seat.seatType === "PREMIUM";
@@ -258,15 +303,40 @@ export function SeatMapViewerPage({ venueId, eventId, sessionId, onSelectionChan
         return `${prefix}-${seat.rowLabel}-${seat.seatNumber}`;
       });
 
-      const seatIdsQuery = selectedSeatIds.join(",");
-      router.push(`/checkout?eventId=${eventId}&seats=${seatKeys.join(",")}&seatIds=${seatIdsQuery}${sessionId ? `&sessionId=${sessionId}` : ""}`);
+      const options = {
+        key: bookingRes.gatewayPublicApiKey || "rzp_test_dummy",
+        amount: Math.round(Number(bookingRes.totalAmount) * 100), // in paise
+        currency: bookingRes.currency || "INR",
+        name: "EventPass",
+        description: `Booking Reference: ${bookingRes.bookingRef}`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg",
+        handler: function (response: any) {
+          toast.success("Payment Successful!");
+          router.push(`/checkout/confirmed?eventId=${eventId}&seats=${seatKeys.join(",")}&total=${bookingRes.totalAmount}&bookingId=${bookingRes.id}`);
+        },
+        prefill: {
+          name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Guest Customer",
+          email: user?.email || "guest@example.com",
+          contact: user?.phoneNumber || "",
+        },
+        notes: {
+          bookingRef: bookingRes.bookingRef,
+          bookingId: String(bookingRes.id),
+        },
+        theme: {
+          color: "#5400c3",
+        },
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
     } catch (err: any) {
-      console.error("Failed to lock seats:", err);
-      toast.error(err.message || "Failed to lock seats. They may have already been taken.", { id: toastId });
+      console.error("Failed to book seats:", err);
+      toast.error(err.message || "Failed to book seats. They may have already been taken.", { id: toastId });
     } finally {
       setIsProceeding(false);
     }
-  }, [selectedSeatIds, venue.sections, eventId, sessionId, router]);
+  }, [selectedSeatIds, venue.sections, eventId, sessionId, sessionSeats, ticketTypes, totalPrice, user, router]);
 
   // ── Loading / error ───────────────────────────────────────────────────────
 
@@ -324,7 +394,7 @@ export function SeatMapViewerPage({ venueId, eventId, sessionId, onSelectionChan
               disabled={isProceeding}
               className="px-4 py-1.5 text-xs font-bold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isProceeding ? "Locking..." : "Proceed →"}
+              {isProceeding ? "Booking..." : "Book Tickets →"}
             </button>
           </div>
         )}
@@ -469,7 +539,7 @@ export function SeatMapViewerPage({ venueId, eventId, sessionId, onSelectionChan
                 disabled={isProceeding}
                 className="w-full py-3 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-all active:scale-[0.98] shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isProceeding ? "Locking seats..." : "Proceed to Checkout"}
+                {isProceeding ? "Booking seats..." : "Book Tickets"}
               </button>
             </div>
           </aside>

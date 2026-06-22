@@ -12,6 +12,13 @@ interface PageProps {
     fail?: string;
     sessionId?: string;
     seatIds?: string;
+    sessionSeatIds?: string;
+    bookingRef?: string;
+    total?: string;
+    subtotal?: string;
+    tax?: string;
+    gatewayKey?: string;
+    bookingId?: string;
   }>;
 }
 
@@ -23,9 +30,19 @@ export default function CheckoutPage({ searchParams }: PageProps) {
   const fail = resolvedParams?.fail;
   const sessionId = resolvedParams?.sessionId;
   const seatIds = resolvedParams?.seatIds;
+  const sessionSeatIds = resolvedParams?.sessionSeatIds;
+  const bookingRef = resolvedParams?.bookingRef;
+  const total = resolvedParams?.total;
+  const subtotal = resolvedParams?.subtotal;
+  const tax = resolvedParams?.tax;
+  const gatewayKey = resolvedParams?.gatewayKey;
+  const bookingId = resolvedParams?.bookingId;
 
   // Parse selected seat IDs
   const seatIdsList = seatIds ? seatIds.split(",").map((id) => Number(id)) : [];
+  
+  // Parse session seat IDs
+  const sessionSeatIdsList = sessionSeatIds ? sessionSeatIds.split(",").map((id) => Number(id)) : [];
   
   // Parse selected seats list
   const seatsList = seats ? seats.split(",") : [];
@@ -37,8 +54,15 @@ export default function CheckoutPage({ searchParams }: PageProps) {
   // Fetch target checkout event details
   const event = getCheckoutEventById(eventId);
   
-  // Calculate pricing values
-  const breakdown = calculateOrderBreakdown(event, validQty, seatsList);
+  // Calculate pricing values — override with backend direct booking numbers if available
+  const breakdown = bookingRef ? {
+    basePrice: Number(subtotal) / (validQty || 1),
+    qty: validQty,
+    baseFareTotal: Number(subtotal),
+    bookingFee: Number(total) - Number(subtotal) - Number(tax),
+    taxesGst: Number(tax),
+    totalAmount: Number(total),
+  } : calculateOrderBreakdown(event, validQty, seatsList);
 
   // Dynamic ticket type label containing selected seats
   const dynamicEvent = { ...event };
@@ -56,8 +80,9 @@ export default function CheckoutPage({ searchParams }: PageProps) {
       breakdown={breakdown} 
       seats={seats} 
       fail={fail === "true"} 
-      sessionId={sessionId}
-      seatIdsList={seatIdsList}
+      bookingRef={bookingRef}
+      gatewayKey={gatewayKey}
+      bookingId={bookingId}
     />
   );
 }

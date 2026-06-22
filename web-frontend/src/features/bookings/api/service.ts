@@ -1,12 +1,18 @@
 import { api } from "@/shared/api";
 import type { ApiResponse } from "@/shared/types";
 import type { BookingResponseDto, CreateBookingRequestDto, LoyaltyStats } from "../types";
+import type { BookingDTO } from "@/features/venue-seat-map/types";
 
 /**
  * BookingService — all HTTP calls for the bookings domain.
  * Pure HTTP adapter: no mapping, no business logic.
  */
 export class BookingService {
+  static getEventBooking(bookingId: number | string) {
+    return api
+      .get<ApiResponse<BookingDTO>>(`/booking/api/bookings/${bookingId}`)
+      .then((res) => res.data.data);
+  }
   static getBookings() {
     return api
       .get<ApiResponse<BookingResponseDto[]>>("/bookings")

@@ -9,6 +9,7 @@ interface FailedClientProps {
   seatsList: string[];
   totalAmount: number;
   reason?: string;
+  bookingRef?: string;
 }
 
 export function FailedClient({
@@ -16,6 +17,7 @@ export function FailedClient({
   seatsList,
   totalAmount,
   reason,
+  bookingRef,
 }: FailedClientProps) {
   const formatPrice = (val: number) => {
     return new Intl.NumberFormat("en-IN", {
@@ -48,7 +50,7 @@ export function FailedClient({
             Booking Failed
           </h1>
           <p className="text-[10px] font-extrabold text-on-surface-variant tracking-widest uppercase">
-            Attempt ID: EP-FAIL-8492067
+            Attempt ID: {bookingRef || "EP-FAIL-8492067"}
           </p>
         </section>
 
@@ -119,7 +121,7 @@ export function FailedClient({
             <div className="space-y-1">
               <h3 className="text-sm font-bold text-on-surface">Contact Support</h3>
               <p className="text-xs text-on-surface-variant leading-relaxed">
-                If money was deducted from your account, email support@eventpass.com with reference **EP-FAIL-8492067** for assistance.
+                If money was deducted from your account, email support@eventpass.com with reference **{bookingRef || "EP-FAIL-8492067"}** for assistance.
               </p>
             </div>
           </div>

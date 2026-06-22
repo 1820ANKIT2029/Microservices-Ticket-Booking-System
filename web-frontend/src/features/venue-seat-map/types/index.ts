@@ -134,3 +134,35 @@ export interface EditorState {
 export interface ViewerState {
   selectedSeatIds: number[];
 }
+
+export interface TicketDTO {
+  id: number;
+  bookingId: number;
+  sessionSeatId: number;
+  ticketTypeId: number;
+  ticketNumber: string;
+  price: number;
+  status: string;
+}
+
+export interface BookingDTO {
+  id: number;
+  bookingRef: string;
+  userId: string;
+  eventSessionId: number;
+  status: string;
+  ticketCount: number;
+  subtotal: number;
+  taxAmount: number;
+  totalAmount: number;
+  currency: string;
+  confirmedAt?: string;
+  cancelledAt?: string;
+  cancelReason?: string;
+  createdAt: string;
+  tickets?: TicketDTO[];
+}
+
+export interface BookingResponseDTO extends BookingDTO {
+  gatewayPublicApiKey?: string;
+}

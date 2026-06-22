@@ -10,6 +10,7 @@ import type {
   CreateSeatPayload,
   UpdateSeatPayload,
   SessionSeatDTO,
+  BookingResponseDTO,
 } from "../types";
 
 /**
@@ -144,21 +145,37 @@ export class VenueSeatMapService {
       .then((res) => res.data.data);
   }
 
-  static lockSeats(eventSessionId: number | string, seats: Omit<SessionSeatDTO, "id">[]) {
+  static lockSeats(eventSessionId: number | string, seats: SessionSeatDTO[]) {
     return api
       .post<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats/batch/lock`, seats)
       .then((res) => res.data.data);
   }
 
-  static unlockSeats(eventSessionId: number | string, seats: Omit<SessionSeatDTO, "id">[]) {
+  static unlockSeats(eventSessionId: number | string, seats: SessionSeatDTO[]) {
     return api
       .post<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats/batch/unlock`, seats)
       .then((res) => res.data.data);
   }
 
-  static bookSeats(eventSessionId: number | string, seats: Omit<SessionSeatDTO, "id">[]) {
+  static bookSeats(eventSessionId: number | string, seats: SessionSeatDTO[]) {
     return api
       .post<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats/batch/booked`, seats)
+      .then((res) => res.data.data);
+  }
+
+  static createEventBooking(booking: {
+    bookingRef: string;
+    userId: string;
+    eventSessionId: number;
+    seats: {
+      sessionSeatId: number;
+      eventSessionId: number;
+      seatId: number;
+      ticketTypeId: number;
+    }[];
+  }) {
+    return api
+      .post<ApiResponse<BookingResponseDTO>>("/booking/api/bookings", booking)
       .then((res) => res.data.data);
   }
 }
