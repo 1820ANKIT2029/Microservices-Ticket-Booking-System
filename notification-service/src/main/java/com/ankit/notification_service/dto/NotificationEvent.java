@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NotificationEvent {
-    private String eventId;
+    private String id;
+    private Long BookingId;
     private String recipient;
     private String templateName;
     private String channel; // EMAIL, SMS, PUSH

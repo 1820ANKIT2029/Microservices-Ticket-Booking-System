@@ -20,11 +20,11 @@ public class TestNotificationProducerController {
 
     @PostMapping
     public String triggerNotification(@RequestBody NotificationEvent event) {
-        if (event.getEventId() == null) {
-            event.setEventId(UUID.randomUUID().toString());
+        if (event.getId() == null) {
+            event.setId(UUID.randomUUID().toString());
         }
 
-        kafkaTemplate.send(TOPIC, event.getEventId(), event);
+        kafkaTemplate.send(TOPIC, event.getId(), event);
         return "Notification event dispatched to Kafka successfully!";
     }
 }
