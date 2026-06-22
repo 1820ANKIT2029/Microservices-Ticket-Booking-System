@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `session_seats` (
     `event_session_id` INT NOT NULL,
     `seat_id` INT NOT NULL,
 
-    `locked_by` VARCHAR(100) NOT NULL,
+    `locked_by` VARCHAR(100),
     `locked_until` TIMESTAMP WITH TIME ZONE,
 
     `override_price` DECIMAL(10, 2),
