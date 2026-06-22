@@ -19,12 +19,17 @@ public class UserController {
             @RequestHeader("X-User-Id") String userId
     ){
         UserResponseDto usr = this.userService.getUser(userId);
+
         return ResponseEntity.ok(new ApiResponse<>(usr, "user details"));
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(@PathVariable String userId){
+    @Deprecated
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(
+            @PathVariable String userId
+    ){
         UserResponseDto usr = this.userService.getUser(userId);
+
         return ResponseEntity.ok(new ApiResponse<>(usr, "user details"));
     }
 }
