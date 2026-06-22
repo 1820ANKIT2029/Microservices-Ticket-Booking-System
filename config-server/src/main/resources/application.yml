@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: 'config-service'
+    name: 'config-server'
 
   profiles:
     active: git
@@ -25,9 +25,12 @@ spring:
             - search-service
             - analytics-service
           default-label: main
-          timeout: 5
+          timeout: 60
           clone-on-start: true
+#          skip-ssl-validation: true
           force-pull: true
+        native:
+          search-locations: file:///C:/Users/Ankit/Downloads/Event-Ticketing-System-Config/common
 
 management:
   endpoints:
@@ -43,3 +46,8 @@ management:
     health:
       probes:
         enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.config.server: DEBUG
+    org.eclipse.jgit: DEBUG
