@@ -43,6 +43,21 @@ public interface SessionSeatsRepository extends JpaRepository<SessionSeat, Long>
     @Modifying
     @Query("""
         UPDATE SessionSeat s
+        SET s.status = 'BOOKED',
+            s.lockedByUserId = null,
+            s.lockedUntil = null
+        WHERE s.id IN :sessionSeatIds
+        AND s.status = 'RESERVED'
+        AND s.lockedByUserId = :userId
+    """)
+    int bookReservedSeats(
+            List<Long> sessionSeatIds,
+            String userId
+    );
+
+    @Modifying
+    @Query("""
+        UPDATE SessionSeat s
         SET s.status = 'AVAILABLE',
             s.lockedByUserId = null,
             s.lockedUntil = null

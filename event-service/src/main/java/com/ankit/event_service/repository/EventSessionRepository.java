@@ -1,6 +1,8 @@
 package com.ankit.event_service.repository;
 
 import com.ankit.event_service.entity.EventSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,8 +21,7 @@ public interface EventSessionRepository extends JpaRepository<EventSession,Long>
         FROM EventSession es
         JOIN es.event e
         WHERE e.userId = :userId
-        ORDER BY es.startDateTime
     """)
-    List<EventSession> findAllByUserId(String userId);
+    Page<EventSession> findAllByUserId(String userId, Pageable pageable);
 
 }
