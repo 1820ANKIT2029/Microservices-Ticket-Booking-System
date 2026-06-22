@@ -66,12 +66,25 @@ public class SessionSeatServiceImpl implements ISessionSeatService {
             List<SessionSeatDTO> sessionSeatsDTO,
             String userId
     ) {
-        List<Long> idsToLock = sessionSeatsDTO.stream()
+        List<Long> idsToUnlock = sessionSeatsDTO.stream()
                 .map(SessionSeatDTO::getId)
                 .toList();
 
         int updatedCount = sessionSeatsRepository
-                .unlockReservedSeats(idsToLock, userId);
+                .unlockReservedSeats(idsToUnlock, userId);
+        System.out.println("Unlocked seats: " + updatedCount);
+    }
+
+    @Override
+    public void bookedSessionSeats(
+            List<SessionSeatDTO> sessionSeatsDTO, String userId
+    ) {
+        List<Long> idsToBooked = sessionSeatsDTO.stream()
+                .map(SessionSeatDTO::getId)
+                .toList();
+
+        int updatedCount = sessionSeatsRepository
+                .bookReservedSeats(idsToBooked, userId);
         System.out.println("Unlocked seats: " + updatedCount);
     }
 

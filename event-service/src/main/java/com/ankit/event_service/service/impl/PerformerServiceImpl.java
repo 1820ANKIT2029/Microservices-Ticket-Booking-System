@@ -7,6 +7,8 @@ import com.ankit.event_service.mapper.PerformerMapper;
 import com.ankit.event_service.repository.PerformerRepository;
 import com.ankit.event_service.service.IPerformerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,9 +70,9 @@ public class PerformerServiceImpl implements IPerformerService {
     }
 
     @Override
-    public List<PerformerDTO> getPerformerByName(String name) {
-        List<Performer> performers = this.performerRepository.findAllByName(name);
-        if(!performers.isEmpty()) return performers.stream().map(performerMapper::toDto).toList();
-        return List.of();
+    public Page<PerformerDTO> getPerformerByName(String name, Pageable pageable) {
+        Page<Performer> performers = this.performerRepository.findAllByName(name, pageable);
+
+        return performers.map(performerMapper::toDto);
     }
 }

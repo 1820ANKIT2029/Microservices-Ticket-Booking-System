@@ -7,6 +7,8 @@ import com.ankit.event_service.mapper.EventMapper;
 import com.ankit.event_service.repository.EventRepository;
 import com.ankit.event_service.service.IEventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,12 +38,10 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public List<EventDTO> getEventOfUser(String userId) {
-        List<Event> events = this.eventRepository.findAllByUserId(userId);
-        if (events != null) {
-            return events.stream().map(eventMapper::toDto).toList();
-        }
-        return List.of();
+    public Page<EventDTO> getEventOfUser(String userId, Pageable pageable) {
+        Page<Event> events = this.eventRepository.findAllByUserId(userId, pageable);
+
+        return events.map(eventMapper::toDto);
     }
 
     @Override

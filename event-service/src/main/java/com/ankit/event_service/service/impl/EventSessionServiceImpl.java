@@ -5,11 +5,11 @@ import com.ankit.event_service.entity.*;
 import com.ankit.event_service.exception.ResourceNotFoundException;
 import com.ankit.event_service.mapper.EventSessionMapper;
 import com.ankit.event_service.repository.EventSessionRepository;
-import com.ankit.event_service.repository.SeatRepository;
-import com.ankit.event_service.repository.SessionSeatsRepository;
 import com.ankit.event_service.service.IEventSessionService;
 import com.ankit.event_service.service.ISessionSeatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,9 +100,10 @@ public class EventSessionServiceImpl implements IEventSessionService {
     }
 
     @Override
-    public List<EventSessionDTO> getEventSessionOfUser(String userId) {
-        List<EventSession> eventSessions = this.eventSessionRepository.findAllByUserId(userId);
-        if(!eventSessions.isEmpty()) return eventSessions.stream().map(eventSessionMapper::toDto).toList();
-        return List.of();
+    public Page<EventSessionDTO> getEventSessionOfUser(String userId, Pageable pageable) {
+        Page<EventSession> eventSessions = this.eventSessionRepository
+                .findAllByUserId(userId, pageable);
+
+        return eventSessions.map(eventSessionMapper::toDto);
     }
 }
