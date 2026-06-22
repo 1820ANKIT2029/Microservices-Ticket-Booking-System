@@ -16,7 +16,7 @@ public class SessionSeatController {
     private final ISessionSeatService sessionSeatsService;
 
     @PostMapping("/batch/lock")
-    public ResponseEntity<ApiResponse<List<SessionSeatDTO>>> LockSeats(
+    public ResponseEntity<ApiResponse<Void>> LockSeats(
             @RequestBody List<SessionSeatDTO> sessionSeats,
             @RequestHeader("X-User-Id") String userId
     ) {
@@ -27,12 +27,23 @@ public class SessionSeatController {
     }
 
     @PostMapping("/batch/unlock")
-    public ResponseEntity<ApiResponse<List<SessionSeatDTO>>> UnlockSeats(
+    public ResponseEntity<ApiResponse<Void>> UnlockSeats(
             @RequestBody List<SessionSeatDTO> sessionSeats,
             @RequestHeader("X-User-Id") String userId
     ) {
        this.sessionSeatsService.unlockSessionSeats(sessionSeats, userId);
        return ResponseEntity.ok(
+                new ApiResponse<>(null, "seats unlocked")
+        );
+    }
+
+    @PostMapping("/batch/booked")
+    public ResponseEntity<ApiResponse<Void>> BookedSeats(
+            @RequestBody List<SessionSeatDTO> sessionSeats,
+            @RequestHeader("X-User-Id") String userId
+    ) {
+        this.sessionSeatsService.bookedSessionSeats(sessionSeats, userId);
+        return ResponseEntity.ok(
                 new ApiResponse<>(null, "seats unlocked")
         );
     }
@@ -43,7 +54,9 @@ public class SessionSeatController {
     ) {
         SessionSeatDTO res = this.sessionSeatsService
                 .getSessionSeat(sessionSeatsId);
-        return ResponseEntity.ok(new ApiResponse<>(res, "seat details"));
+        return ResponseEntity.ok(
+                new ApiResponse<>(res, "seat details")
+        );
     }
 
     @GetMapping("")

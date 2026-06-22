@@ -1,12 +1,13 @@
 package com.ankit.event_service.controller;
 
-import com.ankit.event_service.dto.ApiResponse;
-import com.ankit.event_service.dto.SeatDTO;
-import com.ankit.event_service.dto.VenueDTO;
-import com.ankit.event_service.dto.VenueSectionDTO;
+import com.ankit.event_service.dto.*;
 import com.ankit.event_service.service.IVenueService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +26,17 @@ public class VenueController {
         return ResponseEntity.ok(new ApiResponse<>(venueDTO, "venue details"));
     }
 
-    @GetMapping("")
-    public ResponseEntity<ApiResponse<List<VenueDTO>>> getAllVenues() {
-        List<VenueDTO> venueDTOS = this.venueService.getAllVenues();
-        return ResponseEntity.ok(new ApiResponse<>(venueDTOS, "venues details"));
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<Page<VenueSearchResponse>>> searchVenues(
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(page = 0, size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+        Page<VenueSearchResponse> venuePage = this.venueService
+                .searchVenues(keyword, pageable);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(venuePage, "venues details fetched successfully")
+        );
     }
 
     @PostMapping("")

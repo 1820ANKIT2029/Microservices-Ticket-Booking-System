@@ -6,6 +6,10 @@ import com.ankit.event_service.service.IPerformerService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +31,13 @@ public class PerformerController {
         );
     }
 
-    @GetMapping("")
-    public ResponseEntity<ApiResponse<Iterable<PerformerDTO>>> getAllPerformers(
-            @NotBlank @RequestParam String name
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<Page<PerformerDTO>>> getAllPerformers(
+            @NotBlank @RequestParam String name,
+            @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Iterable<PerformerDTO> performerDTOS = this.performerService
-                .getPerformerByName(name);
+        Page<PerformerDTO> performerDTOS = this.performerService
+                .getPerformerByName(name, pageable);
         return ResponseEntity.ok(
                 new ApiResponse<>(performerDTOS, "performers details")
         );
