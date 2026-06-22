@@ -15,6 +15,10 @@ public interface ISessionSeatService {
             List<SessionSeatDTO> sessionSeatsDTO,
             String userId
     );
+    public void bookedSessionSeats(
+            List<SessionSeatDTO> sessionSeatsDTO,
+            String userId
+    );
     public void releaseExpiredLocks();
     public void initializeSessionSeats(EventSession eventSession);
 }
