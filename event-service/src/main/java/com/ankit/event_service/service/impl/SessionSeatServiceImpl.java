@@ -62,6 +62,7 @@ public class SessionSeatServiceImpl implements ISessionSeatService {
     }
 
     @Override
+    @Transactional
     public void unlockSessionSeats(
             List<SessionSeatDTO> sessionSeatsDTO,
             String userId
@@ -76,6 +77,7 @@ public class SessionSeatServiceImpl implements ISessionSeatService {
     }
 
     @Override
+    @Transactional
     public void bookedSessionSeats(
             List<SessionSeatDTO> sessionSeatsDTO, String userId
     ) {
