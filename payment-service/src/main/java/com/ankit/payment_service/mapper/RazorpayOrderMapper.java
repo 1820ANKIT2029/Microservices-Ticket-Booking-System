@@ -1,6 +1,8 @@
 package com.ankit.payment_service.mapper;
 
 import com.ankit.payment_service.dto.PaymentDTO;
+import com.ankit.payment_service.entity.PaymentGateway;
+import com.ankit.payment_service.entity.PaymentStatus;
 import com.razorpay.Order;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -13,7 +15,7 @@ import java.util.Currency;
 @Component
 public class RazorpayOrderMapper {
 
-    public PaymentDTO toPaymentDTO(Order order, Long bookingId, Long userId) {
+    public PaymentDTO toPaymentDTO(Order order, Long bookingId, String userId) {
         if (order == null) {
             return null;
         }
@@ -30,18 +32,18 @@ public class RazorpayOrderMapper {
         BigDecimal standardAmount = BigDecimal.valueOf(amountInSubunit)
                 .divide(divider, fractionDigits, RoundingMode.HALF_UP);
 
-        // 3. Map Razorpay status string to your application's defined status lifecycle values
+        // Map Razorpay status string to your application's defined status lifecycle values
         // Razorpay Order statuses: created, attempted, paid
         String razorpayStatus = order.get("status");
         String appStatus = translateStatus(razorpayStatus);
 
         return PaymentDTO.builder()
-                .gatewayName("RAZORPAY")
+                .gatewayName(PaymentGateway.RAZORPAY)
                 .gatewayOrderId(order.get("id")) // Maps to Razorpay Order ID (e.g., order_Kjuw89...)
                 .gatewayPaymentId(null)          // Order creation phase does not have a payment transaction ID yet
                 .amount(standardAmount)
                 .currency(order.get("currency")) // e.g., "INR"
-                .status(appStatus)
+                .status(PaymentStatus.INITIATED)
                 .bookingId(bookingId)
                 .userId(userId)
                 .build();

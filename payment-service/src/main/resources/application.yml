@@ -1,9 +1,12 @@
 server:
   port: 8089
+  forward-headers-strategy: framework
 
 spring:
   application:
     name: 'payment-service'
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
 
   datasource:
     url: jdbc:h2:mem:testdb
@@ -19,25 +22,23 @@ spring:
       ddl-auto: update
     show-sql: true
 
-  kafka:
-    consumer:
-      bootstrap-servers: localhost:9092
-      group-id: booking-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-    #      properties:
-    #        spring.json.trusted.packages: "com.ankit.notification_service.dto"
-    producer:
-      bootstrap-servers: localhost:9092
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-  #      properties:
-  #        spring.json.trusted.packages: "com.example.notification-service.dto"
+  cloud:
+    config:
+      enabled: true
+      uri: "optional:configserver:http://localhost:8888/"
+  config:
+    import: optional:configserver:http://localhost:8888/
 
 razorpay:
-  key_id: ${RAZORPAY_KEY_ID}
+  key_id: ${RAZORPAYa_KEY_ID}
   key_secret: ${RAZORPAY_KEY_SECRET}
   webhook:
-    secret: ${RAZORPAY_WEBHOOK_SECRET}
+    secret: ${RAZORPAY_WEBHOOK_SECRET} # 7A+so2UBjF3AALPPcmbkaG3ZR7SX/bIkePMDJ3FN4zI=
     event_type: ${RAZORPAY_WEBHOOK_EVENT_TYPE}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost

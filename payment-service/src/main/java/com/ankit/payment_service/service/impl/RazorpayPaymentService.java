@@ -3,6 +3,7 @@ package com.ankit.payment_service.service.impl;
 import com.ankit.payment_service.dto.BookingRequestDTO;
 import com.ankit.payment_service.dto.PaymentDTO;
 import com.ankit.payment_service.entity.Payment;
+import com.ankit.payment_service.exception.ResourceNotFoundException;
 import com.ankit.payment_service.mapper.PaymentMapper;
 import com.ankit.payment_service.mapper.RazorpayOrderMapper;
 import com.ankit.payment_service.repository.PaymentRepository;
@@ -14,6 +15,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,10 +32,10 @@ public class RazorpayPaymentService implements IPaymentService {
     private final RazorpayOrderMapper razorpayOrderMapper;
     private RazorpayClient razorpayClient;
 
-    @Value("${razorpay.key_id}")
+    @Value("${razorpay.key-id}")
     private String apiKey;
 
-    @Value("${razorpay.key_secret}")
+    @Value("${razorpay.key-secret}")
     private String apiSecret;
 
     @PostConstruct
@@ -53,16 +56,36 @@ public class RazorpayPaymentService implements IPaymentService {
 
             Payment payment = this.paymentMapper.toEntity(paymentDTO);
 
-            Payment savedPayment = paymentRepository.save(payment);
+            Payment savedPayment = this.paymentRepository.save(payment);
             PaymentDTO savedPaymentDTO = this.paymentMapper.toDTO(savedPayment);
-            savedPaymentDTO.setGatewayPublicApiKey(apiKey);
+            savedPaymentDTO.setGatewayPublicApiKey(this.apiKey);
+
             return savedPaymentDTO;
         } catch (RazorpayException ex) {
             throw new RuntimeException("Razorpay execution dropped: " + ex.getMessage(), ex);
         }
     }
 
-    private PaymentDTO createRazorpayOrder(Long bookingId, Long userId, BigDecimal amount, String currencyCode) throws RazorpayException {
+    @Override
+    public PaymentDTO getPayment(Long paymentId, String userId) {
+        Payment payment = this.paymentRepository
+                .findAllByIdAndUserId(paymentId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
+
+        return this.paymentMapper.toDTO(payment);
+    }
+
+    @Override
+    public Page<PaymentDTO> getPaymentsOfUser(String userId, Pageable pageable) {
+        Page<Payment> paymentPage = this.paymentRepository.
+                findByUserId(userId, pageable);
+
+        return paymentPage.map(paymentMapper::toDTO);
+    }
+
+    private PaymentDTO createRazorpayOrder(
+            Long bookingId, String userId, BigDecimal amount, String currencyCode
+    ) throws RazorpayException {
         JSONObject orderRequest = new JSONObject();
 
         // Dynamically find the subunit factor based on the ISO-4217 currency code
@@ -79,6 +102,7 @@ public class RazorpayPaymentService implements IPaymentService {
                 .longValue();
 
         orderRequest.put("amount", lowestDenominationAmount);
+        orderRequest.put("currency", currencyCode);
 
         // Tag internal application states into metadata
         JSONObject metadata = new JSONObject();
