@@ -2,16 +2,17 @@ CREATE TABLE IF NOT EXISTS `payments` (
     `id` SERIAL PRIMARY KEY,
     `gateway_name` VARCHAR(100) NOT NULL,     -- e.g., STRIPE, PAYPAL
     `gateway_payment_id` VARCHAR(255) UNIQUE, -- Transaction reference from provider
-    `gateway_order_id` VARCHAR(255),          -- Associated order record on provider
+    `gateway_order_id` VARCHAR(255) UNIQUE,          -- Associated order record on provider
     `amount` DECIMAL(12, 2) NOT NULL,
     `currency` VARCHAR(10) DEFAULT 'INR',
     `status` VARCHAR(50) NOT NULL,            -- e.g., INITIATED, SUCCESS, FAILED
     `method` VARCHAR(50),                     -- Quick copy reference of the processing type
     `gateway_response` TEXT,                  -- Complete payload logging for debugging
     `booking_id` INT NOT NULL,                -- Logical connection to Booking Service
-    `user_id` INT NOT NULL,          -- Logical connection to User Service
-    `completed_id` VARCHAR(100),              -- Unique transaction processing log id
-    `initiated_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    `user_id` VARCHAR(100) NOT NULL,          -- Logical connection to User Service
+    `completed_id` VARCHAR(100) UNIQUE,              -- Unique transaction processing log id
+    `initiated_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS `refunds` (

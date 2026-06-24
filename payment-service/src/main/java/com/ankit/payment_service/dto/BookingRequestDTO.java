@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Builder
 public class BookingRequestDTO {
     private Long bookingId;
-    private Long userId;
+    private String userId;
     private BigDecimal amount;
     private String currencyCode;
 }
