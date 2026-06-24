@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Builder
 public class PaymentRequestDTO {
     private Long bookingId;
-    private Long userId;
+    private String userId;
     private BigDecimal amount;
     private String currencyCode;
 }

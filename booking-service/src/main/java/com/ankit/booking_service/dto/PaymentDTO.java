@@ -23,7 +23,7 @@ public class PaymentDTO {
     private String method;
     private String gatewayResponse;
     private Long bookingId;
-    private Long userId;
+    private String userId;
     private String completedId;
     private ZonedDateTime initiatedAt;
 

@@ -24,7 +24,7 @@ public class Ticket {
     private Booking booking;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId; // Logical link to User Service
+    private String userId; // Logical link to User Service
 
     @Column(name = "event_session_id", nullable = false)
     private Long eventSessionId; // Logical link to Event Service
@@ -32,8 +32,8 @@ public class Ticket {
     @Column(name = "ticket_type_id", nullable = false)
     private Long ticketTypeId; // Logical link to Event Service
 
-    @Column(name = "seat_id")
-    private Long seatId; // Logical link to Event Service (Nullable for GA)
+    @Column(name = "session_seat_id")
+    private Long sessionSeatId; // Logical link to Event Service (session seat id)
 
     @Column(name = "qr_code", length = 500)
     private String qrCode;

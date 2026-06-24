@@ -16,10 +16,10 @@ import java.time.ZonedDateTime;
 public class TicketDTO {
     private Long id;
     private Long bookingId; // Extracted to avoid passing the whole Booking object
-    private Long userId;
+    private String userId;
     private Long eventSessionId;
     private Long ticketTypeId;
-    private Long seatId;
+    private Long sessionSeatId;
     private String qrCode;
     private String barCode;
     private TicketStatus status;

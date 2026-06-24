@@ -1,19 +1,35 @@
 package com.ankit.booking_service.service.client;
 
+import com.ankit.booking_service.dto.ApiResponse;
 import com.ankit.booking_service.dto.SessionSeatDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @FeignClient(
         name = "event-service",
-        path = "/api/session-seats"
+        contextId = "sessionSeatClient"
 )
 public interface SessionSeatClient {
-    @GetMapping("/batch/lock")
-    public ResponseEntity<List<SessionSeatDTO>> lockSeats(@RequestBody List<SessionSeatDTO> sessionSeats);
+    @PostMapping("/api/event-sessions/{eventSessionId}/session-seats/batch/lock")
+    ApiResponse<Void> lockSeats(
+            @PathVariable Long eventSessionId,
+            @RequestBody List<SessionSeatDTO> sessionSeats,
+            @RequestHeader("X-User-Id") String userId
+    );
+
+    @PostMapping("/api/event-sessions/{eventSessionId}/session-seats/batch/unlock")
+    ApiResponse<Void> unlockSeats(
+            @PathVariable Long eventSessionId,
+            @RequestBody List<SessionSeatDTO> sessionSeats,
+            @RequestHeader("X-User-Id") String userId
+    );
+
+    @PostMapping("/api/event-sessions/{eventSessionId}/session-seats/batch/booked")
+    ApiResponse<Void> bookedSeats(
+            @PathVariable Long eventSessionId,
+            @RequestBody List<SessionSeatDTO> sessionSeats,
+            @RequestHeader("X-User-Id") String userId
+    );
 }

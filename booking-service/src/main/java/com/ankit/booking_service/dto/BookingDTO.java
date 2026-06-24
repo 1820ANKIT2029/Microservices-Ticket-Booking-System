@@ -17,7 +17,7 @@ import java.util.List;
 public class BookingDTO {
     private Long id;
     private String bookingRef;
-    private Long userId;
+    private String userId;
     private Long eventSessionId;
     private BookingStatus status;
     private Integer ticketCount;

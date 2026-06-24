@@ -5,16 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingRequestDTO {
-    String bookingRef;
-    String userId;
-    Long eventSessionId;
-
-    List<SessionSeatRequest> seats;
+@Builder
+public class SessionSeatRequest {
+    private Long sessionSeatId;
+    private Long eventSessionId;
+    private Long seatId;
+    private Long ticketTypeId;
 }

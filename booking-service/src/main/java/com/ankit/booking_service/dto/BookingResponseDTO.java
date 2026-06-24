@@ -10,4 +10,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class BookingResponseDTO extends BookingDTO {
     private String gatewayPublicApiKey;
+    private String gatewayOrderId;
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -16,14 +17,19 @@ import java.time.ZonedDateTime;
 @Builder
 public class TicketTypeDTO {
     private Long id;
-    private Long eventId;
+
     private Long eventSessionId;
+    private Set<Long> venueSectionIds;
+
     private String name;
+
     private String description;
     private BigDecimal basePrice;
+
     private Integer totalQuantity;
     private Integer availableQuantity;
     private Integer maxPerBooking;
+
     private Boolean isActive;
     private ZonedDateTime saleStartAt;
     private ZonedDateTime saleEndAt;

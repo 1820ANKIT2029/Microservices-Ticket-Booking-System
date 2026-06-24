@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `bookings` (
     `id` SERIAL PRIMARY KEY,
     `booking_ref` VARCHAR(100) NOT NULL UNIQUE,
-    `user_id` INT NOT NULL,          -- Logical link to User Service
+    `user_id` VARCHAR(100) NOT NULL,          -- Logical link to User Service
     `event_session_id` INT NOT NULL,         -- Logical link to Event Service
     `status` VARCHAR(50) DEFAULT 'PENDING', -- PENDING, CONFIRMED, CANCELLED, EXPIRED
     `ticket_count` INT DEFAULT 0,
@@ -18,10 +18,10 @@ CREATE TABLE IF NOT EXISTS `bookings` (
 CREATE TABLE IF NOT EXISTS `tickets` (
     `id` SERIAL PRIMARY KEY,
     `booking_id` INT NOT NULL,
-    `user_id` INT NOT NULL,          -- Logical link to User Service
+    `user_id` VARCHAR(100) NOT NULL,          -- Logical link to User Service
     `event_session_id` INT NOT NULL, -- Logical link to Event Service
     `ticket_type_id` INT NOT NULL,   -- Logical link to Event Service
-    `seat_id` INT,                   -- Logical link to Event Service (Null for general admission)
+    `session_seat_id` INT,           -- Logical link to Event Service
     `qr_code` VARCHAR(500),
     `bar_code` VARCHAR(500),
     `status` VARCHAR(50) DEFAULT 'RESERVED', -- RESERVED, VALID, USED, VOIDED
@@ -30,14 +30,4 @@ CREATE TABLE IF NOT EXISTS `tickets` (
     `issued_at` TIMESTAMP WITH TIME ZONE,
     `checked_in_at` TIMESTAMP WITH TIME ZONE,
     FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`id`) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS `seat_locks` (
-    `id` SERIAL PRIMARY KEY,
-    `session_token` VARCHAR(500) NOT NULL, -- Ties back to booking window session
-    `seat_id` INT NOT NULL,                -- Logical link to Event Service
-    `event_session_id` INT NOT NULL,       -- Logical link to Event Service
-    `user_id` INT NOT NULL,                -- Logical link to User Service
-    `locked_at` TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    `expire_at` TIMESTAMP WITH TIME ZONE NOT NULL
 );

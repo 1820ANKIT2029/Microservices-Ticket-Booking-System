@@ -5,16 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingRequestDTO {
-    String bookingRef;
-    String userId;
-    Long eventSessionId;
-
-    List<SessionSeatRequest> seats;
+public class PaymentEvent {
+    private String orderId;
+    private String paymentId;
+    private Long bookingId;
 }

@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookingResponseMapper {
-    public BookingResponseDTO toResponseDTO(Booking booking, String gatewayPublicKey) {
+    public BookingResponseDTO toResponseDTO(
+            Booking booking, String gatewayPublicKey, String gatewayOrderId
+    ) {
         if (booking == null) {
             return null;
         }
@@ -25,6 +27,7 @@ public class BookingResponseMapper {
                 .createdAt(booking.getCreatedAt())
                 // --- Field native to BookingResponseDTO ---
                 .gatewayPublicApiKey(gatewayPublicKey)
+                .gatewayOrderId(gatewayOrderId)
                 .build();
     }
 }

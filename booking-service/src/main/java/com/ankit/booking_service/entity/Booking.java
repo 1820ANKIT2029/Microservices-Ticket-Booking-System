@@ -26,7 +26,7 @@ public class Booking {
     private String bookingRef;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId; // Logical link to User Service
+    private String userId; // Logical link to User Service
 
     @Column(name = "event_session_id", nullable = false)
     private Long eventSessionId; // Logical link to Event Service
@@ -48,7 +48,7 @@ public class Booking {
     private BigDecimal totalAmount;
 
     @Column(length = 10)
-    private String currency = "USD";
+    private String currency = "INR";
 
     @Column(name = "confirmed_at")
     private ZonedDateTime confirmedAt;
