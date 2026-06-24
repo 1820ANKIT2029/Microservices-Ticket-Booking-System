@@ -4,11 +4,217 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="29083d6d-5ca6-4291-80a9-9f9fa16a6c9b" name="Changes" comment="" />
+    <list default="true" id="29083d6d-5ca6-4291-80a9-9f9fa16a6c9b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/BookingServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/BookingServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/controller/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/controller/BookingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/controller/TicketController.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/controller/TicketController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/BookingDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/BookingDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/BookingRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/BookingRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/BookingResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/BookingResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/PaymentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/PaymentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/PaymentRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/PaymentRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/SessionSeatDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/SessionSeatDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/TicketDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/TicketDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/TicketTypeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/dto/TicketTypeDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/entity/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/entity/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/entity/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/entity/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/entity/TicketStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/entity/TicketStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/mapper/BookingResponseMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/mapper/BookingResponseMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/mapper/TicketMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/mapper/TicketMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/repository/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/repository/BookingRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/repository/TicketRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/repository/TicketRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/IBookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/IBookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/ITicketService.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/ITicketService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/client/PaymentClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/client/PaymentClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/client/SessionSeatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/client/SessionSeatClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/impl/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/impl/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/resources/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/default/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/default/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/SessionSeatStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/SessionSeatStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/SessionSeatServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/SessionSeatServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/resources/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-server/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-server/src/main/java/com/ankit/gateway_server/controller/GlobalFallbackController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-server/src/main/java/com/ankit/gateway_server/security/JwtHeaderPropagationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-server/src/main/java/com/ankit/gateway_server/security/JwtHeaderPropagationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-server/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/consumer/NotificationConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/consumer/NotificationConsumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/controller/PaymentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/controller/RazorpayWebhookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/controller/RazorpayWebhookController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/dto/BookingRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/dto/BookingRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/dto/PaymentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/dto/PaymentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/entity/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/entity/Payment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/mapper/RazorpayOrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/mapper/RazorpayOrderMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/repository/PaymentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/repository/PaymentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/IPaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/IPaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/RazorpayPaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/RazorpayPaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/RazorpayWebhookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/RazorpayWebhookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/resources/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/next.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/admin/venues/[id]/edit/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/admin/venues/[id]/seat-map/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/admin/venues/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/admin/venues/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/bookings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/bookings/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/checkout/confirmed/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/checkout/confirmed/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/checkout/failed/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/checkout/failed/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/checkout/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/checkout/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/error.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/error.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/event-sessions/[id]/edit/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/events/[id]/edit/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/events/[id]/layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/events/[id]/loading.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/events/[id]/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/events/[id]/seats/layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/events/[id]/seats/loading.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/events/[id]/seats/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/events/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/events/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/movies/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/movies/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/music/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/music/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/search/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/search/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/sports/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/sports/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/admin/api/service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/admin/api/service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/admin/components/common/DataTable.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/admin/components/common/DeleteDialog.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/admin/components/common/Pagination.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/admin/components/venues/VenueForm.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/admin/components/venues/VenueTable.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/auth/api/service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/auth/api/service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/auth/components/signin-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/auth/components/signin-form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/bookings/api/service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/bookings/api/service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/bookings/components/booking-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/bookings/components/booking-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/bookings/components/bookings-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/bookings/components/bookings-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/bookings/components/bookings-featured.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/bookings/components/bookings-featured.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/bookings/components/bookings-sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/bookings/components/bookings-sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/bookings/hooks/useBookingMutations.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/bookings/hooks/useBookingMutations.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/bookings/hooks/useBookings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/bookings/hooks/useBookings.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/bookings/hooks/useLoyaltyStats.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/bookings/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/bookings/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/bookings/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/bookings/types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/checkout/api/service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/checkout/api/service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/checkout-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/checkout-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/confirmed-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/confirmed-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/failed-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/failed-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/mobile-bottom-bar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/mobile-bottom-bar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/order-summary.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/order-summary.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/payment-section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/checkout/components/payment-section.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/checkout/hooks/useCheckout.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/checkout/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/checkout/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/confirmed/components/confirmed-client.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/confirmed/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/event-sessions/api/service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/event-sessions/api/service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/event-sessions/components/EventSessionForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/event-sessions/components/EventSessionForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/event-sessions/components/EventSessionTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/event-sessions/components/EventSessionTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/events/api/service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/events/api/service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/events/components/EventForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/events/components/EventForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/events/components/EventSetupWizard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/events/components/EventSetupWizard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/events/components/EventTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/events/components/EventTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/events/components/offers-guidelines.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/events/components/offers-guidelines.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/events/hooks/useAdminEvents.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/events/hooks/useAdminEvents.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/failed/components/failed-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/failed/components/failed-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/concert-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/concert-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/footer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/mobile-bottom-nav.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/mobile-bottom-nav.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/movie-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/movie-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/navbar.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/sports-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/homepage/components/sports-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/homepage/constants/homepage-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/homepage/constants/homepage-data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/movies-explorer/components/coming-soon.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/movies-explorer/components/coming-soon.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/movies-explorer/components/hero-carousel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/movies-explorer/components/hero-carousel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/movies-explorer/components/movie-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/movies-explorer/components/movie-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/movies-explorer/components/recommended-bento.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/movies-explorer/components/recommended-bento.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/movies-explorer/components/trending-movies.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/movies-explorer/components/trending-movies.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/music-explorer/components/concert-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/music-explorer/components/concert-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/music-explorer/components/festival-spotlight.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/music-explorer/components/festival-spotlight.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/music-explorer/components/upcoming-gigs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/music-explorer/components/upcoming-gigs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/music-explorer/components/world-tours.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/music-explorer/components/world-tours.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/onboarding/components/onboarding-client.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/onboarding/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/onboarding/types/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/onboarding/types/onboarding.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/profile/components/bookings-tab.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/profile/components/notifications-tab.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/profile/components/payments-tab.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/profile/components/personal-info-tab.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/profile/components/profile-client.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/profile/components/profile-sidebar.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/profile/components/security-tab.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/profile/constants/profile-data.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/profile/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/search/api/service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/search/api/service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/search/components/search-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/search/components/search-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/search/components/search-results-list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/search/components/search-results-list.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/search/components/search-sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/search/components/search-sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/search/hooks/useSearch.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/search/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/search/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/search/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/search/types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/seats/components/seats-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/seats/components/seats-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/sports-explorer/components/matches-near-you.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/sports-explorer/components/matches-near-you.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/sports-explorer/components/recommended-sports.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/sports-explorer/components/recommended-sports.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/sports-explorer/components/sports-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/sports-explorer/components/sports-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/sports-explorer/components/sports-content-section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/sports-explorer/components/sports-content-section.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/sports-explorer/components/trending-events.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/sports-explorer/components/trending-events.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/users/api/service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/users/api/service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/users/components/onboarding/onboarding-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/users/components/onboarding/onboarding-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/users/components/profile/bookings-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/users/components/profile/bookings-tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/users/components/profile/personal-info-tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/users/components/profile/personal-info-tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/users/components/profile/profile-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/users/components/profile/profile-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/users/components/profile/profile-sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/users/components/profile/profile-sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/users/hooks/useUserMutations.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/users/hooks/useUserMutations.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/api/service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/api/service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/components/editor/SeatMapEditorPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/components/editor/SeatMapEditorPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/components/venue/VenueForm.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/components/venue/VenueTable.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/components/viewer/SeatMapViewerPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/components/viewer/SeatMapViewerPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/components/viewer/ViewerSeatLayer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/components/viewer/ViewerSeatLayer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/hooks/useVenueEditor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/hooks/useVenueEditor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/hooks/useVenueSeatMapQueries.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/hooks/useVenueSeatMapQueries.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/store/seat-map.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/store/seat-map.store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/api/error-handler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/api/error-handler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/api/interceptors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/api/interceptors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/components/DeleteDialog.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/components/EmptyState.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/components/EmptyState.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/components/LoadingSpinner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/components/LoadingSpinner.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/components/StatusBadge.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/components/StatusBadge.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/components/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/components/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/components/landing/hero-section.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/components/landing/hero-section.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/components/layout/footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/components/layout/footer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/components/layout/mobile-bottom-nav.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/components/layout/mobile-bottom-nav.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/components/layout/navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/components/layout/navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/components/section-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/components/section-header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/constants/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/constants/routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/hooks/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/hooks/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/hooks/useDebounce.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/hooks/useDebounce.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/hooks/useRole.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/hooks/useRole.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/providers/query-provider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/providers/query-provider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/store/auth.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/store/auth.store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/store/filter.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/store/filter.store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/store/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/store/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/store/ui.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/store/ui.store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/types/api-response.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/utils/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/utils/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/utils/jwt.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/utils/jwt.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/utils/logger.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/utils/logger.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DockerExecCommands">
+    <ExecCommand>
+      <option name="command" value="kafka-consumer-groups.sh \ --bootstrap-server localhost:9092 \ --group booking-group \ --reset-offsets \ --to-latest \ --execute \ --all-topics" />
+    </ExecCommand>
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -25,6 +231,16 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="event-ticket-booking-system" type="f1a62948:ProjectNode" />
               </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="event-ticket-booking-system" type="f1a62948:ProjectNode" />
+                <item name="analytics-service" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="event-ticket-booking-system" type="f1a62948:ProjectNode" />
+                <item name="payment-service" type="2d1252cf:ModuleNode" />
+              </path>
             </expand>
             <select />
           </tree_state>
@@ -36,6 +252,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="AnnotationType" />
+        <option value="Exception" />
+        <option value="Record" />
+        <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
       </list>
@@ -44,10 +263,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+  <component name="HttpClientOnboardingState">{
+  &quot;isOnboardingCommentShown&quot;: true
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -57,17 +279,25 @@
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Docker.default.redis: Compose Deployment.executor": "Run",
+    "Docker.default: Compose Deployment.executor": "Run",
     "Gradle.Build DistributedTicketBookingSystem.executor": "Run",
+    "Gradle.Download Sources.executor": "Run",
+    "HTTP Request.ConfigServerApplication | #1.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found": "New/updated database configurations found",
+    "Notification.DoNotAsk-DatabaseConfigFileWatcher.found": "true",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.AnalyticsServiceApplication.executor": "Run",
@@ -80,8 +310,10 @@
     "Spring Boot.PaymentServiceApplication.executor": "Run",
     "Spring Boot.SearchServiceApplication.executor": "Run",
     "Spring Boot.UserServiceApplication.executor": "Run",
-    "git-widget-placeholder": "datalayer",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/DistributedTicketBookingSystem/payment-service/src/main/java/com/ankit/payment_service",
     "node.js.detected.package.eslint": "true",
@@ -89,6 +321,9 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "spring",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "D:\\DistributedTicketBookingSystem\\web-frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -97,12 +332,26 @@
     ]
   }
 }]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.ankit.gateway_server.security" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\DistributedTicketBookingSystem\payment-service\src\main\java\com\ankit\payment_service" />
+      <recent name="D:\DistributedTicketBookingSystem\booking-service\src\main\java\com\ankit\booking_service" />
+      <recent name="D:\DistributedTicketBookingSystem\user-service\src\main\java\com\ankit\user_service" />
       <recent name="D:\DistributedTicketBookingSystem\notification-service\src\main\java\com\ankit\notification_service" />
       <recent name="D:\DistributedTicketBookingSystem\event-service\src\main\java\com\ankit\event_service" />
-      <recent name="D:\DistributedTicketBookingSystem\booking-service\src\main\java\com\ankit\booking_service" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ankit.user_service.dto" />
+      <recent name="com.ankit.payment_service.dto" />
+      <recent name="com.ankit.gateway_server.security" />
+      <recent name="com.ankit.event_service.dto" />
+      <recent name="com.ankit.user_service.exception" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -116,18 +365,25 @@
     </option>
     <option name="configurationStatuses">
       <map>
+        <entry key="HttpClient.HttpRequestRunConfigurationType">
+          <value>
+            <map>
+              <entry key="ConfigServerApplication | #1" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
         <entry key="SpringBootApplicationConfigurationType">
           <value>
             <map>
               <entry key="AnalyticsServiceApplication" value="STOPPED" />
               <entry key="BookingServiceApplication" value="STOPPED" />
               <entry key="ConfigServerApplication" value="STOPPED" />
-              <entry key="EurekaServerApplication" value="FAILED" />
+              <entry key="EurekaServerApplication" value="STOPPED" />
               <entry key="EventServiceApplication" value="STOPPED" />
-              <entry key="GatewayServerApplication" value="FAILED" />
+              <entry key="GatewayServerApplication" value="STOPPED" />
               <entry key="NotificationServiceApplication" value="STOPPED" />
               <entry key="PaymentServiceApplication" value="STOPPED" />
-              <entry key="SearchServiceApplication" value="FAILED" />
+              <entry key="SearchServiceApplication" value="STOPPED" />
               <entry key="UserServiceApplication" value="STOPPED" />
             </map>
           </value>
@@ -135,7 +391,7 @@
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.UserServiceApplication">
+  <component name="RunManager" selected="HTTP Request.ConfigServerApplication | #1">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="DistributedTicketBookingSystem" />
       <option name="ENV_FILES" value="" />
@@ -155,6 +411,9 @@
       <option name="CUSTOM_SETTINGS" value="false" />
       <option name="USE_OPTIONS" value="false" />
       <option name="OPTIONS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ConfigServerApplication | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/ConfigServerApplication.http" executionIdentifier="#1" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration default="true" type="JetRunConfigurationType">
@@ -213,13 +472,28 @@
       </method>
     </configuration>
     <configuration name="BookingServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <additionalParameters>
+        <param>
+          <option name="enabled" value="true" />
+          <option name="name" value="management.endpoint.env.show-values" />
+          <option name="value" value="when_authorized" />
+        </param>
+      </additionalParameters>
       <module name="event-ticket-booking-system.booking-service.main" />
+      <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.ankit.booking_service.BookingServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="ConfigServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <additionalParameters>
+        <param>
+          <option name="enabled" value="true" />
+          <option name="name" value="management.endpoint.env.show-values" />
+          <option name="value" value="when_authorized" />
+        </param>
+      </additionalParameters>
       <module name="event-ticket-booking-system.config-server.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.ankit.config_server.ConfigServerApplication" />
       <method v="2">
@@ -249,6 +523,10 @@
     </configuration>
     <configuration name="GatewayServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="event-ticket-booking-system.gateway-server.main" />
+      <selectedOptions>
+        <option name="environmentVariables" />
+      </selectedOptions>
+      <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.ankit.gateway_server.GatewayServerApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -262,6 +540,18 @@
       </method>
     </configuration>
     <configuration name="PaymentServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <additionalParameters>
+        <param>
+          <option name="name" value="management.endpoint.env.show-values" />
+          <option name="value" value="when_authorized" />
+        </param>
+      </additionalParameters>
+      <envs>
+        <env name="RAZORPAY_KEY_ID" value="rzp_test_SwhS2mGoclhvXL" />
+        <env name="RAZORPAY_KEY_SECRET" value="8VekXDbyuknAW2T8quIaoc1f" />
+        <env name="RAZORPAY_WEBHOOK_SECRET" value="gasndjbsjgbska" />
+        <env name="RAZORPAY_WEBHOOK_EVENT_TYPE" value="order.paid" />
+      </envs>
       <module name="event-ticket-booking-system.payment-service.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.ankit.payment_service.PaymentServiceApplication" />
       <method v="2">
@@ -282,6 +572,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="Tox" factoryName="Tox">
       <module name="DistributedTicketBookingSystem" />
       <option name="ENV_FILES" value="" />
@@ -295,6 +591,55 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <method v="2" />
     </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="default: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose/default/docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="default.redis: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="redis" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose/default/docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Docker.default.redis: Compose Deployment" />
+      <item itemvalue="Docker.default: Compose Deployment" />
+      <item itemvalue="HTTP Request.ConfigServerApplication | #1" />
+      <item itemvalue="Spring Boot.SearchServiceApplication" />
+      <item itemvalue="Spring Boot.AnalyticsServiceApplication" />
+      <item itemvalue="Spring Boot.BookingServiceApplication" />
+      <item itemvalue="Spring Boot.ConfigServerApplication" />
+      <item itemvalue="Spring Boot.EurekaServerApplication" />
+      <item itemvalue="Spring Boot.EventServiceApplication" />
+      <item itemvalue="Spring Boot.GatewayServerApplication" />
+      <item itemvalue="Spring Boot.NotificationServiceApplication" />
+      <item itemvalue="Spring Boot.PaymentServiceApplication" />
+      <item itemvalue="Spring Boot.UserServiceApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.ConfigServerApplication | #1" />
+        <item itemvalue="Docker.default: Compose Deployment" />
+        <item itemvalue="Docker.default.redis: Compose Deployment" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -303,6 +648,9 @@
         <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
       </set>
     </attachedChunks>
+  </component>
+  <component name="StructureViewState">
+    <option name="selectedTab" value="Logical" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -318,10 +666,93 @@
       <workItem from="1779012348077" duration="28000" />
       <workItem from="1779012388186" duration="606000" />
       <workItem from="1779184809901" duration="16888000" />
+      <workItem from="1779881160989" duration="1114000" />
+      <workItem from="1779931914678" duration="3844000" />
+      <workItem from="1779938131139" duration="3384000" />
+      <workItem from="1779941559299" duration="588000" />
+      <workItem from="1779942739525" duration="779000" />
+      <workItem from="1779943547128" duration="5798000" />
+      <workItem from="1779954976771" duration="5228000" />
+      <workItem from="1779960275955" duration="2082000" />
+      <workItem from="1779962394954" duration="2504000" />
+      <workItem from="1779964931869" duration="562000" />
+      <workItem from="1780018790911" duration="1101000" />
+      <workItem from="1780028894491" duration="2000" />
+      <workItem from="1780294330630" duration="22183000" />
+      <workItem from="1780378236526" duration="2905000" />
+      <workItem from="1780387775742" duration="13826000" />
+      <workItem from="1780414124418" duration="4123000" />
+      <workItem from="1780454539819" duration="8986000" />
+      <workItem from="1780472210888" duration="7897000" />
+      <workItem from="1780481279259" duration="1749000" />
+      <workItem from="1780544628578" duration="14143000" />
+      <workItem from="1780670341381" duration="3503000" />
+      <workItem from="1780716798228" duration="2953000" />
+      <workItem from="1780889903980" duration="2209000" />
+      <workItem from="1780893299855" duration="5257000" />
+      <workItem from="1780901042278" duration="3667000" />
+      <workItem from="1780932304239" duration="2146000" />
+      <workItem from="1781592730150" duration="13556000" />
+      <workItem from="1781610335085" duration="513000" />
+      <workItem from="1781611231516" duration="266000" />
+      <workItem from="1781614367379" duration="3480000" />
+      <workItem from="1781675950232" duration="4493000" />
+      <workItem from="1781684468968" duration="1823000" />
+      <workItem from="1781702007003" duration="11166000" />
+      <workItem from="1781767571602" duration="19287000" />
+      <workItem from="1781851770429" duration="5298000" />
+      <workItem from="1781935189916" duration="15993000" />
+      <workItem from="1781966657570" duration="7511000" />
+      <workItem from="1782006811595" duration="13889000" />
+      <workItem from="1782039038366" duration="2943000" />
+      <workItem from="1782046352983" duration="2166000" />
+      <workItem from="1782052406215" duration="1902000" />
+      <workItem from="1782056774741" duration="1822000" />
+      <workItem from="1782058629476" duration="2310000" />
+      <workItem from="1782060972577" duration="827000" />
+      <workItem from="1782085793323" duration="6264000" />
+      <workItem from="1782092315075" duration="4774000" />
+      <workItem from="1782108151792" duration="9722000" />
+      <workItem from="1782120148622" duration="1267000" />
+      <workItem from="1782133286152" duration="12800000" />
+      <workItem from="1782189919350" duration="22127000" />
+      <workItem from="1782221447621" duration="8751000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint type="java-exception">
+          <properties class="java.lang.ClassNotFoundException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
