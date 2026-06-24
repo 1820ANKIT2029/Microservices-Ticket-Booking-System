@@ -12,10 +12,22 @@ spring:
       server:
         webflux:
           default-filters:
-            - name: CircuitBreaker
+            # FILTER 1: Per-User Limit (Fair Use)
+            - name: RequestRateLimiter
               args:
-                name: globalCircuitBreaker
-                fallbackUri: forward:/fallback/global
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userIdKeyResolver}"
+
+            # FILTER 2: Global System Limit (Circuit Breaker)
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 500
+                redis-rate-limiter.burstCapacity: 800
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@globalKeyResolver}"
+
           routes:
             - id: event-service
               uri: lb://EVENT-SERVICE
@@ -86,29 +98,10 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888/
 
-resilience4j:
-  circuitbreaker:
-    configs:
-      default:
-        slidingWindowSize: 20
-        slidingWindowType: COUNT_BASED
-        minimumNumberOfCalls: 10
-        failureRateThreshold: 50
-        slowCallRateThreshold: 75
-        slowCallDurationThreshold: 2s
-        waitDurationInOpenState: 15s
-        permittedNumberOfCallsInHalfOpenState: 5
-    instances:
-      globalCircuitBreaker:
-        baseConfig: default
-
-  timelimiter:
-    configs:
-      default:
-        timeoutDuration: 3s # Global timeout for any downstream service call
-    instances:
-      globalCircuitBreaker:
-        baseConfig: default
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 eureka:
   client:

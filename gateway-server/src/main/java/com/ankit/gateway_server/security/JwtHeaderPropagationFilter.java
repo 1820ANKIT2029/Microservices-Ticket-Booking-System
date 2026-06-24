@@ -63,6 +63,6 @@ public class JwtHeaderPropagationFilter implements GlobalFilter, Ordered {
     public int getOrder() {
         // High priority: Execute right after Spring Security populates the context
         // return SecurityWebFiltersOrder.AUTHORIZATION.getOrder() + 1;
-        return -1;
+        return -100;
     }
 }
