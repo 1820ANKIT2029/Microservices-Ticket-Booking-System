@@ -14,7 +14,7 @@ public class NotificationConsumer {
 
     private final List<INotificationStrategy> strategies;
 
-    @KafkaListener(topics = "notification-topic", groupId = "notification-group")
+    @KafkaListener(topics = "notification-topic", groupId = "notification-service")
     public void consumeNotification(NotificationEvent event) {
 
         try {
