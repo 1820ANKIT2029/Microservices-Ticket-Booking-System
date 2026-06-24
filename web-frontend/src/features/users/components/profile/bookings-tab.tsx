@@ -1,19 +1,25 @@
 "use client";
 
 import * as React from "react";
-import { Ticket } from "lucide-react";
-import { BOOKINGS_DATA } from "@/features/bookings/constants/bookings-data";
+import { Ticket, Loader2 } from "lucide-react";
 import { BookingCard } from "@/features/bookings/components/booking-card";
+import { useBookings } from "@/features/bookings/hooks/useBookings";
 
 type BookingStatusTab = "upcoming" | "past" | "cancelled";
 
 export function BookingsTab() {
   const [activeSubTab, setActiveSubTab] = React.useState<BookingStatusTab>("upcoming");
+  const [page, setPage] = React.useState(0);
+
+  const { data, isLoading } = useBookings(page, 6);
+
+  const bookings = data?.content || [];
+  const totalPages = data?.totalPages || 0;
 
   // Filter logic
-  const upcomingBookings = BOOKINGS_DATA.filter((b) => b.status === "confirmed");
-  const pastBookings = BOOKINGS_DATA.filter((b) => b.status === "completed");
-  const cancelledBookings = BOOKINGS_DATA.filter((b) => b.status === "cancelled");
+  const upcomingBookings = bookings.filter((b) => b.status === "confirmed");
+  const pastBookings = bookings.filter((b) => b.status === "completed");
+  const cancelledBookings = bookings.filter((b) => b.status === "cancelled");
 
   const getFilteredBookings = () => {
     switch (activeSubTab) {
@@ -29,6 +35,15 @@ export function BookingsTab() {
   };
 
   const currentBookings = getFilteredBookings();
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16" role="status">
+        <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
+        <p className="text-on-surface-variant text-sm font-semibold">Loading bookings...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
@@ -65,7 +80,10 @@ export function BookingsTab() {
               key={tab}
               role="tab"
               aria-selected={isActive}
-              onClick={() => setActiveSubTab(tab)}
+              onClick={() => {
+                setActiveSubTab(tab);
+                setPage(0);
+              }}
               className={`px-4 py-2 rounded-lg text-label-md font-semibold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                 isActive
                   ? "bg-primary/10 text-primary"
@@ -85,7 +103,7 @@ export function BookingsTab() {
             <Ticket className="size-10 text-outline/50 mx-auto mb-3" />
             <h3 className="font-bold text-label-md text-on-surface">No bookings found</h3>
             <p className="text-sm text-on-surface-variant mt-1">
-              You don&apos;t have any {activeSubTab} bookings at the moment.
+              You don&apos;t have any {activeSubTab} bookings on this page.
             </p>
           </div>
         ) : (
@@ -94,6 +112,29 @@ export function BookingsTab() {
           ))
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 mt-8 pt-4 border-t border-outline-variant/20">
+          <button
+            onClick={() => setPage((p) => Math.max(0, p - 1))}
+            disabled={page === 0}
+            className="px-3.5 py-1.5 border border-outline-variant/50 rounded-lg text-xs font-semibold text-on-surface hover:bg-surface-container disabled:opacity-50 disabled:pointer-events-none transition-colors cursor-pointer"
+          >
+            Previous
+          </button>
+          <span className="text-xs font-medium text-on-surface">
+            Page {page + 1} of {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+            disabled={page >= totalPages - 1}
+            className="px-3.5 py-1.5 border border-outline-variant/50 rounded-lg text-xs font-semibold text-on-surface hover:bg-surface-container disabled:opacity-50 disabled:pointer-events-none transition-colors cursor-pointer"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

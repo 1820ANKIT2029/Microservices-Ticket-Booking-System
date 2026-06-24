@@ -1,181 +1,38 @@
-import { api } from "@/shared/api";
-import type { ApiResponse } from "@/shared/types";
-import type { VenueResponseDto, VenueRequestDto } from "@/features/events/types";
+import { VenueService, SessionSeatService, BookingService } from "@/shared/api/services";
+import type { VenueRequestDto } from "@/features/events/types";
 import type {
-  VenueMapDTO,
-  VenueSectionMapDTO,
-  SeatDTO,
   CreateVenueSectionPayload,
   UpdateVenueSectionPayload,
   CreateSeatPayload,
   UpdateSeatPayload,
-  SessionSeatDTO,
-  BookingResponseDTO,
 } from "../types";
 
 /**
- * VenueSeatMapService — all HTTP calls for venues and the venue canvas editor.
- *
- * NOTE: Uses VenueMapDTO / VenueSectionMapDTO / SeatDTO — these are
- * canvas-specific projections, distinct from the admin-facing VenueResponseDto.
- * The shared ApiResponse<T> from @/shared/types is used — no local redeclaration.
+ * VenueSeatMapService — Legacy wrapper mapping to centralized API services.
  */
 export class VenueSeatMapService {
-  // ── Venue CRUD ─────────────────────────────────────────────────────────────
+  static getVenueById(id: number | string) { return VenueService.getVenueById(id); }
+  static createVenue(data: VenueRequestDto) { return VenueService.createVenue(data); }
+  static updateVenue(id: number | string, data: Partial<VenueRequestDto>) { return VenueService.updateVenue(id, data); }
+  static deleteVenue(id: number | string) { return VenueService.deleteVenue(id); }
 
-  static getVenues() {
-    return api
-      .get<ApiResponse<VenueResponseDto[]>>("/event/api/venues")
-      .then((res) => res.data.data);
+  static getVenue(venueId: number | string) { return VenueService.getVenue(venueId); }
+  static updateVenueMetadata(venueId: number | string, name: string, mapWidth: number, mapHeight: number) {
+    return VenueService.updateVenueMetadata(venueId, name, mapWidth, mapHeight);
   }
 
-  static getVenueById(id: number | string) {
-    return api
-      .get<ApiResponse<VenueResponseDto>>(`/event/api/venues/${id}`)
-      .then((res) => res.data.data);
-  }
+  static getSections(venueId: number | string) { return VenueService.getSections(venueId); }
+  static createSection(payload: CreateVenueSectionPayload) { return VenueService.createSection(payload); }
+  static updateSection(venueId: number | string, id: number, payload: UpdateVenueSectionPayload) { return VenueService.updateSection(venueId, id, payload); }
+  static deleteSection(venueId: number | string, id: number) { return VenueService.deleteSection(venueId, id); }
 
-  static createVenue(data: VenueRequestDto) {
-    return api
-      .post<ApiResponse<VenueResponseDto>>("/event/api/venues", data)
-      .then((res) => res.data.data);
-  }
+  static getSeatsBySection(venueId: number | string, sectionId: number | string) { return VenueService.getSeatsBySection(venueId, sectionId); }
+  static createSeat(payload: CreateSeatPayload) { return VenueService.createSeat(payload); }
+  static createSeatsBatch(venueId: number | string, sectionId: number | string, payloads: CreateSeatPayload[]) { return VenueService.createSeatsBatch(venueId, sectionId, payloads); }
+  static updateSeat(venueId: number | string, sectionId: number | string, id: number, payload: UpdateSeatPayload) { return VenueService.updateSeat(venueId, sectionId, id, payload); }
+  static deleteSeat(venueId: number | string, sectionId: number | string, id: number) { return VenueService.deleteSeat(venueId, sectionId, id); }
 
-  static updateVenue(id: number | string, data: Partial<VenueRequestDto>) {
-    return api
-      .put<ApiResponse<VenueResponseDto>>(`/event/api/venues/${id}`, data)
-      .then((res) => res.data.data);
-  }
+  static getSessionSeats(eventSessionId: number | string) { return SessionSeatService.getSessionSeats(eventSessionId); }
 
-  static deleteVenue(id: number | string) {
-    return api
-      .delete<ApiResponse<void>>(`/event/api/venues/${id}`)
-      .then((res) => res.data);
-  }
-
-  // ── Venue Canvas ──────────────────────────────────────────────────────────
-
-  static getVenue(venueId: number | string) {
-    return api
-      .get<ApiResponse<VenueMapDTO>>(`/event/api/venues/${venueId}`)
-      .then((res) => res.data.data);
-  }
-
-  static async updateVenueMetadata(venueId: number | string, name: string, mapWidth: number, mapHeight: number) {
-    // 1. Fetch full venue to prevent overwriting other fields (backend PUT replaces)
-    const res = await api.get(`/event/api/venues/${venueId}`);
-    const fullVenue = res.data.data;
-    
-    // 2. Update canvas fields
-    const updated = {
-      ...fullVenue,
-      name,
-      mapWidth,
-      mapHeight,
-    };
-    
-    // 3. Save back
-    const putRes = await api.put(`/event/api/venues/${venueId}`, updated);
-    return putRes.data.data;
-  }
-
-  // ── Sections ──────────────────────────────────────────────────────────────
-
-  static getSections(venueId: number | string) {
-    return api
-      .get<ApiResponse<VenueSectionMapDTO[]>>(`/event/api/venues/${venueId}/venue-sections`)
-      .then((res) => res.data.data);
-  }
-
-  static createSection(payload: CreateVenueSectionPayload) {
-    return api
-      .post<ApiResponse<VenueSectionMapDTO>>(`/event/api/venues/${payload.venueId}/venue-sections`, payload)
-      .then((res) => res.data.data);
-  }
-
-  static updateSection(venueId: number | string, id: number, payload: UpdateVenueSectionPayload) {
-    return api
-      .put<ApiResponse<VenueSectionMapDTO>>(`/event/api/venues/${venueId}/venue-sections/${id}`, payload)
-      .then((res) => res.data.data);
-  }
-
-  static deleteSection(venueId: number | string, id: number) {
-    return api
-      .delete<ApiResponse<void>>(`/event/api/venues/${venueId}/venue-sections/${id}`)
-      .then((res) => res.data);
-  }
-
-  // ── Seats ──────────────────────────────────────────────────────────────────
-
-  static getSeatsBySection(venueId: number | string, sectionId: number | string) {
-    return api
-      .get<ApiResponse<SeatDTO[]>>(`/event/api/venues/${venueId}/venue-sections/${sectionId}/seats`)
-      .then((res) => res.data.data);
-  }
-
-  static createSeat(payload: CreateSeatPayload) {
-    return api
-      .post<ApiResponse<SeatDTO>>(`/event/api/venues/${payload.venueId}/venue-sections/${payload.venueSectionId}/seats`, payload)
-      .then((res) => res.data.data);
-  }
-
-  static createSeatsBatch(venueId: number | string, sectionId: number | string, payloads: CreateSeatPayload[]) {
-    return api
-      .post<ApiResponse<SeatDTO[]>>(`/event/api/venues/${venueId}/venue-sections/${sectionId}/seats/batch`, payloads)
-      .then((res) => res.data.data);
-  }
-
-  static updateSeat(venueId: number | string, sectionId: number | string, id: number, payload: UpdateSeatPayload) {
-    return api
-      .put<ApiResponse<SeatDTO>>(`/event/api/venues/${venueId}/venue-sections/${sectionId}/seats/${id}`, payload)
-      .then((res) => res.data.data);
-  }
-
-  static deleteSeat(venueId: number | string, sectionId: number | string, id: number) {
-    return api
-      .delete<ApiResponse<void>>(`/event/api/venues/${venueId}/venue-sections/${sectionId}/seats/${id}`)
-      .then((res) => res.data);
-  }
-
-  // ── Session Seats ──────────────────────────────────────────────────────────
-
-  static getSessionSeats(eventSessionId: number | string) {
-    return api
-      .get<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats`)
-      .then((res) => res.data.data);
-  }
-
-  static lockSeats(eventSessionId: number | string, seats: SessionSeatDTO[]) {
-    return api
-      .post<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats/batch/lock`, seats)
-      .then((res) => res.data.data);
-  }
-
-  static unlockSeats(eventSessionId: number | string, seats: SessionSeatDTO[]) {
-    return api
-      .post<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats/batch/unlock`, seats)
-      .then((res) => res.data.data);
-  }
-
-  static bookSeats(eventSessionId: number | string, seats: SessionSeatDTO[]) {
-    return api
-      .post<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats/batch/booked`, seats)
-      .then((res) => res.data.data);
-  }
-
-  static createEventBooking(booking: {
-    bookingRef: string;
-    userId: string;
-    eventSessionId: number;
-    seats: {
-      sessionSeatId: number;
-      eventSessionId: number;
-      seatId: number;
-      ticketTypeId: number;
-    }[];
-  }) {
-    return api
-      .post<ApiResponse<BookingResponseDTO>>("/booking/api/bookings", booking)
-      .then((res) => res.data.data);
-  }
+  static createEventBooking(booking: any) { return BookingService.createBooking(booking); }
 }

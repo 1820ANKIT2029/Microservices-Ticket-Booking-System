@@ -1,5 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 import { Footer } from "@/features/homepage/components/footer";
 import { SportsHero } from "@/features/sports-explorer/components/sports-hero";
 import { LiveScores } from "@/features/sports-explorer/components/live-scores";
@@ -8,6 +11,12 @@ import { RecommendedSports } from "@/features/sports-explorer/components/recomme
 import { MobileBottomNav } from "@/features/homepage/components/mobile-bottom-nav";
 
 export default function SportsPage() {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/");
+  }, [router]);
+
+
   return (
     <>
       <main id="main-content" className="w-full max-w-7xl mx-auto px-4 md:px-16 pt-24 pb-24 md:pb-8 flex-1">

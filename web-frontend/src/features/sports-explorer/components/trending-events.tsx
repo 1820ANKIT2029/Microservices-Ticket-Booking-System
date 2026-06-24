@@ -54,7 +54,7 @@ export function TrendingEvents({ events, page, onPageChange, hasNextPage, isLoad
                 return (
                   <Link
                     key={event.id}
-                    href={`/events/${event.id}`}
+                    href={`/events/detail?id=${event.id}`}
                     className="group block bg-card border border-outline-variant rounded-xl overflow-hidden flex flex-col md:flex-row hover:shadow-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   >
                     <div className="relative md:w-48 h-36 md:h-auto overflow-hidden shrink-0">

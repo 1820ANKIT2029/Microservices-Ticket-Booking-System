@@ -1,7 +1,13 @@
 import type { Movie } from "@/features/movies-explorer/types";
 import type { SportsMatch } from "@/features/sports-explorer/types";
 import type { Concert } from "@/features/music-explorer/types";
-import type { Step } from "@/features/onboarding/types";
+export interface Step {
+  icon: any;
+  title: string;
+  description: string;
+  bgClass: string;
+  iconColorClass: string;
+}
 
 export const FEATURED_MOVIES: Movie[] = [
   {

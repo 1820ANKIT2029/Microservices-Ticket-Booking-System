@@ -35,7 +35,7 @@ function EventCard({ event }: { event: SearchResultEvent }) {
   const [isFavorited, setIsFavorited] = useState(false);
 
   // Map to checkout page or generic details page
-  const detailsUrl = `/events/${event.id}`;
+  const detailsUrl = `/events/detail?id=${event.id}`;
 
   return (
     <article className="bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">

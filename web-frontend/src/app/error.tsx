@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { AlertCircle, RefreshCw, Home } from "lucide-react";
 import Link from "next/link";
-import { logger } from "@/shared/utils/logger";
+import { LoggerUtils as logger } from "@/shared/utils/logger";
 
 export default function RootError({
   error,

@@ -18,7 +18,6 @@ export function useCreateBooking() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: bookingKeys.list() });
-      queryClient.invalidateQueries({ queryKey: bookingKeys.loyalty() });
     },
   });
 }

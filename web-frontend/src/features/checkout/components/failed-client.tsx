@@ -1,6 +1,8 @@
 "use client";
 
 import { AlertOctagon, RefreshCw, Home, Mail, ShieldAlert } from "lucide-react";
+import { useMemo } from "react";
+import { FormatUtils } from "@/shared/utils";
 import Link from "next/link";
 import type { CheckoutEvent } from "@/features/checkout/types/checkout";
 
@@ -19,13 +21,9 @@ export function FailedClient({
   reason,
   bookingRef,
 }: FailedClientProps) {
-  const formatPrice = (val: number) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(val);
-  };
+  const formattedAmount = useMemo(() => {
+    return FormatUtils.formatCurrency(totalAmount);
+  }, [totalAmount]);
 
   const formattedSeats = seatsList.map((s) => {
     const parts = s.split("-");
@@ -85,7 +83,7 @@ export function FailedClient({
                 )}
                 <div className="flex justify-between">
                   <span className="text-on-surface-variant font-medium">Amount Attempted</span>
-                  <span className="font-bold text-primary">{formatPrice(totalAmount)}</span>
+                  <span className="font-bold text-on-surface">{formattedAmount}</span>
                 </div>
               </div>
             </div>

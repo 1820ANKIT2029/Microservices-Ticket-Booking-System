@@ -12,11 +12,7 @@ export function BookingsFeatured({ booking }: BookingsFeaturedProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Map booking ID to actual checkout event ID for mock continuity
-  const checkoutEventId = booking.id === "booking-1" ? "neon-horizon-fest" : "mumbai-indians-vs-rcb";
-  const seatsParam = booking.id === "booking-1" ? "VIP-A1,VIP-A2" : "P-B1,P-B2";
-  const totalParam = booking.id === "booking-1" ? "5456" : "10670";
-  const ticketUrl = `/checkout/confirmed?eventId=${checkoutEventId}&seats=${seatsParam}&total=${totalParam}`;
+  const ticketUrl = `/checkout/confirmed?bookingId=${booking.id}`;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

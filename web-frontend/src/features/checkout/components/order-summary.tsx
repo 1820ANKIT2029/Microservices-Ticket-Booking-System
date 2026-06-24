@@ -2,6 +2,7 @@
 
 import type { CheckoutEvent, OrderBreakdown } from "../types/checkout";
 import { ShieldCheck, Loader2 } from "lucide-react";
+import { FormatUtils } from "@/shared/utils";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -19,11 +20,7 @@ export function OrderSummary({
   onPay,
 }: OrderSummaryProps) {
   const formatPrice = (val: number) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(val);
+    return FormatUtils.formatCurrency(val);
   };
 
   return (

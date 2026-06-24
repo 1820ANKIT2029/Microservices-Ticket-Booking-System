@@ -7,9 +7,9 @@ import { cn } from "@/shared/utils/cn";
 
 const NAV_TABS = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/movies", label: "Movies", icon: Film },
-  { href: "/sports", label: "Sports", icon: Trophy },
-  { href: "/music", label: "Music", icon: Music },
+  // { href: "/movies", label: "Movies", icon: Film },
+  // { href: "/sports", label: "Sports", icon: Trophy },
+  // { href: "/music", label: "Music", icon: Music },
 ] as const;
 
 export function MobileBottomNav() {

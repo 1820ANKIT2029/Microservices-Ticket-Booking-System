@@ -1,3 +1,4 @@
+import type { BookingDTO, TicketDTO } from "@/features/venue-seat-map/types";
 import type { ISODateString } from "@/shared/types";
 import type { BookingStatus } from "@/shared/constants";
 
@@ -19,6 +20,34 @@ export interface CreateBookingRequestDto {
   qty:         number;
   seats:       string[];
   totalAmount: number;
+}
+
+export interface SessionSeatRequest {
+  sessionSeatId: number;
+  eventSessionId: number;
+  seatId: number;
+  ticketTypeId: number;
+}
+
+export interface BookingRequestDTO {
+  bookingRef: string;
+  userId?: string;
+  eventSessionId: number;
+  seats: SessionSeatRequest[];
+}
+
+export { BookingDTO, TicketDTO };
+
+export interface PageBookingDTO {
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: BookingDTO[];
+  number: number;
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
 }
 
 // ── Domain Model ──────────────────────────────────────────────────────────────

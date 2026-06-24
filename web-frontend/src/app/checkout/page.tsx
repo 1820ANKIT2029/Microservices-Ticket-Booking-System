@@ -1,42 +1,26 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { CheckoutClient } from "@/features/checkout/components/checkout-client";
 import { getCheckoutEventById, calculateOrderBreakdown } from "@/features/checkout/constants/checkout-data";
 
-interface PageProps {
-  searchParams: Promise<{
-    eventId?: string;
-    qty?: string;
-    seats?: string;
-    fail?: string;
-    sessionId?: string;
-    seatIds?: string;
-    sessionSeatIds?: string;
-    bookingRef?: string;
-    total?: string;
-    subtotal?: string;
-    tax?: string;
-    gatewayKey?: string;
-    bookingId?: string;
-  }>;
-}
-
-export default function CheckoutPage({ searchParams }: PageProps) {
-  const resolvedParams = React.use(searchParams);
-  const eventId = resolvedParams?.eventId;
-  const qty = resolvedParams?.qty;
-  const seats = resolvedParams?.seats;
-  const fail = resolvedParams?.fail;
-  const sessionId = resolvedParams?.sessionId;
-  const seatIds = resolvedParams?.seatIds;
-  const sessionSeatIds = resolvedParams?.sessionSeatIds;
-  const bookingRef = resolvedParams?.bookingRef;
-  const total = resolvedParams?.total;
-  const subtotal = resolvedParams?.subtotal;
-  const tax = resolvedParams?.tax;
-  const gatewayKey = resolvedParams?.gatewayKey;
-  const bookingId = resolvedParams?.bookingId;
+function CheckoutContent() {
+  const searchParams = useSearchParams();
+  const eventId = searchParams.get("eventId") || undefined;
+  const qty = searchParams.get("qty") || undefined;
+  const seats = searchParams.get("seats") || undefined;
+  const fail = searchParams.get("fail") || undefined;
+  const sessionId = searchParams.get("sessionId") || undefined;
+  const seatIds = searchParams.get("seatIds") || undefined;
+  const sessionSeatIds = searchParams.get("sessionSeatIds") || undefined;
+  const bookingRef = searchParams.get("bookingRef") || undefined;
+  const total = searchParams.get("total") || undefined;
+  const subtotal = searchParams.get("subtotal") || undefined;
+  const tax = searchParams.get("tax") || undefined;
+  const gatewayKey = searchParams.get("gatewayKey") || undefined;
+  const bookingId = searchParams.get("bookingId") || undefined;
 
   // Parse selected seat IDs
   const seatIdsList = seatIds ? seatIds.split(",").map((id) => Number(id)) : [];
@@ -84,5 +68,17 @@ export default function CheckoutPage({ searchParams }: PageProps) {
       gatewayKey={gatewayKey}
       bookingId={bookingId}
     />
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen items-center justify-center bg-background">
+        <div className="w-10 h-10 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+      </div>
+    }>
+      <CheckoutContent />
+    </Suspense>
   );
 }

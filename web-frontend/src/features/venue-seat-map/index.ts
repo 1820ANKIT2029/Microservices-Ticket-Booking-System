@@ -28,8 +28,8 @@ export { useVenueEditor } from "./hooks/useVenueEditor";
 export type { VenueEditorAPI } from "./hooks/useVenueEditor";
 
 // Venue Components
-export { VenueForm } from "./components/venue/VenueForm";
-export { VenueTable } from "./components/venue/VenueTable";
+export { VenueForm } from "@/features/events/components/VenueForm";
+export { VenueTable } from "@/features/events/components/VenueTable";
 export { SeatMapViewerPage } from "./components/viewer/SeatMapViewerPage";
 export { SeatMapEditorPage } from "./components/editor/SeatMapEditorPage";
 

@@ -83,14 +83,14 @@ export function SportsCard({ match }: SportsCardProps) {
       {/* CTA */}
       {isLive ? (
         <Link
-          href={`/events/${match.id}`}
+          href={`/events/detail?id=${match.id}`}
           className="w-full bg-primary-container text-on-primary py-3 rounded-xl text-label-md font-semibold hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all h-auto block text-center"
         >
           Buy Tickets
         </Link>
       ) : (
         <Link
-          href={`/events/${match.id}`}
+          href={`/events/detail?id=${match.id}`}
           className="w-full border border-primary text-primary py-3 rounded-xl text-label-md font-semibold hover:bg-primary-container hover:text-on-primary hover:border-primary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all h-auto block text-center"
         >
           Get Passes

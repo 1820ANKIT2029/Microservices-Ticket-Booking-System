@@ -238,48 +238,16 @@ export function PersonalInfoTab({ initialData, onSave }: PersonalInfoTabProps) {
           </button>
           <Button
             type="submit"
-            className={`px-8 py-3 text-label-md font-semibold rounded-lg shadow-sm active:scale-95 transition-all cursor-pointer border-none flex items-center justify-center ${
-              saveStatus === "saved"
+            className={`px-8 py-3 text-label-md font-semibold rounded-lg shadow-sm active:scale-95 transition-all cursor-pointer border-none flex items-center justify-center ${saveStatus === "saved"
                 ? "bg-green-600 hover:bg-green-600 text-white"
                 : "bg-primary text-on-primary hover:opacity-90"
-            }`}
+              }`}
             disabled={isSaving}
           >
             {isSaving ? "Saving Profile..." : saveStatus === "saved" ? "Profile Saved!" : "Save Profile"}
           </Button>
         </div>
       </form>
-
-      {/* Bento-style Status Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-        <div className="p-6 rounded-2xl border border-outline-variant/30 bg-surface-container-low flex items-start gap-4">
-          <div className="p-3 bg-primary/10 text-primary rounded-xl shrink-0">
-            <Star className="size-6 fill-primary/10" />
-          </div>
-          <div className="space-y-1">
-            <h4 className="font-bold text-label-md text-on-surface">Loyalty Status</h4>
-            <p className="text-body-md font-bold text-primary">{MOCK_LOYALTY_STATUS.tier}</p>
-            <p className="text-label-sm text-on-surface-variant/80 mt-1">
-              {MOCK_LOYALTY_STATUS.pointsUntilNext}
-            </p>
-          </div>
-        </div>
-        <div className="p-6 rounded-2xl border border-outline-variant/30 bg-surface-container-low flex items-start gap-4">
-          <div className="p-3 bg-secondary-container/50 text-on-secondary-container rounded-xl shrink-0">
-            <Ticket className="size-6" />
-          </div>
-          <div className="space-y-1">
-            <h4 className="font-bold text-label-md text-on-surface">Active Tickets</h4>
-            <p className="text-body-md font-bold text-on-surface">{MOCK_ACTIVE_TICKETS.description}</p>
-            <Link
-              href="/bookings"
-              className="inline-block font-bold text-label-sm text-primary underline mt-2 hover:opacity-80 transition-opacity"
-            >
-              View all
-            </Link>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

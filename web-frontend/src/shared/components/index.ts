@@ -7,9 +7,12 @@ export { LoadingSpinner } from "./LoadingSpinner";
 
 // Generic Table/List utilities
 export { DataTable } from "./DataTable";
-export { DeleteDialog } from "./DeleteDialog";
+export { Pagination } from "./Pagination";
+export { ConfirmDialog } from "./ConfirmDialog";
 export { EmptyState } from "./EmptyState";
 export { StatusBadge } from "./StatusBadge";
+export { Modal } from "./Modal";
+export { SearchInput } from "./SearchInput";
 
 // Layouts & Landing components
 export { Navbar } from "./layout/navbar";

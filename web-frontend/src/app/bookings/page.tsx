@@ -3,17 +3,13 @@
 import { Footer } from "@/features/homepage/components/footer";
 import { MobileBottomNav } from "@/features/homepage/components/mobile-bottom-nav";
 import { BookingsClient } from "@/features/bookings/components/bookings-client";
-import { BOOKINGS_DATA, LOYALTY_STATS } from "@/features/bookings/constants/bookings-data";
 import { Search } from "lucide-react";
 
 export default function BookingsDashboardPage() {
   return (
     <>
       <main id="main-content" className="pt-20 pb-20 md:pb-0 min-h-screen bg-background">
-        <BookingsClient 
-          bookings={BOOKINGS_DATA} 
-          loyaltyStats={LOYALTY_STATS} 
-        />
+        <BookingsClient />
       </main>
       <Footer />
       <MobileBottomNav />

@@ -16,7 +16,7 @@ export function MatchesNearYou() {
           {LOCAL_MATCHES.map((match) => (
             <Link
               key={match.id}
-              href={`/events/${match.id}`}
+              href={`/events/detail?id=${match.id}`}
               className="block p-4 border border-outline-variant rounded-lg hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors text-left"
             >
               <h4 className="text-label-md font-bold text-on-surface">{match.title}</h4>

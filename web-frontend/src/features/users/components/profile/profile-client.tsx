@@ -5,16 +5,16 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { ProfileSidebar, ProfileTab } from "./profile-sidebar";
 import { PersonalInfoTab } from "./personal-info-tab";
-import { SecurityTab } from "./security-tab";
+// import { SecurityTab } from "./security-tab";
 import { NotificationsTab } from "./notifications-tab";
-import { PaymentsTab } from "./payments-tab";
+// import { PaymentsTab } from "./payments-tab";
 import { BookingsTab } from "./bookings-tab";
 import {
-  MOCK_SECURITY_SETTINGS,
+  // MOCK_SECURITY_SETTINGS,
   MOCK_NOTIFICATION_PREFS,
-  MOCK_SAVED_CARDS,
+  // MOCK_SAVED_CARDS,
 } from "../../constants/profile-data";
-import { SecuritySettings, NotificationPreferences } from "@/features/users/types/profile";
+import { /* SecuritySettings, */ NotificationPreferences } from "@/features/users/types/profile";
 import { useUser, useUpdateProfile } from "@/features/users";
 import { UserProfileData } from "@/features/users/types/profile";
 
@@ -28,7 +28,7 @@ export function ProfileClient() {
   const updateProfileMutation = useUpdateProfile();
 
   // ── Local UI-only state (not server data) ──────────────────────────────────
-  const [security, setSecurity] = React.useState<SecuritySettings>(MOCK_SECURITY_SETTINGS);
+  // const [security, setSecurity] = React.useState<SecuritySettings>(MOCK_SECURITY_SETTINGS);
   const [notifications, setNotifications] = React.useState<NotificationPreferences>(MOCK_NOTIFICATION_PREFS);
 
   // Authentication guard
@@ -40,8 +40,8 @@ export function ProfileClient() {
   // Sync auth store with profile data from React Query
   React.useEffect(() => {
     if (profile) {
-      const { useAuthStore } = require("@/shared/store/auth.store");
-      useAuthStore.getState().setUser(profile);
+      const { authStore } = require("@/shared/store/auth.store");
+      authStore.setUser(profile);
     }
   }, [profile]);
 
@@ -54,10 +54,10 @@ export function ProfileClient() {
     await updateProfileMutation.mutateAsync(updatedData);
   };
 
-  const handleSecuritySave = async (updatedData: SecuritySettings) => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setSecurity(updatedData);
-  };
+  // const handleSecuritySave = async (updatedData: SecuritySettings) => {
+  //   await new Promise((resolve) => setTimeout(resolve, 800));
+  //   setSecurity(updatedData);
+  // };
 
   const handleNotificationsSave = async (updatedData: NotificationPreferences) => {
     await new Promise((resolve) => setTimeout(resolve, 800));
@@ -78,12 +78,12 @@ export function ProfileClient() {
         return <PersonalInfoTab initialData={profileData} onSave={handleProfileSave} />;
       case "bookings":
         return <BookingsTab />;
-      case "security":
-        return <SecurityTab initialData={security} onSave={handleSecuritySave} />;
+      // case "security":
+      //   return <SecurityTab initialData={security} onSave={handleSecuritySave} />;
       case "notifications":
         return <NotificationsTab initialData={notifications} onSave={handleNotificationsSave} />;
-      case "payments":
-        return <PaymentsTab initialCards={MOCK_SAVED_CARDS} />;
+      // case "payments":
+      //   return <PaymentsTab initialCards={MOCK_SAVED_CARDS} />;
 
       // ── Organizer tabs ──────────────────────────────────────────────────────────
       case "admin-venues":

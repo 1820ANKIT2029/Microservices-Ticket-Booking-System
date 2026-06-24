@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ApiError } from "./axios";
-import { logger } from "@/shared/utils/logger";
+import { LoggerUtils as logger } from "@/shared/utils/logger";
 
 /**
  * Transforms Axios errors into typed ApiError instances.

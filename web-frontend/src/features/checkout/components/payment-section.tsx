@@ -1,6 +1,8 @@
 "use client";
 
 import { CreditCard, ShieldCheck, Lock, Loader2, ShieldAlert } from "lucide-react";
+import { useMemo } from "react";
+import { FormatUtils } from "@/shared/utils";
 import Image from "next/image";
 
 interface PaymentSectionProps {
@@ -16,11 +18,9 @@ export function PaymentSection({
   onPay,
   eventName,
 }: PaymentSectionProps) {
-  const formattedAmount = new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(totalAmount);
+  const formattedAmount = useMemo(() => {
+    return FormatUtils.formatCurrency(totalAmount);
+  }, [totalAmount]);
 
   return (
     <section className="md:col-span-8 flex flex-col gap-6" aria-labelledby="payment-section-title">

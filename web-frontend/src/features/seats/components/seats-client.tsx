@@ -7,6 +7,7 @@ import { Check, MapPin, ZoomIn, ZoomOut, Info } from "lucide-react";
 import Image from "next/image";
 import type { CheckoutEvent } from "@/features/checkout/types/checkout";
 import { EventService } from "@/features/events";
+import { FormatUtils } from "@/shared/utils";
 
 interface SeatsClientProps {
   event: CheckoutEvent;
@@ -143,11 +144,7 @@ export function SeatsClient({ event, eventId }: SeatsClientProps) {
   }, [selectedSeats]);
 
   const formattedTotalPrice = useMemo(() => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(totalPrice);
+    return FormatUtils.formatCurrency(totalPrice);
   }, [totalPrice]);
 
   const platinumRows = 4;

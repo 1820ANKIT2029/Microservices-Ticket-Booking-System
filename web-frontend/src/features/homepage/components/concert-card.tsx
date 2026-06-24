@@ -39,7 +39,7 @@ export function ConcertCard({ concert }: ConcertCardProps) {
             </p>
           )}
           <Link
-            href={`/events/${concert.id}`}
+            href={`/events/detail?id=${concert.id}`}
             className="bg-surface text-primary px-8 py-4 rounded-xl text-label-md font-semibold hover:bg-primary-container hover:text-on-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all inline-block text-center"
           >
             Explore Tour Dates
@@ -52,7 +52,7 @@ export function ConcertCard({ concert }: ConcertCardProps) {
   /* Compact variant */
   return (
     <Link
-      href={`/events/${concert.id}`}
+      href={`/events/detail?id=${concert.id}`}
       className="relative rounded-[2rem] overflow-hidden group min-h-[200px] block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
     >
       <article

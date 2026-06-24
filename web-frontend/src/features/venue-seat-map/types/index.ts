@@ -44,7 +44,7 @@ export interface SessionSeatDTO {
   eventSessionId: number;
   seatId: number;
   overridePrice?: number;
-  status: "AVAILABLE" | "RESERVED" | "SOLD";
+  status: "AVAILABLE" | "RESERVED" | "BOOKED";
 }
 
 // ─── Create / Update payloads ─────────────────────────────────────────────────
@@ -138,11 +138,17 @@ export interface ViewerState {
 export interface TicketDTO {
   id: number;
   bookingId: number;
-  sessionSeatId: number;
+  userId: string;
+  eventSessionId: number;
   ticketTypeId: number;
-  ticketNumber: string;
-  price: number;
+  sessionSeatId: number;
+  qrCode?: string;
+  barCode?: string;
   status: string;
+  pricePaid?: number;
+  isChecked?: boolean;
+  issuedAt?: string;
+  checkedInAt?: string;
 }
 
 export interface BookingDTO {

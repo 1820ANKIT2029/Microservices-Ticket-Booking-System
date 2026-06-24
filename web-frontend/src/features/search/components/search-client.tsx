@@ -7,9 +7,9 @@ import { SearchResultsList } from "./search-results-list";
 import { SearchResultEvent, SearchFilters } from "../types/search";
 import { ChevronRight, ChevronLeft, Search, Loader2 } from "lucide-react";
 import { SearchService } from "@/features/search";
+import { EventService } from "@/features/events";
 
 interface SearchClientProps {
-  initialEvents: SearchResultEvent[];
   initialQuery?: string;
 }
 
@@ -17,7 +17,24 @@ type SortType = "recommended" | "price-asc" | "date-asc";
 
 const PAGE_SIZE = 3;
 
-export function SearchClient({ initialEvents, initialQuery = "" }: SearchClientProps) {
+function formatEventDate(dateString?: string) {
+  if (!dateString) return "Upcoming Session";
+  try {
+    const d = new Date(dateString);
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const dayName = days[d.getDay()];
+    const monthName = months[d.getMonth()];
+    const day = d.getDate();
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    return `${dayName}, ${monthName} ${day} • ${hours}:${minutes}`;
+  } catch {
+    return "Upcoming Session";
+  }
+}
+
+export function SearchClient({ initialQuery = "" }: SearchClientProps) {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [searchInput, setSearchInput] = useState(initialQuery);
   const [sortBy, setSortBy] = useState<SortType>("recommended");
@@ -30,95 +47,116 @@ export function SearchClient({ initialEvents, initialQuery = "" }: SearchClientP
     venue: null,
   });
 
-  // Backend search API query
-  const { data: apiEvents, isLoading } = useQuery({
-    queryKey: ["search", searchQuery, filters],
-    queryFn: () => SearchService.searchEvents(searchQuery, filters).then((res: any) => res.data.data),
+  // 1. Fetch Venues for location lookup mapping
+  const { data: venues = [] } = useQuery({
+    queryKey: ["venues"],
+    queryFn: () => EventService.getVenues(),
   });
 
-  // Local fallback filter logic
-  const filteredEvents = useMemo(() => {
-    return initialEvents.filter((event) => {
-      // 1. Search text match
-      if (searchQuery.trim()) {
-        const queryLower = searchQuery.toLowerCase();
-        const matchesTitle = event.title.toLowerCase().includes(queryLower);
-        const matchesLoc = event.location.toLowerCase().includes(queryLower);
-        const matchesCategory = event.category.toLowerCase().includes(queryLower);
-        if (!matchesTitle && !matchesLoc && !matchesCategory) {
-          return false;
+  // 2. Paginated Event Catalog Search from Microservice
+  const { data: apiEventsPage, isLoading: isSearchLoading } = useQuery({
+    queryKey: ["searchCatalog", searchQuery, filters, currentPage, sortBy],
+    queryFn: () => {
+      const status = "PUBLISHED";
+      let eventType: string | undefined;
+
+      if (filters.categories && filters.categories.length > 0) {
+        const cat = filters.categories[0].toLowerCase();
+        if (cat.includes("movie")) eventType = "MOVIE";
+        else if (cat.includes("music") || cat.includes("concert")) eventType = "CONCERT";
+        else if (cat.includes("sport")) eventType = "SPORTS";
+      }
+
+      const sort = sortBy === "price-asc"
+        ? ["price,asc"]
+        : sortBy === "date-asc"
+        ? ["createdAt,desc"]
+        : undefined;
+
+      return SearchService.searchEventsCatalog(
+        searchQuery || undefined,
+        status,
+        eventType,
+        currentPage - 1, // backend is 0-indexed
+        PAGE_SIZE,
+        sort
+      );
+    },
+  });
+
+  // 3. Fetch detailed event information for the search results on current page
+  const eventIds = useMemo(() => {
+    return apiEventsPage?.content?.map((e) => e.id) || [];
+  }, [apiEventsPage]);
+
+  const { data: detailedEvents, isLoading: isDetailsLoading } = useQuery({
+    queryKey: ["detailedEvents", eventIds],
+    queryFn: async () => {
+      if (eventIds.length === 0) return [];
+      const promises = eventIds.map((id) => EventService.getEventById(id));
+      return Promise.all(promises);
+    },
+    enabled: eventIds.length > 0,
+  });
+
+  // 4. Map detailed event data to UI consumed SearchResultEvent shape
+  const apiMappedEvents = useMemo(() => {
+    if (!detailedEvents || detailedEvents.length === 0) return [];
+
+    const venueMap = new Map(venues.map((v) => [v.id, v]));
+    const friendlyCategory: Record<string, string> = {
+      MOVIE: "Movies",
+      CONCERT: "Music",
+      SPORTS: "Sports",
+      OTHER: "Special Event",
+    };
+
+    return detailedEvents.map((e) => {
+      let minPrice = Infinity;
+      let dateString = e.createdAt || new Date().toISOString();
+
+      if (e.sessions && e.sessions.length > 0) {
+        const session = e.sessions[0];
+        dateString = session.startDataTime || dateString;
+
+        if (session.ticketTypes && session.ticketTypes.length > 0) {
+          session.ticketTypes.forEach((t) => {
+            if (t.basePrice < minPrice) {
+              minPrice = t.basePrice;
+            }
+          });
         }
       }
 
-      // 2. Category match
-      if (filters.categories.length > 0) {
-        if (!filters.categories.includes(event.category)) {
-          return false;
-        }
-      }
+      const venue = e.venueId ? venueMap.get(e.venueId) : null;
+      const venueName = venue?.name || "Main Venue";
+      const locationText = venue ? `${venue.name}, ${venue.city || ""}` : "Main Venue";
 
-      // 3. Price match
-      if (event.price > filters.maxPrice) {
-        return false;
-      }
+      const price = minPrice !== Infinity ? minPrice : 45;
+      const priceText = minPrice !== Infinity ? (minPrice === 0 ? "Free" : `$${minPrice}`) : "$45";
 
-      // 4. Venue match
-      if (filters.venue && event.venue !== filters.venue) {
-        return false;
-      }
-
-      // 5. Date match
-      if (filters.dates.length > 0) {
-        let matchesDate = false;
-        const dateStr = event.date.split("T")[0]; // YYYY-MM-DD
-        
-        filters.dates.forEach((dateFilter) => {
-          if (dateFilter === "today" && dateStr === "2026-10-12") {
-            matchesDate = true;
-          }
-          if (dateFilter === "tomorrow" && dateStr === "2026-10-13") {
-            matchesDate = true;
-          }
-          if (dateFilter === "weekend" && (dateStr === "2026-10-12" || dateStr === "2026-10-13")) {
-            matchesDate = true;
-          }
-        });
-
-        if (!matchesDate) {
-          return false;
-        }
-      }
-
-      return true;
+      return {
+        id: String(e.id),
+        title: e.title,
+        category: friendlyCategory[e.eventType || "OTHER"] || "Special Event",
+        price,
+        priceText,
+        date: dateString,
+        dateText: formatEventDate(dateString),
+        location: locationText,
+        imageUrl: e.bannerUrl || "https://placehold.co/600x400/5400c3/ffffff/png?text=" + encodeURIComponent(e.title),
+        imageAlt: e.title,
+        venue: venueName,
+      };
     });
-  }, [initialEvents, searchQuery, filters]);
+  }, [detailedEvents, venues]);
 
-  // Map API events with local fallback
-  const activeEventsList = useMemo(() => {
-    if (apiEvents && apiEvents.length > 0) {
-      return apiEvents;
-    }
-    return filteredEvents;
-  }, [apiEvents, filteredEvents]);
+  // Determine active display data
+  const displayEvents = apiMappedEvents || [];
+  const displayCount = apiEventsPage?.totalElements || 0;
+  const displayTotalPages = apiEventsPage?.totalPages || 1;
 
-  // Dynamic sort logic
-  const sortedAndFilteredEvents = useMemo(() => {
-    const list = [...activeEventsList];
-    if (sortBy === "price-asc") {
-      list.sort((a, b) => a.price - b.price);
-    } else if (sortBy === "date-asc") {
-      list.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    }
-    return list;
-  }, [activeEventsList, sortBy]);
-
-  // Pagination bounds
-  const totalPages = Math.max(1, Math.ceil(sortedAndFilteredEvents.length / PAGE_SIZE));
-  
-  const paginatedEvents = useMemo(() => {
-    const startIdx = (currentPage - 1) * PAGE_SIZE;
-    return sortedAndFilteredEvents.slice(startIdx, startIdx + PAGE_SIZE);
-  }, [sortedAndFilteredEvents, currentPage]);
+  const isLoading = isSearchLoading || (eventIds.length > 0 && isDetailsLoading);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -164,7 +202,7 @@ export function SearchClient({ initialEvents, initialQuery = "" }: SearchClientP
             )}
           </nav>
           <h1 className="text-2xl md:text-3xl font-bold text-on-surface">
-            {sortedAndFilteredEvents.length} results {searchQuery && `for '${searchQuery}'`}
+            {displayCount} results {searchQuery && `for '${searchQuery}'`}
           </h1>
         </div>
 
@@ -206,11 +244,11 @@ export function SearchClient({ initialEvents, initialQuery = "" }: SearchClientP
               <p className="text-on-surface-variant font-semibold">Searching events...</p>
             </div>
           ) : (
-            <SearchResultsList events={paginatedEvents} />
+            <SearchResultsList events={displayEvents} />
           )}
 
           {/* Pagination Controls */}
-          {sortedAndFilteredEvents.length > PAGE_SIZE && !isLoading && (
+          {displayCount > PAGE_SIZE && !isLoading && (
             <div className="mt-12 flex justify-center items-center gap-2">
               <button
                 disabled={currentPage === 1}
@@ -220,7 +258,7 @@ export function SearchClient({ initialEvents, initialQuery = "" }: SearchClientP
               >
                 <ChevronLeft className="size-5" />
               </button>
-              {Array.from({ length: totalPages }).map((_, i) => {
+              {Array.from({ length: displayTotalPages }).map((_, i) => {
                 const pageNum = i + 1;
                 const isActive = pageNum === currentPage;
                 return (
@@ -238,7 +276,7 @@ export function SearchClient({ initialEvents, initialQuery = "" }: SearchClientP
                 );
               })}
               <button
-                disabled={currentPage === totalPages}
+                disabled={currentPage === displayTotalPages}
                 onClick={() => setCurrentPage(currentPage + 1)}
                 className="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container-low text-on-surface-variant disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer disabled:cursor-not-allowed transition-all focus-visible:outline-none"
                 aria-label="Next page"

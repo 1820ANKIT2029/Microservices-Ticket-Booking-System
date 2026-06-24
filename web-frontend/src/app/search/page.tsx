@@ -1,25 +1,21 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Footer } from "@/features/homepage/components/footer";
 import { MobileBottomNav } from "@/features/homepage/components/mobile-bottom-nav";
 import { SearchClient } from "@/features/search/components/search-client";
-import { MOCK_SEARCH_EVENTS } from "@/features/search/constants/search-data";
 
-interface SearchPageProps {
-  searchParams: Promise<{ q?: string }>;
-}
-
-export default function SearchPage({ searchParams }: SearchPageProps) {
-  const resolvedParams = React.use(searchParams);
-  const initialQuery = resolvedParams?.q || "";
+function SearchContent() {
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("q") || "";
 
   return (
     <>
       <main id="main-content" className="pt-20 pb-20 md:pb-0 min-h-screen bg-background">
         <SearchClient 
           key={initialQuery}
-          initialEvents={MOCK_SEARCH_EVENTS}
           initialQuery={initialQuery}
         />
       </main>
@@ -28,3 +24,16 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
     </>
   );
 }
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen items-center justify-center bg-background">
+        <div className="w-10 h-10 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+      </div>
+    }>
+      <SearchContent />
+    </Suspense>
+  );
+}
+

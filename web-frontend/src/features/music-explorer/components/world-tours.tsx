@@ -31,7 +31,7 @@ export function WorldTours() {
           {WORLD_TOURS.map((tour) => (
             <Link
               key={tour.id}
-              href={`/events/${tour.id}`}
+              href={`/events/detail?id=${tour.id}`}
               className="group relative overflow-hidden rounded-2xl aspect-[3/4] block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all border border-outline-variant/10 shadow-sm hover:shadow-xl"
               aria-label={`${tour.name}: ${tour.tourName} tour. ${tour.details}`}
             >

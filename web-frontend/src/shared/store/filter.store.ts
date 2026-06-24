@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import { SearchFilters } from "@/features/search/types/search";
+import { BaseStore } from "./BaseStore";
 
 export interface FilterState {
   search: string;
@@ -7,11 +7,6 @@ export interface FilterState {
   page: number;
   limit: number;
   filters: SearchFilters;
-  setSearch: (search: string) => void;
-  setSort: (sort: string) => void;
-  setPage: (page: number) => void;
-  setFilters: (filters: Partial<SearchFilters>) => void;
-  resetFilters: () => void;
 }
 
 const initialFilters: SearchFilters = {
@@ -21,25 +16,45 @@ const initialFilters: SearchFilters = {
   venue: null,
 };
 
-export const useFilterStore = create<FilterState>()((set) => ({
-  search: "",
-  sort: "recommended",
-  page: 1,
-  limit: 3,
-  filters: initialFilters,
-  setSearch: (search) => set({ search, page: 1 }),
-  setSort: (sort) => set({ sort, page: 1 }),
-  setPage: (page) => set({ page }),
-  setFilters: (filters) =>
-    set((state) => ({
+class FilterStore extends BaseStore<FilterState> {
+  constructor() {
+    super(() => ({
+      search: "",
+      sort: "recommended",
+      page: 1,
+      limit: 3,
+      filters: initialFilters,
+    }));
+  }
+
+  public setSearch = (search: string) => {
+    this.setState({ search, page: 1 });
+  };
+
+  public setSort = (sort: string) => {
+    this.setState({ sort, page: 1 });
+  };
+
+  public setPage = (page: number) => {
+    this.setState({ page });
+  };
+
+  public setFilters = (filters: Partial<SearchFilters>) => {
+    this.setState((state) => ({
       filters: { ...state.filters, ...filters },
       page: 1,
-    })),
-  resetFilters: () =>
-    set({
+    }));
+  };
+
+  public resetFilters = () => {
+    this.setState({
       search: "",
       sort: "recommended",
       page: 1,
       filters: initialFilters,
-    }),
-}));
+    });
+  };
+}
+
+export const filterStore = new FilterStore();
+export const useFilterStore = filterStore.useSelector;

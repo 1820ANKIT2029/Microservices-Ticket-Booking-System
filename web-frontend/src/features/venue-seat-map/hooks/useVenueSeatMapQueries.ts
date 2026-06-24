@@ -1,6 +1,8 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/shared/api";
+import type { ApiResponse } from "@/shared/types";
 import { VenueSeatMapService } from "../api/service";
 import { venueSeatMapKeys, venueKeys } from "../query-keys";
 import { toLocalVenue, toLocalSection } from "../mapper";
@@ -149,13 +151,32 @@ export function useDeleteSeat(venueId: number | string, sectionId: number | stri
 
 // ── Venue CRUD Hooks (Consolidated from admin) ────────────────────────────────
 
-export function useAdminVenues() {
-  return useQuery<Venue[]>({
-    queryKey: venueKeys.list(),
-    queryFn:  async () => {
-      const dtos = await VenueSeatMapService.getVenues();
-      return dtos.map(toVenue);
-    },
+export function useAdminVenues(page = 0, size = 10, keyword = "") {
+  return useQuery({
+    queryKey: [...venueKeys.all, "list", page, size, keyword],
+    queryFn: async () => {
+      const res = await api.get<ApiResponse<any>>("/event/api/venues/search", {
+        params: { keyword: keyword || undefined, page, size }
+      });
+      const pageData = res.data.data;
+      const content = pageData.content || [];
+      
+      const fullDetails = await Promise.all(
+        content.map((item: any) =>
+          VenueSeatMapService.getVenueById(item.id).then(toVenue)
+        )
+      );
+
+      return {
+        content: fullDetails,
+        totalPages: pageData.totalPages,
+        totalElements: pageData.totalElements,
+        size: pageData.size,
+        number: pageData.number,
+        first: pageData.first,
+        last: pageData.last,
+      };
+    }
   });
 }
 

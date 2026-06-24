@@ -6,13 +6,13 @@ import { MapPin, Loader2 } from "lucide-react";
 import { useState, useMemo } from "react";
 import { UPCOMING_GIGS } from "../constants/music-data";
 import { Button } from "@/shared/components/ui/button";
-import { useEvents } from "@/features/events";
+import { eventQueries } from "@/features/events/hooks/EventQueryService";
 import type { Concert } from "@/features/music-explorer/types";
 
 export function UpcomingGigs() {
   const [page, setPage] = useState(1);
   const limit = 4;
-  const { data: events = [], isLoading } = useEvents({ category: "concerts" });
+  const { data: events = [], isLoading } = eventQueries.useEvents({ category: "concerts" });
 
   const displayedGigs = useMemo(() => {
     if (events && events.length > 0) {
@@ -55,10 +55,10 @@ export function UpcomingGigs() {
       ) : (
         <div className="space-y-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {displayedGigs.map((gig) => (
+            {displayedGigs.map((gig: any) => (
               <Link
                 key={gig.id}
-                href={`/events/${gig.id}`}
+                href={`/events/detail?id=${gig.id}`}
                 className="group block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 <article

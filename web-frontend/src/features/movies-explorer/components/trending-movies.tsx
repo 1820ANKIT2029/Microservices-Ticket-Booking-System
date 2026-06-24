@@ -7,13 +7,13 @@ import { useState, useMemo } from "react";
 import { TRENDING_MOVIES } from "../constants/movies-data";
 import { SectionHeader } from "@/shared/components/section-header";
 import { Button } from "@/shared/components/ui/button";
-import { useEvents } from "@/features/events";
+import { eventQueries } from "@/features/events/hooks/EventQueryService";
 import type { Movie } from "@/features/movies-explorer/types";
 
 export function TrendingMovies() {
   const [page, setPage] = useState(1);
   const limit = 4;
-  const { data: events = [], isLoading } = useEvents({ category: "movies" });
+  const { data: events = [], isLoading } = eventQueries.useEvents({ category: "movies" });
 
   const displayedMovies = useMemo(() => {
     
@@ -55,7 +55,7 @@ export function TrendingMovies() {
               return (
                 <Link
                   key={movie.id}
-                  href={`/events/${movie.id}`}
+                  href={`/events/detail?id=${movie.id}`}
                   className="min-w-[240px] w-[240px] block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-xl transition-all"
                 >
                   <article aria-label={`Trending movie: ${movie.title}. Rated ${rating}.`}>

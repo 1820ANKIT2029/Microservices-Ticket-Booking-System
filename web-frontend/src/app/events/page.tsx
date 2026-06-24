@@ -1,12 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useAdminEvents } from "@/features/events";
 import { EventTable } from "@/features/events/components/EventTable";
 import { PageHeader, LoadingSpinner, RoleGuard } from "@/shared/components";
+import { Pagination } from "@/shared/components";
 
 export default function EventsPage() {
-  const { data, isLoading, error } = useAdminEvents();
+  const [page, setPage] = useState(0);
+  const { data, isLoading, error } = useAdminEvents(page, 10);
 
   return (
     <RoleGuard requiredRole="ORGANIZER" redirectTo="/">
@@ -26,8 +28,22 @@ export default function EventsPage() {
           </div>
         )}
 
-        {data && <EventTable events={data} />}
+        {!isLoading && !error && data && (
+          <>
+            <EventTable events={data.content || []} />
+            {data.totalPages > 1 && (
+              <div className="mt-6">
+                <Pagination
+                  currentPage={page + 1}
+                  totalPages={data.totalPages}
+                  onPageChange={(p: number) => setPage(p - 1)}
+                />
+              </div>
+            )}
+          </>
+        )}
       </div>
     </RoleGuard>
   );
 }
+

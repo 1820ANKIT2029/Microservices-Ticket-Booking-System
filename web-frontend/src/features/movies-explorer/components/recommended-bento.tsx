@@ -26,7 +26,7 @@ export function RecommendedBento() {
             return (
               <Link
                 key={movie.id}
-                href={`/events/${movie.id}`}
+                href={`/events/detail?id=${movie.id}`}
                 className={cn(
                   "relative rounded-2xl overflow-hidden group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all border border-outline-variant/10 shadow-sm hover:shadow-lg block",
                   isLarge && "md:col-span-2 md:row-span-2 h-[350px] md:h-auto",

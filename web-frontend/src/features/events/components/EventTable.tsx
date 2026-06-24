@@ -4,11 +4,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Edit, Trash2, CalendarDays } from "lucide-react";
 import { Event } from "@/features/events/types";
-import { Button } from "@/shared/components/ui/button";
-import { DeleteDialog } from "@/features/admin/components/common/DeleteDialog";
-import { DataTable } from "@/features/admin/components/common/DataTable";
+import { Button, DataTable, ConfirmDialog as DeleteDialog } from "@/shared/components";
 import { EmptyState } from "@/features/admin/components/common/EmptyState";
-import { StatusBadge } from "@/features/admin/components/common/StatusBadge";
+import { StatusBadge } from "@/shared/components";
 import { useDeleteEvent } from "@/features/events";
 import { toast } from "sonner";
 
@@ -60,7 +58,7 @@ export function EventTable({ events }: EventTableProps) {
       accessor: (e: Event) => (
         <div className="flex justify-end space-x-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/events/${e.id}/edit`}>
+            <Link href={`/events/edit?id=${e.id}`}>
               <Edit className="size-4 mr-2" />
               Edit
             </Link>
@@ -80,14 +78,16 @@ export function EventTable({ events }: EventTableProps) {
 
   return (
     <>
-      <DataTable columns={columns} data={events} keyExtractor={(e) => String(e.id)} />
+      <DataTable columns={columns} data={events} keyExtractor={(e: Event) => String(e.id)} />
       <DeleteDialog
         isOpen={!!deleteId}
-        onOpenChange={(open) => !open && setDeleteId(null)}
+        onOpenChange={(open: boolean) => {
+          if (!open) setDeleteId(null);
+        }}
         onConfirm={handleDelete}
         title="Delete Event"
         description="Are you sure you want to delete this event? This action cannot be undone."
-        isDeleting={deleteMutation.isPending}
+        isProcessing={deleteMutation.isPending}
       />
     </>
   );

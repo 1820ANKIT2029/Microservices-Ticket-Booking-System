@@ -1,7 +1,7 @@
 "use client";
 
-import { useAuthStore } from "@/shared/store";
-import { getRoleFromToken, AppRole } from "@/shared/utils/jwt";
+import { useAuthStore, authStore } from "@/shared/store";
+import { AppRole, JwtUtils } from "@/shared/utils";
 import { useMemo } from "react";
 
 /**
@@ -13,7 +13,7 @@ import { useMemo } from "react";
  */
 export function useRole() {
   const storeRole = useAuthStore((s) => s.role);
-  const setRole   = useAuthStore((s) => s.setRole);
+  const setRole   = authStore.setRole;
 
   const role: AppRole = useMemo(() => {
     // If store already has a role (set via login()), trust it
@@ -21,13 +21,11 @@ export function useRole() {
 
     // Fallback: decode live from localStorage (handles legacy signin paths)
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const liveRole = getRoleFromToken(token);
-        // Sync back into store so subsequent renders are fast
-        if (liveRole !== storeRole) setRole(liveRole);
-        return liveRole;
-      }
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const liveRole = token ? JwtUtils.getRoleFromToken(token) : "CONSUMER";
+      // Sync back into store so subsequent renders are fast
+      if (liveRole !== storeRole) setRole(liveRole);
+      return liveRole;
     }
     return storeRole ?? "CONSUMER";
   }, [storeRole, setRole]);

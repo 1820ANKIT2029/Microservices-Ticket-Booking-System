@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import { cn } from "@/shared/utils/cn";
 
 export type StatusType = "SCHEDULED" | "OPEN" | "CLOSED" | "CANCELLED" | "DRAFT" | "PUBLISHED" | "ACTIVE" | "INACTIVE";
@@ -7,7 +7,7 @@ interface StatusBadgeProps {
   status: StatusType | boolean;
 }
 
-export function StatusBadge({ status }: StatusBadgeProps) {
+export const StatusBadge = memo(function StatusBadge({ status }: StatusBadgeProps) {
   let label = String(status);
   let colorClass = "bg-surface-variant text-on-surface-variant";
 
@@ -26,4 +26,4 @@ export function StatusBadge({ status }: StatusBadgeProps) {
       {label}
     </span>
   );
-}
+});

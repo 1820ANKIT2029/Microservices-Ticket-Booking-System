@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef } from "react";
-import { useSeatMapStore } from "../store/seat-map.store";
+import { useSeatMapStore, seatMapStore } from "../store/seat-map.store";
 
 export function useVenueEditor() {
   const store = useSeatMapStore();
@@ -14,14 +14,14 @@ export function useVenueEditor() {
     // Undo shortcut: Ctrl+Z
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && !e.shiftKey) {
       e.preventDefault();
-      store.undo();
+      seatMapStore.undo();
     }
     // Redo shortcut: Ctrl+Y or Ctrl+Shift+Z
     if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === "y" || (e.shiftKey && e.key.toLowerCase() === "z"))) {
       e.preventDefault();
-      store.redo();
+      seatMapStore.redo();
     }
-  }, [store]);
+  }, []);
 
   const onKeyUp = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Control" || e.key === "Meta") isCtrlHeld.current = false;
@@ -30,9 +30,9 @@ export function useVenueEditor() {
   // Selection delegate
   const selectSeat = useCallback(
     (seatId: number, multi?: boolean) => {
-      store.selectSeat(seatId, multi ?? isCtrlHeld.current);
+      seatMapStore.selectSeat(seatId, multi ?? isCtrlHeld.current);
     },
-    [store]
+    []
   );
 
   // Convenience computed selections
@@ -59,25 +59,26 @@ export function useVenueEditor() {
     future: store.future,
 
     // Actions
-    loadVenue: store.loadVenue,
-    setVenueField: store.setVenueField,
-    addSection: store.addSection,
-    updateSection: store.updateSection,
-    deleteSection: store.deleteSection,
-    selectSection: store.selectSection,
-    generateSeats: store.generateSeats,
-    updateSeat: store.updateSeat,
-    deleteSeat: store.deleteSeat,
-    deleteSelectedSeats: store.deleteSelectedSeats,
+    // Actions
+    loadVenue: seatMapStore.loadVenue,
+    setVenueField: seatMapStore.setVenueField,
+    addSection: seatMapStore.addSection,
+    updateSection: seatMapStore.updateSection,
+    deleteSection: seatMapStore.deleteSection,
+    selectSection: seatMapStore.selectSection,
+    generateSeats: seatMapStore.generateSeats,
+    updateSeat: seatMapStore.updateSeat,
+    deleteSeat: seatMapStore.deleteSeat,
+    deleteSelectedSeats: seatMapStore.deleteSelectedSeats,
     selectSeat,
-    deselectAllSeats: store.deselectAllSeats,
-    changeSelectedSeatsType: store.changeSelectedSeatsType,
-    toggleSelectedSeatsAccessible: store.toggleSelectedSeatsAccessible,
-    openGenerateModal: store.openGenerateModal,
-    closeGenerateModal: store.closeGenerateModal,
-    clearDeletedIds: store.clearDeletedIds,
-    undo: store.undo,
-    redo: store.redo,
+    deselectAllSeats: seatMapStore.deselectAllSeats,
+    changeSelectedSeatsType: seatMapStore.changeSelectedSeatsType,
+    toggleSelectedSeatsAccessible: seatMapStore.toggleSelectedSeatsAccessible,
+    openGenerateModal: seatMapStore.openGenerateModal,
+    closeGenerateModal: seatMapStore.closeGenerateModal,
+    clearDeletedIds: seatMapStore.clearDeletedIds,
+    undo: seatMapStore.undo,
+    redo: seatMapStore.redo,
 
     // Keyboard helpers
     onKeyDown,

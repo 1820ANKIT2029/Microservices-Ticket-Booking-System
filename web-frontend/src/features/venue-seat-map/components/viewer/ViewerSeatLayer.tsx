@@ -8,14 +8,13 @@ import type { TicketTypeResponseDto } from "@/features/events/types";
 interface ViewerSeatLayerProps {
   sections: LocalSection[];
   selectedSeatIds: number[];
-  soldSeatIds: number[];
+  bookedSeatIds: number[];
   ticketTypes: TicketTypeResponseDto[];
   onSeatSelect: (seatId: number) => void;
 }
 
-function getViewerSeatFill(seat: LocalSeat, isSelected: boolean, ticketType?: TicketTypeResponseDto): string {
+function getViewerSeatFill(seat: LocalSeat, ticketType?: TicketTypeResponseDto): string {
   if (!seat.isActive) return "#9ca3af"; // Muted grey
-  if (isSelected)     return "#3b82f6"; // Selected Blue
   if (seat.isAccessible) return "#a855f7"; // Accessible Purple
 
   if (ticketType) {
@@ -36,25 +35,29 @@ function getViewerSeatFill(seat: LocalSeat, isSelected: boolean, ticketType?: Ti
 
 interface ViewerSeatProps {
   seat: LocalSeat;
-  isSelected: boolean;
-  isSold: boolean;
+  status: "AVAILABLE" | "SELECTED" | "BOOKED";
   ticketType?: TicketTypeResponseDto;
   onClick: () => void;
 }
 
-function ViewerSeat({ seat, isSelected, isSold, ticketType, onClick }: ViewerSeatProps) {
-  const fill = isSold ? "#cbd5e1" : getViewerSeatFill(seat, isSelected, ticketType);
+function ViewerSeat({ seat, status, ticketType, onClick }: ViewerSeatProps) {
+  let fill = getViewerSeatFill(seat, ticketType);
+  if (status === "SELECTED") fill = "#3b82f6";
+  else if (status === "BOOKED") fill = "#cbd5e1"; // Grey for Booked (and reserved)
+
+  const isDisabled = status === "BOOKED";
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleInteract = (e: any) => {
     e?.evt?.stopPropagation?.();
-    if (isSold) return;
+    if (isDisabled) return;
     onClick();
   };
 
   const handleMouseEnter = (e: any) => {
     const stage = e.target.getStage();
     if (stage) {
-      stage.container().style.cursor = isSold ? "not-allowed" : "pointer";
+      stage.container().style.cursor = isDisabled ? "not-allowed" : "pointer";
     }
   };
 
@@ -65,9 +68,10 @@ function ViewerSeat({ seat, isSelected, isSold, ticketType, onClick }: ViewerSea
     }
   };
 
+  const isSelected = status === "SELECTED";
   const props = {
     fill,
-    stroke: isSelected ? "#1d4ed8" : (isSold ? "#94a3b8" : "rgba(0,0,0,0.15)"),
+    stroke: isSelected ? "#1d4ed8" : (isDisabled ? "#94a3b8" : "rgba(0,0,0,0.15)"),
     strokeWidth: isSelected ? 2 : 1,
     onClick: handleInteract,
     onTap: handleInteract,
@@ -113,7 +117,7 @@ const SECTION_TYPE_COLORS: Record<string, string> = {
 export const ViewerSeatLayer = React.memo(function ViewerSeatLayer({
   sections,
   selectedSeatIds,
-  soldSeatIds,
+  bookedSeatIds,
   ticketTypes,
   onSeatSelect,
 }: ViewerSeatLayerProps) {
@@ -146,16 +150,17 @@ export const ViewerSeatLayer = React.memo(function ViewerSeatLayer({
           {section.seats
             .filter((s) => s.isActive)
             .map((seat) => {
-              const isSold = soldSeatIds.includes(seat.id);
-              const isSelected = selectedSeatIds.includes(seat.id);
+              let seatStatus: "AVAILABLE" | "SELECTED" | "BOOKED" = "AVAILABLE";
+              if (selectedSeatIds.includes(seat.id)) seatStatus = "SELECTED";
+              else if (bookedSeatIds.includes(seat.id)) seatStatus = "BOOKED";
+
               const seatTicketType = ticketTypes.find((t) => t.venueSectionIds?.includes(section.id));
 
               return (
                 <ViewerSeat
                   key={seat.id}
                   seat={seat}
-                  isSelected={isSelected}
-                  isSold={isSold}
+                  status={seatStatus}
                   ticketType={seatTicketType}
                   onClick={() => onSeatSelect(seat.id)}
                 />

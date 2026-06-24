@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { FormatUtils } from "@/shared/utils";
 import { SportsCategories } from "./sports-categories";
 import { TrendingEvents } from "./trending-events";
 import { MatchesNearYou } from "./matches-near-you";
 import { TRENDING_SPORTS_EVENTS } from "../constants/sports-data";
-import { useEvents } from "@/features/events";
+import { eventQueries } from "@/features/events/hooks/EventQueryService";
 import { SportEvent } from "../types/sports";
 
 export function SportsContentSection() {
@@ -14,7 +15,7 @@ export function SportsContentSection() {
   const limit = 3;
 
   // Load sports events from backend
-  const { data: events = [], isLoading } = useEvents({ category: "sports" });
+  const { data: events = [], isLoading } = eventQueries.useEvents({ category: "sports" });
 
   // Map API data (SportsMatch) to SportEvent structure or use local fallback
   const displayedEvents = useMemo(() => {
@@ -25,7 +26,7 @@ export function SportsContentSection() {
           title: match.title || `${match.homeTeam?.name || "Team A"} vs ${match.awayTeam?.name || "Team B"}`,
           category: match.league || "Cricket",
           location: match.venue || "Stadium",
-          date: match.time ? new Date(match.time).toLocaleDateString() : "Today",
+          date: match.time ? FormatUtils.formatDate(match.time) : "Today",
           priceText: "From ₹499",
           tagType: match.status === "live" ? "primary" : "secondary",
           imageUrl: match.homeTeam?.logoUrl || "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=600",

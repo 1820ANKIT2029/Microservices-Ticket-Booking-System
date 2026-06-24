@@ -9,12 +9,7 @@ interface BookingCardProps {
 }
 
 export function BookingCard({ booking }: BookingCardProps) {
-  // Map booking ID to actual checkout event ID for mock continuity
-  const checkoutEventId =
-    booking.id === "booking-2" ? "mumbai-indians-vs-rcb" : "mumbai-city-fc-vs-mohun-bagan";
-  const seatsParam = "G-F12,G-F13";
-  const totalParam = "6000";
-  const ticketUrl = `/checkout/confirmed?eventId=${checkoutEventId}&seats=${seatsParam}&total=${totalParam}`;
+  const ticketUrl = `/checkout/confirmed?bookingId=${booking.id}`;
 
   if (booking.status === "cancelled") {
     return (

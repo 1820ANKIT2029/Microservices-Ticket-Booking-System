@@ -36,7 +36,7 @@ export function HeroCarousel() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                href={`/events/${movie.id}`}
+                href={`/events/detail?id=${movie.id}`}
                 className="bg-primary text-on-primary px-8 py-3.5 rounded-xl text-label-md font-bold hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all shadow-lg shadow-primary/20 inline-flex items-center justify-center"
               >
                 Book Tickets

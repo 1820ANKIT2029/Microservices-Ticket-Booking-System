@@ -6,7 +6,7 @@ import { MapPin, Camera, Loader2, Check, User, ArrowRight, Mail, Phone } from "l
 import { Button } from "@/shared/components/ui/button";
 import { Footer } from "@/shared/components/layout/footer";
 import { AuthService } from "@/features/auth";
-import { getUserIdFromToken } from "@/shared/utils";
+import { JwtUtils } from "@/shared/utils";
 
 const AVAILABLE_INTERESTS = [
   "Action Movies",
@@ -98,7 +98,7 @@ export function OnboardingClient() {
 
       const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
       if (token) {
-        const userId = getUserIdFromToken(token);
+        const userId = token ? JwtUtils.getUserIdFromToken(token) : null;
         if (userId) {
           await AuthService.createProfile({
             firstName,

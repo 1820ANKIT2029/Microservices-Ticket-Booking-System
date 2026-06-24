@@ -13,7 +13,6 @@ export function SignInForm() {
   const router = useRouter();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [rememberMe, setRememberMe] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -46,11 +45,10 @@ export function SignInForm() {
       const loginResponse = await AuthService.login({ email, password });
 
       // ── Sync Zustand store so role / navbar update immediately ──────────────
-      const { useAuthStore } = await import("@/shared/store/auth.store");
+      const { authStore } = await import("@/shared/store/auth.store");
       const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
       if (token) {
-        // Populate store with token + a placeholder user (profile query will hydrate it)
-        useAuthStore.getState().login(token, {
+        authStore.login(token, {
           firstName: "",
           lastName: "",
           email,
@@ -183,24 +181,6 @@ export function SignInForm() {
               {showPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
             </button>
           </div>
-        </div>
-
-        {/* Remember Me */}
-        <div className="flex items-center gap-3">
-          <input
-            className="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer"
-            id="remember"
-            type="checkbox"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-            disabled={isLoading}
-          />
-          <label
-            className="text-body-md text-on-surface-variant cursor-pointer select-none"
-            htmlFor="remember"
-          >
-            Remember me for 30 days
-          </label>
         </div>
 
         {/* Submit Button */}

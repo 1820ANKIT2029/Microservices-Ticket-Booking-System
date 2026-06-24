@@ -1,14 +1,24 @@
 "use client";
 
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useState, useEffect } from "react";
 import { useAdminVenues, VenueTable } from "@/features/venue-seat-map";
 import { PageHeader, LoadingSpinner, RoleGuard } from "@/shared/components";
 import { useRole } from "@/shared/hooks/useRole";
+import { useDebounce } from "@/shared/hooks";
+import { Search } from "lucide-react";
+import { Pagination } from "@/shared/components";
 
 export default function VenuesPage() {
   const { isAdmin } = useRole();
-  const { data: venues = [], isLoading, error } = useAdminVenues();
+  const [page, setPage] = useState(0);
+  const [keyword, setKeyword] = useState("");
+  const debouncedKeyword = useDebounce(keyword, 300);
+
+  useEffect(() => {
+    setPage(0); // Reset page to 0 when search term changes
+  }, [debouncedKeyword]);
+
+  const { data, isLoading, error } = useAdminVenues(page, 10, debouncedKeyword);
 
   return (
     <RoleGuard requiredRole="ADMIN" redirectTo="/">
@@ -20,6 +30,20 @@ export default function VenuesPage() {
           actionHref={isAdmin ? "/admin/venues/new" : undefined}
         />
 
+        {/* Search Bar */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div className="relative max-w-md w-full">
+            <input
+              type="text"
+              placeholder="Search venues by name..."
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="w-full bg-surface-container border border-outline-variant/60 rounded-lg py-2 pl-10 pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-on-surface"
+            />
+            <Search className="absolute left-3 top-2.5 text-on-surface-variant size-5" />
+          </div>
+        </div>
+
         {isLoading && <LoadingSpinner message="Loading venues..." />}
         
         {error && (
@@ -28,8 +52,22 @@ export default function VenuesPage() {
           </div>
         )}
 
-        {venues && <VenueTable venues={venues} />}
+        {!isLoading && !error && data && (
+          <>
+            <VenueTable venues={data.content || []} />
+            {data.totalPages > 1 && (
+              <div className="mt-6">
+                <Pagination
+                  currentPage={page + 1}
+                  totalPages={data.totalPages}
+                  onPageChange={(p: number) => setPage(p - 1)}
+                />
+              </div>
+            )}
+          </>
+        )}
       </div>
     </RoleGuard>
   );
 }
+

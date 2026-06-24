@@ -31,7 +31,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         {movie.genre} • {movie.duration}
       </p>
       <Link
-        href={`/events/${movie.id}`}
+        href={`/events/detail?id=${movie.id}`}
         className="w-full py-3 border border-primary text-primary rounded-xl text-label-md font-semibold hover:bg-primary-container hover:text-on-primary hover:border-primary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all h-auto block text-center"
       >
         Book Now

@@ -18,7 +18,7 @@ export function ComingSoon() {
           >
             {/* Left side: Poster */}
             <Link
-              href={`/events/${movie.id}`}
+              href={`/events/detail?id=${movie.id}`}
               className="w-full max-w-[200px] mx-auto sm:w-1/3 sm:mx-0 aspect-[2/3] rounded-xl overflow-hidden shrink-0 relative border border-outline-variant/10 block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <Image
@@ -33,7 +33,7 @@ export function ComingSoon() {
             {/* Right side: Movie Info & Action */}
             <div className="flex flex-col justify-between py-1 flex-1 text-left">
               <div>
-                <Link href={`/events/${movie.id}`} className="hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded block">
+                <Link href={`/events/detail?id=${movie.id}`} className="hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded block">
                   <h3 className="text-headline-sm font-bold text-on-surface hover:text-primary transition-colors">
                     {movie.title}
                   </h3>

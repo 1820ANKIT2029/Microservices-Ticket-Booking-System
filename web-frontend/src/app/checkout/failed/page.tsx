@@ -1,25 +1,21 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FailedClient } from "@/features/checkout";
 import { getCheckoutEventById } from "@/features/checkout/constants/checkout-data";
 import { BookingService } from "@/features/bookings/api/service";
 import type { BookingDTO } from "@/features/venue-seat-map/types";
 
-interface PageProps {
-  searchParams: Promise<{ eventId?: string; seats?: string; total?: string; reason?: string; bookingId?: string }>;
-}
-
-export default function FailedPage({ searchParams }: PageProps) {
+function FailedContent() {
   const router = useRouter();
-  const resolvedParams = React.use(searchParams);
-  const eventId = resolvedParams?.eventId;
-  const seats = resolvedParams?.seats;
-  const total = resolvedParams?.total;
-  const reason = resolvedParams?.reason;
-  const bookingId = resolvedParams?.bookingId;
+  const searchParams = useSearchParams();
+  const eventId = searchParams.get("eventId") || undefined;
+  const seats = searchParams.get("seats") || undefined;
+  const total = searchParams.get("total") || undefined;
+  const reason = searchParams.get("reason") || undefined;
+  const bookingId = searchParams.get("bookingId") || undefined;
 
   const [booking, setBooking] = useState<BookingDTO | null>(null);
   const [loading, setLoading] = useState(!!bookingId);
@@ -63,5 +59,17 @@ export default function FailedPage({ searchParams }: PageProps) {
       reason={reason}
       bookingRef={bookingRef}
     />
+  );
+}
+
+export default function FailedPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen items-center justify-center bg-background">
+        <div className="w-10 h-10 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+      </div>
+    }>
+      <FailedContent />
+    </Suspense>
   );
 }

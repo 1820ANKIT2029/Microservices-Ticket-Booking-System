@@ -44,3 +44,42 @@ export interface SearchFilters {
   maxPrice:   number;
   venue:      string | null;
 }
+
+export interface VenueSearchResponse {
+  id: number;
+  name: string;
+}
+
+export interface PageVenueSearchResponse {
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: VenueSearchResponse[];
+  number: number;
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}
+
+export interface EventSearchResponse {
+  id: number;
+  title: string;
+  slug: string;
+  eventType: string;
+  status: string;
+  bannerUrl?: string;
+  isFeatured: boolean;
+}
+
+export interface PageEventSearchResponse {
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: EventSearchResponse[];
+  number: number;
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}

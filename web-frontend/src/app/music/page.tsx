@@ -1,5 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 import { Footer } from "@/features/homepage/components/footer";
 import { MusicHero } from "@/features/music-explorer/components/music-hero";
 import { GenreFilter } from "@/features/music-explorer/components/genre-filter";
@@ -10,6 +13,12 @@ import { NewsletterSignup } from "@/features/music-explorer/components/newslette
 import { MobileBottomNav } from "@/features/homepage/components/mobile-bottom-nav";
 
 export default function MusicPage() {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/");
+  }, [router]);
+
+
   return (
     <>
       <main id="main-content" className="pt-20 pb-20 md:pb-0">

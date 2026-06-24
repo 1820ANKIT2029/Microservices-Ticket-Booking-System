@@ -1,6 +1,6 @@
 import type { InternalAxiosRequestConfig } from "axios";
 import { TOKEN_KEY } from "@/shared/constants";
-import { logger } from "@/shared/utils/logger";
+import { LoggerUtils as logger } from "@/shared/utils/logger";
 
 /**
  * Attaches the Bearer token to every outgoing request.

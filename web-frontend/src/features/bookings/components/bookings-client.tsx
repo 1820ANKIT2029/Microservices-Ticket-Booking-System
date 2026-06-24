@@ -1,20 +1,23 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Booking, LoyaltyStats } from "../types/bookings";
 import { BookingsFeatured } from "./bookings-featured";
 import { BookingsSidebar } from "./bookings-sidebar";
 import { BookingsList } from "./bookings-list";
-
-interface BookingsClientProps {
-  bookings: Booking[];
-  loyaltyStats: LoyaltyStats;
-}
+import { useBookings } from "../hooks/useBookings";
+import { Loader2 } from "lucide-react";
 
 type TabType = "upcoming" | "past" | "cancelled";
 
-export function BookingsClient({ bookings, loyaltyStats }: BookingsClientProps) {
+export function BookingsClient() {
   const [activeTab, setActiveTab] = useState<TabType>("upcoming");
+  const [page, setPage] = useState(0);
+
+  const { data, isLoading } = useBookings(page, 8);
+
+  const bookings = data?.content || [];
+  const totalPages = data?.totalPages || 0;
+
 
   // Filter logic
   const upcomingBookings = useMemo(() => bookings.filter((b) => b.status === "confirmed"), [bookings]);
@@ -38,6 +41,7 @@ export function BookingsClient({ bookings, loyaltyStats }: BookingsClientProps) 
   }, [activeTab, upcomingBookings, pastBookings, cancelledBookings]);
 
   const tabCountText = (tab: TabType) => {
+    if (isLoading) return "";
     switch (tab) {
       case "upcoming":
         return `(${upcomingBookings.length})`;
@@ -49,6 +53,15 @@ export function BookingsClient({ bookings, loyaltyStats }: BookingsClientProps) 
         return "";
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex-grow flex flex-col items-center justify-center min-h-[400px]" role="status">
+        <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+        <p className="text-on-surface-variant font-semibold">Loading your bookings...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-grow max-w-[1280px] mx-auto w-full px-4 md:px-16 py-8">
@@ -66,7 +79,10 @@ export function BookingsClient({ bookings, loyaltyStats }: BookingsClientProps) 
             aria-selected={activeTab === "upcoming"}
             aria-controls="bookings-panel"
             id="tab-upcoming"
-            onClick={() => setActiveTab("upcoming")}
+            onClick={() => {
+              setActiveTab("upcoming");
+              setPage(0);
+            }}
             className={`px-6 py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
               activeTab === "upcoming"
                 ? "bg-primary text-on-primary shadow-sm"
@@ -80,7 +96,10 @@ export function BookingsClient({ bookings, loyaltyStats }: BookingsClientProps) 
             aria-selected={activeTab === "past"}
             aria-controls="bookings-panel"
             id="tab-past"
-            onClick={() => setActiveTab("past")}
+            onClick={() => {
+              setActiveTab("past");
+              setPage(0);
+            }}
             className={`px-6 py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
               activeTab === "past"
                 ? "bg-primary text-on-primary shadow-sm"
@@ -94,7 +113,10 @@ export function BookingsClient({ bookings, loyaltyStats }: BookingsClientProps) 
             aria-selected={activeTab === "cancelled"}
             aria-controls="bookings-panel"
             id="tab-cancelled"
-            onClick={() => setActiveTab("cancelled")}
+            onClick={() => {
+              setActiveTab("cancelled");
+              setPage(0);
+            }}
             className={`px-6 py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
               activeTab === "cancelled"
                 ? "bg-primary text-on-primary shadow-sm"
@@ -134,9 +156,32 @@ export function BookingsClient({ bookings, loyaltyStats }: BookingsClientProps) 
 
         {/* Sidebar Section */}
         <div className="lg:col-span-4">
-          <BookingsSidebar loyaltyStats={loyaltyStats} />
+          <BookingsSidebar />
         </div>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 mt-12">
+          <button
+            onClick={() => setPage((p) => Math.max(0, p - 1))}
+            disabled={page === 0}
+            className="px-4 py-2 border border-outline-variant/50 rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container disabled:opacity-50 disabled:pointer-events-none transition-colors cursor-pointer"
+          >
+            Previous
+          </button>
+          <span className="text-sm font-medium text-on-surface">
+            Page {page + 1} of {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+            disabled={page >= totalPages - 1}
+            className="px-4 py-2 border border-outline-variant/50 rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container disabled:opacity-50 disabled:pointer-events-none transition-colors cursor-pointer"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

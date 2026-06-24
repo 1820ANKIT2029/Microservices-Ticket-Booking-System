@@ -1,15 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Event } from "@/features/events/types";
 import { useCreateEvent, useUpdateEvent } from "@/features/events";
-import { useAdminVenues } from "@/features/admin";
+import { useAdminVenues, useAdminVenue } from "@/features/venue-seat-map";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
+import { ChevronDown } from "lucide-react";
+import { useDebounce } from "@/shared/hooks";
 
 const eventSchema = z.object({
   title: z.string().min(1, "Name is required"),
@@ -36,8 +38,34 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
   const createMutation = useCreateEvent();
   const updateMutation = useUpdateEvent();
   
-  // Fetch venues for the dropdown
-  const { data: venues = [] } = useAdminVenues();
+  const [venueSearch, setVenueSearch] = useState("");
+  const debouncedVenueSearch = useDebounce(venueSearch, 300);
+  const [isVenueDropdownOpen, setIsVenueDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Fetch initial venue details if editing
+  const { data: initialVenue } = useAdminVenue(initialData?.venueId || "");
+
+  useEffect(() => {
+    if (initialVenue) {
+      setVenueSearch(initialVenue.name);
+    }
+  }, [initialVenue]);
+
+  // Fetch venues dynamically via search hook from venue-seat-map
+  const { data: venuesData } = useAdminVenues(0, 10, debouncedVenueSearch);
+  const venuesList = venuesData?.content || [];
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsVenueDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventSchema),
@@ -148,17 +176,50 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
           </select>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 relative" ref={dropdownRef}>
           <label className="text-label-md font-bold text-on-surface">Default Venue *</label>
-          <select
-            {...form.register("venueId", { valueAsNumber: true })}
-            className="w-full px-4 py-2 bg-surface-container-low border border-outline-variant/80 rounded-lg text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none"
-          >
-            <option value={0}>Select a venue...</option>
-            {venues.map((v) => (
-              <option key={v.id} value={v.id}>{v.name}</option>
-            ))}
-          </select>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Type venue name to search..."
+              value={venueSearch}
+              onChange={(e) => {
+                setVenueSearch(e.target.value);
+                setIsVenueDropdownOpen(true);
+                if (!e.target.value) {
+                  form.setValue("venueId", undefined as any);
+                }
+              }}
+              onFocus={() => setIsVenueDropdownOpen(true)}
+              className="w-full px-4 py-2 bg-surface-container-low border border-outline-variant/80 rounded-lg text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+            />
+            <ChevronDown className="absolute right-3 top-2.5 text-on-surface-variant size-5 pointer-events-none" />
+          </div>
+
+          {isVenueDropdownOpen && (
+            <ul className="absolute z-50 w-full mt-1 bg-surface-container border border-outline-variant/50 rounded-lg shadow-lg max-h-60 overflow-y-auto divide-y divide-outline-variant/20">
+              {venuesList.length > 0 ? (
+                venuesList.map((v) => (
+                  <li
+                    key={v.id}
+                    onClick={() => {
+                      form.setValue("venueId", Number(v.id));
+                      setVenueSearch(v.name);
+                      setIsVenueDropdownOpen(false);
+                    }}
+                    className="px-4 py-2.5 hover:bg-primary-container hover:text-on-primary-container text-body-md cursor-pointer transition-colors text-left"
+                  >
+                    <div className="font-semibold text-on-surface hover:text-inherit">{v.name}</div>
+                    <div className="text-xs text-on-surface-variant hover:text-inherit">{v.city || ""}, {v.country || ""}</div>
+                  </li>
+                ))
+              ) : (
+                <li className="px-4 py-3 text-body-md text-on-surface-variant text-center">
+                  No venues found
+                </li>
+              )}
+            </ul>
+          )}
           {errors.venueId && <p className="text-error text-xs">{errors.venueId.message}</p>}
         </div>
 

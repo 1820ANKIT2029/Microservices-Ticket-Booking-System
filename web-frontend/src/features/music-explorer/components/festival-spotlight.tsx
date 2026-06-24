@@ -63,7 +63,7 @@ export function FestivalSpotlight() {
                 </div>
 
                 <Link
-                  href={`/events/${fest.id}`}
+                  href={`/events/detail?id=${fest.id}`}
                   className="mt-6 border-2 border-primary text-primary font-bold text-label-md px-5 py-2.5 rounded-xl hover:bg-primary hover:text-on-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all active:scale-95 cursor-pointer w-full md:w-fit block text-center"
                 >
                   Explore Festival

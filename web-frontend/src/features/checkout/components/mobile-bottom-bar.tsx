@@ -1,6 +1,8 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
+import { useMemo } from "react";
+import { FormatUtils } from "@/shared/utils";
 
 interface MobileBottomBarProps {
   totalAmount: number;
@@ -13,11 +15,9 @@ export function MobileBottomBar({
   paymentStatus,
   onPay,
 }: MobileBottomBarProps) {
-  const formattedAmount = new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(totalAmount);
+  const formattedAmount = useMemo(() => {
+    return FormatUtils.formatCurrency(totalAmount);
+  }, [totalAmount]);
 
   return (
     <div 

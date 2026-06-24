@@ -6,7 +6,7 @@ import { cn } from "@/shared/utils/cn";
 import type { OfferCoupon, GuidelineItem } from "../types/event-detail";
 
 interface OffersGuidelinesProps {
-  offers: OfferCoupon[];
+  offers?: OfferCoupon[];
   guidelines: GuidelineItem[];
 }
 
@@ -32,29 +32,31 @@ export function OffersGuidelines({ offers, guidelines }: OffersGuidelinesProps) 
   return (
     <aside className="space-y-6 text-left" aria-label="Event offers and guidelines">
       {/* Offers Card */}
-      <div className="bg-surface-container-high rounded-xl p-6 border border-primary/10 shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <Tag className="text-primary size-5 fill-primary/10" aria-hidden="true" />
-          <h3 className="text-headline-sm font-bold text-on-surface">Best Offers</h3>
-        </div>
+      {offers && offers.length > 0 && (
+        <div className="bg-surface-container-high rounded-xl p-6 border border-primary/10 shadow-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <Tag className="text-primary size-5 fill-primary/10" aria-hidden="true" />
+            <h3 className="text-headline-sm font-bold text-on-surface">Best Offers</h3>
+          </div>
 
-        <div className="space-y-3">
-          {offers.map((offer, index) => (
-            <div
-              key={index}
-              className="p-4 bg-background rounded-lg border border-outline-variant border-dashed flex flex-col gap-1.5"
-            >
-              <div className="flex justify-between items-center">
-                <span className="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
-                  {offer.code}
-                </span>
-                <span className="text-primary font-black text-label-md">{offer.discountText}</span>
+          <div className="space-y-3">
+            {offers.map((offer, index) => (
+              <div
+                key={index}
+                className="p-4 bg-background rounded-lg border border-outline-variant border-dashed flex flex-col gap-1.5"
+              >
+                <div className="flex justify-between items-center">
+                  <span className="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
+                    {offer.code}
+                  </span>
+                  <span className="text-primary font-black text-label-md">{offer.discountText}</span>
+                </div>
+                <p className="text-label-sm text-on-surface-variant font-medium">{offer.description}</p>
               </div>
-              <p className="text-label-sm text-on-surface-variant font-medium">{offer.description}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Guidelines Card */}
       <div className="bg-surface-container-low rounded-xl p-6 border border-outline-variant shadow-sm">

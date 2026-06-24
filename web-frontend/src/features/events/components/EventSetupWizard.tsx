@@ -10,7 +10,7 @@ export function EventSetupWizard() {
 
   const handleEventSelected = (event: EventResponseDto) => {
     // Redirect to the event edit page with sessions tab
-    router.push(`/events/${event.id}/edit?tab=sessions`);
+    router.push(`/events/edit?id=${event.id}&tab=sessions`);
     router.refresh();
   };
 

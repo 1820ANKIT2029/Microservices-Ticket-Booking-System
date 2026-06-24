@@ -1,26 +1,36 @@
-import { create } from "zustand";
+import { BaseStore } from "./BaseStore";
 
 export interface UIState {
   sidebarOpen: boolean;
   activeModals: Record<string, boolean>;
-  toggleSidebar: (force?: boolean) => void;
-  openModal: (modalId: string) => void;
-  closeModal: (modalId: string) => void;
 }
 
-export const useUIStore = create<UIState>()((set) => ({
-  sidebarOpen: false,
-  activeModals: {},
-  toggleSidebar: (force) =>
-    set((state) => ({
+class UIStore extends BaseStore<UIState> {
+  constructor() {
+    super(() => ({
+      sidebarOpen: false,
+      activeModals: {},
+    }));
+  }
+
+  public toggleSidebar = (force?: boolean) => {
+    this.setState((state) => ({
       sidebarOpen: force !== undefined ? force : !state.sidebarOpen,
-    })),
-  openModal: (modalId) =>
-    set((state) => ({
+    }));
+  };
+
+  public openModal = (modalId: string) => {
+    this.setState((state) => ({
       activeModals: { ...state.activeModals, [modalId]: true },
-    })),
-  closeModal: (modalId) =>
-    set((state) => ({
+    }));
+  };
+
+  public closeModal = (modalId: string) => {
+    this.setState((state) => ({
       activeModals: { ...state.activeModals, [modalId]: false },
-    })),
-}));
+    }));
+  };
+}
+
+export const uiStore = new UIStore();
+export const useUIStore = uiStore.useSelector;

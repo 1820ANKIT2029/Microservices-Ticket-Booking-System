@@ -25,17 +25,18 @@ export function CheckoutClient({ event, breakdown, seats, fail, bookingRef, gate
     setPaymentStatus("processing");
     // Simulate network authorization latency (3.5 seconds)
     setTimeout(() => {
+      const bIdParam = bookingId ? `&bookingId=${bookingId}` : "";
       if (fail) {
         setPaymentStatus("error");
         // Redirect to failed page after 1.5 seconds so user sees the error state animation
         setTimeout(() => {
-          router.push(`/checkout/failed?eventId=${event.id}&seats=${seats || ""}&total=${breakdown.totalAmount}&reason=declined`);
+          router.push(`/checkout/failed?eventId=${event.id}&seats=${seats || ""}&total=${breakdown.totalAmount}&reason=declined${bIdParam}`);
         }, 1500);
       } else {
         setPaymentStatus("success");
         // Redirect to confirmed page after 1.5 seconds so user sees the success state animation
         setTimeout(() => {
-          router.push(`/checkout/confirmed?eventId=${event.id}&seats=${seats || ""}&total=${breakdown.totalAmount}`);
+          router.push(`/checkout/confirmed?eventId=${event.id}&seats=${seats || ""}&total=${breakdown.totalAmount}${bIdParam}`);
         }, 1500);
       }
     }, 3500);

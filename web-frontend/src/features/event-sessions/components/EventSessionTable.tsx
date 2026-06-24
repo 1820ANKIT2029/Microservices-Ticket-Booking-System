@@ -4,11 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Edit, Trash2, Clock } from "lucide-react";
 import { EventSession } from "@/features/event-sessions/types";
-import { Button } from "@/shared/components/ui/button";
-import { DeleteDialog } from "@/features/admin/components/common/DeleteDialog";
-import { DataTable } from "@/features/admin/components/common/DataTable";
+import { Button, StatusBadge, DataTable, ConfirmDialog as DeleteDialog } from "@/shared/components";
 import { EmptyState } from "@/features/admin/components/common/EmptyState";
-import { StatusBadge } from "@/features/admin/components/common/StatusBadge";
 import { useDeleteSession } from "@/features/event-sessions";
 import { toast } from "sonner";
 
@@ -80,7 +77,7 @@ export function EventSessionTable({ sessions, onEdit }: EventSessionTableProps) 
             </Button>
           ) : (
             <Button variant="outline" size="sm" asChild>
-              <Link href={`/event-sessions/${s.id}/edit?eventId=${s.eventId}`}>
+              <Link href={`/event-sessions/edit?id=${s.id}&eventId=${s.eventId}`}>
                 <Edit className="size-4 mr-2" />
                 Edit
               </Link>
@@ -101,15 +98,15 @@ export function EventSessionTable({ sessions, onEdit }: EventSessionTableProps) 
 
   return (
     <>
-      <DataTable columns={columns} data={sessions} keyExtractor={(s) => String(s.id)} />
+      <DataTable columns={columns} data={sessions} keyExtractor={(s: EventSession) => String(s.id)} />
 
       <DeleteDialog
         isOpen={!!deleteData}
-        onOpenChange={(open) => !open && setDeleteData(null)}
+        onOpenChange={(open: boolean) => !open && setDeleteData(null)}
         onConfirm={handleDelete}
         title="Delete Session"
         description="Are you sure you want to delete this session? All associated tickets and seat maps might be affected."
-        isDeleting={deleteMutation.isPending}
+        isProcessing={deleteMutation.isPending}
       />
     </>
   );

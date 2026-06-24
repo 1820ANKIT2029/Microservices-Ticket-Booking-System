@@ -1,5 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 import { Footer } from "@/features/homepage/components/footer";
 import { HeroCarousel } from "@/features/movies-explorer/components/hero-carousel";
 import { FilterBar } from "@/features/movies-explorer/components/filter-bar";
@@ -10,6 +13,12 @@ import { ComingSoon } from "@/features/movies-explorer/components/coming-soon";
 import { MobileBottomNav } from "@/features/homepage/components/mobile-bottom-nav";
 
 export default function MoviesPage() {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/");
+  }, [router]);
+
+
   return (
     <>
       <main id="main-content" className="pt-20 pb-20 md:pb-0">

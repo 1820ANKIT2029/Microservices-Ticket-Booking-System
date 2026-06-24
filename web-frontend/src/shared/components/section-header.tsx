@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/shared/utils/cn";
@@ -11,7 +12,7 @@ interface SectionHeaderProps {
   align?: "left" | "center";
 }
 
-export function SectionHeader({
+export const SectionHeader = memo(function SectionHeader({
   title,
   subtitle,
   actionLabel,
@@ -50,4 +51,4 @@ export function SectionHeader({
       )}
     </div>
   );
-}
+});

@@ -55,7 +55,7 @@ export function RecommendedSports() {
         {RECOMMENDED_SPORTS_EVENTS.map((event) => (
           <Link
             key={event.id}
-            href={`/events/${event.id}`}
+            href={`/events/detail?id=${event.id}`}
             className="min-w-[280px] md:min-w-[320px] snap-start group text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xl p-1"
           >
             <div className="h-48 rounded-xl overflow-hidden mb-3 relative">

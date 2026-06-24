@@ -1,6 +1,4 @@
-"use client";
-
-import { create } from "zustand";
+import { BaseStore } from "@/shared/store/BaseStore";
 import type {
   LocalVenue,
   LocalSection,
@@ -40,43 +38,6 @@ export interface SeatMapState {
 
   // Temp ID generator
   tempIdCounter: number;
-
-  // Viewport / Zoom Actions
-  setScale: (scale: number) => void;
-  setPos: (pos: { x: number; y: number }) => void;
-
-  // Selection Actions
-  setSelectedSectionId: (id: number | null) => void;
-  setSelectedSeatIds: (ids: number[]) => void;
-  selectSection: (id: number | null) => void;
-  selectSeat: (seatId: number, multi: boolean) => void;
-  deselectAllSeats: () => void;
-
-  // Venue Data Mutations (with undo/redo capability)
-  loadVenue: (venue: LocalVenue) => void;
-  setVenueField: (field: keyof Omit<LocalVenue, "sections">, value: string | number | null) => void;
-  addSection: () => void;
-  updateSection: (id: number, changes: Partial<Omit<LocalSection, "id" | "seats">>) => void;
-  deleteSection: (id: number) => void;
-  generateSeats: (sectionId: number, config: SeatGenerationConfig) => void;
-  updateSeat: (sectionId: number, seatId: number, changes: Partial<LocalSeat>) => void;
-  deleteSeat: (sectionId: number, seatId: number) => void;
-  deleteSelectedSeats: (sectionId: number) => void;
-  changeSelectedSeatsType: (sectionId: number, seatType: SeatType) => void;
-  toggleSelectedSeatsAccessible: (sectionId: number) => void;
-
-  // Undo / Redo
-  undo: () => void;
-  redo: () => void;
-
-  // Modal / Saving UI Actions
-  openGenerateModal: () => void;
-  closeGenerateModal: () => void;
-  setSaving: (isSaving: boolean) => void;
-  clearDeletedIds: () => void;
-
-  // Reset
-  resetStore: () => void;
 }
 
 const initialVenue: LocalVenue = {
@@ -87,50 +48,55 @@ const initialVenue: LocalVenue = {
   sections: [],
 };
 
-// Helper to push to history stack
 const createHistoryEntry = (state: SeatMapState): HistoryEntry => ({
   venue: JSON.parse(JSON.stringify(state.venue)),
   deletedSectionIds: [...state.deletedSectionIds],
   deletedSeatIds: [...state.deletedSeatIds],
 });
 
-export const useSeatMapStore = create<SeatMapState>((set, get) => ({
-  // Viewport / Zoom Initial
-  scale: 1,
-  pos: { x: 0, y: 0 },
-
-  // Interactive Selection Initial
-  selectedSectionId: null,
-  selectedSeatIds: [],
-
-  // Venue Data Initial
-  venue: initialVenue,
-  savedSnapshot: null,
-  deletedSectionIds: [],
-  deletedSeatIds: [],
-
-  // UI States Initial
-  isGenerateModalOpen: false,
-  isSaving: false,
-
-  // History stacks
-  past: [],
-  future: [],
-
-  tempIdCounter: -1,
+class SeatMapStore extends BaseStore<SeatMapState> {
+  constructor() {
+    super(() => ({
+      scale: 1,
+      pos: { x: 0, y: 0 },
+      selectedSectionId: null,
+      selectedSeatIds: [],
+      venue: initialVenue,
+      savedSnapshot: null,
+      deletedSectionIds: [],
+      deletedSeatIds: [],
+      isGenerateModalOpen: false,
+      isSaving: false,
+      past: [],
+      future: [],
+      tempIdCounter: -1,
+    }));
+  }
 
   // Viewport / Zoom Actions
-  setScale: (scale) => set({ scale }),
-  setPos: (pos) => set({ pos }),
+  public setScale = (scale: number) => {
+    this.setState({ scale });
+  };
+
+  public setPos = (pos: { x: number; y: number }) => {
+    this.setState({ pos });
+  };
 
   // Selection Actions
-  setSelectedSectionId: (id) => set({ selectedSectionId: id, selectedSeatIds: [] }),
-  setSelectedSeatIds: (ids) => set({ selectedSeatIds: ids }),
+  public setSelectedSectionId = (id: number | null) => {
+    this.setState({ selectedSectionId: id, selectedSeatIds: [] });
+  };
 
-  selectSection: (id) => set({ selectedSectionId: id, selectedSeatIds: [] }),
+  public setSelectedSeatIds = (ids: number[]) => {
+    this.setState({ selectedSeatIds: ids });
+  };
 
-  selectSeat: (seatId, multi) =>
-    set((state) => {
+  public selectSection = (id: number | null) => {
+    this.setState({ selectedSectionId: id, selectedSeatIds: [] });
+  };
+
+  public selectSeat = (seatId: number, multi: boolean) => {
+    this.setState((state) => {
       const isSelected = state.selectedSeatIds.includes(seatId);
       let nextSelected: number[];
       if (multi) {
@@ -141,13 +107,16 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         nextSelected = isSelected && state.selectedSeatIds.length === 1 ? [] : [seatId];
       }
       return { selectedSeatIds: nextSelected };
-    }),
+    });
+  };
 
-  deselectAllSeats: () => set({ selectedSeatIds: [] }),
+  public deselectAllSeats = () => {
+    this.setState({ selectedSeatIds: [] });
+  };
 
   // Venue Data Mutations
-  loadVenue: (venue) =>
-    set({
+  public loadVenue = (venue: LocalVenue) => {
+    this.setState({
       venue,
       savedSnapshot: JSON.parse(JSON.stringify(venue)),
       selectedSectionId: null,
@@ -159,20 +128,21 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
       scale: 1,
       pos: { x: 0, y: 0 },
       tempIdCounter: -1,
-    }),
+    });
+  };
 
-  setVenueField: (field, value) => {
-    const currentEntry = createHistoryEntry(get());
-    set((state) => ({
+  public setVenueField = (field: keyof Omit<LocalVenue, "sections">, value: string | number | null) => {
+    const currentEntry = createHistoryEntry(this.getState());
+    this.setState((state) => ({
       past: [...state.past, currentEntry],
       future: [],
       venue: { ...state.venue, [field]: value },
     }));
-  },
+  };
 
-  addSection: () => {
-    const currentEntry = createHistoryEntry(get());
-    set((state) => {
+  public addSection = () => {
+    const currentEntry = createHistoryEntry(this.getState());
+    this.setState((state) => {
       const newId = state.tempIdCounter;
       const newSection: LocalSection = {
         id: newId,
@@ -199,11 +169,11 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         selectedSeatIds: [],
       };
     });
-  },
+  };
 
-  updateSection: (id, changes) => {
-    const currentEntry = createHistoryEntry(get());
-    set((state) => ({
+  public updateSection = (id: number, changes: Partial<Omit<LocalSection, "id" | "seats">>) => {
+    const currentEntry = createHistoryEntry(this.getState());
+    this.setState((state) => ({
       past: [...state.past, currentEntry],
       future: [],
       venue: {
@@ -213,12 +183,12 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         ),
       },
     }));
-  },
+  };
 
-  deleteSection: (id) => {
-    const currentEntry = createHistoryEntry(get());
+  public deleteSection = (id: number) => {
+    const currentEntry = createHistoryEntry(this.getState());
     const wasAlreadySaved = id > 0;
-    set((state) => ({
+    this.setState((state) => ({
       past: [...state.past, currentEntry],
       future: [],
       venue: {
@@ -232,11 +202,11 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         : state.deletedSectionIds,
       deletedSeatIds: state.deletedSeatIds.filter((d) => d.sectionId !== id),
     }));
-  },
+  };
 
-  generateSeats: (sectionId, config) => {
-    const currentEntry = createHistoryEntry(get());
-    set((state) => {
+  public generateSeats = (sectionId: number, config: SeatGenerationConfig) => {
+    const currentEntry = createHistoryEntry(this.getState());
+    this.setState((state) => {
       const section = state.venue.sections.find((s) => s.id === sectionId);
       if (!section) return {};
 
@@ -285,11 +255,11 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         deletedSeatIds: [...state.deletedSeatIds, ...stalePersistedSeats],
       };
     });
-  },
+  };
 
-  updateSeat: (sectionId, seatId, changes) => {
-    const currentEntry = createHistoryEntry(get());
-    set((state) => ({
+  public updateSeat = (sectionId: number, seatId: number, changes: Partial<LocalSeat>) => {
+    const currentEntry = createHistoryEntry(this.getState());
+    this.setState((state) => ({
       past: [...state.past, currentEntry],
       future: [],
       venue: {
@@ -306,12 +276,12 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         ),
       },
     }));
-  },
+  };
 
-  deleteSeat: (sectionId, seatId) => {
-    const currentEntry = createHistoryEntry(get());
+  public deleteSeat = (sectionId: number, seatId: number) => {
+    const currentEntry = createHistoryEntry(this.getState());
     const wasAlreadySaved = seatId > 0;
-    set((state) => ({
+    this.setState((state) => ({
       past: [...state.past, currentEntry],
       future: [],
       venue: {
@@ -327,11 +297,11 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         ? [...state.deletedSeatIds, { sectionId, seatId }]
         : state.deletedSeatIds,
     }));
-  },
+  };
 
-  deleteSelectedSeats: (sectionId) => {
-    const currentEntry = createHistoryEntry(get());
-    set((state) => {
+  public deleteSelectedSeats = (sectionId: number) => {
+    const currentEntry = createHistoryEntry(this.getState());
+    this.setState((state) => {
       const section = state.venue.sections.find((s) => s.id === sectionId);
       const seatsToDelete = section
         ? section.seats.filter((s) => state.selectedSeatIds.includes(s.id))
@@ -358,11 +328,11 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         deletedSeatIds: newDeletedSeatIds,
       };
     });
-  },
+  };
 
-  changeSelectedSeatsType: (sectionId, seatType) => {
-    const currentEntry = createHistoryEntry(get());
-    set((state) => ({
+  public changeSelectedSeatsType = (sectionId: number, seatType: SeatType) => {
+    const currentEntry = createHistoryEntry(this.getState());
+    this.setState((state) => ({
       past: [...state.past, currentEntry],
       future: [],
       venue: {
@@ -381,11 +351,11 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         ),
       },
     }));
-  },
+  };
 
-  toggleSelectedSeatsAccessible: (sectionId) => {
-    const currentEntry = createHistoryEntry(get());
-    set((state) => ({
+  public toggleSelectedSeatsAccessible = (sectionId: number) => {
+    const currentEntry = createHistoryEntry(this.getState());
+    this.setState((state) => ({
       past: [...state.past, currentEntry],
       future: [],
       venue: {
@@ -404,11 +374,11 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         ),
       },
     }));
-  },
+  };
 
   // Undo / Redo Actions
-  undo: () =>
-    set((state) => {
+  public undo = () => {
+    this.setState((state) => {
       if (state.past.length === 0) return {};
       const previous = state.past[state.past.length - 1];
       const newPast = state.past.slice(0, state.past.length - 1);
@@ -420,14 +390,14 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         venue: previous.venue,
         deletedSectionIds: previous.deletedSectionIds,
         deletedSeatIds: previous.deletedSeatIds,
-        // Reset selections to avoid selecting missing items
         selectedSectionId: null,
         selectedSeatIds: [],
       };
-    }),
+    });
+  };
 
-  redo: () =>
-    set((state) => {
+  public redo = () => {
+    this.setState((state) => {
       if (state.future.length === 0) return {};
       const next = state.future[state.future.length - 1];
       const newFuture = state.future.slice(0, state.future.length - 1);
@@ -442,17 +412,29 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
         selectedSectionId: null,
         selectedSeatIds: [],
       };
-    }),
+    });
+  };
 
   // Modal / Saving UI Actions
-  openGenerateModal: () => set({ isGenerateModalOpen: true }),
-  closeGenerateModal: () => set({ isGenerateModalOpen: false }),
-  setSaving: (isSaving) => set({ isSaving }),
-  clearDeletedIds: () => set({ deletedSectionIds: [], deletedSeatIds: [] }),
+  public openGenerateModal = () => {
+    this.setState({ isGenerateModalOpen: true });
+  };
+
+  public closeGenerateModal = () => {
+    this.setState({ isGenerateModalOpen: false });
+  };
+
+  public setSaving = (isSaving: boolean) => {
+    this.setState({ isSaving });
+  };
+
+  public clearDeletedIds = () => {
+    this.setState({ deletedSectionIds: [], deletedSeatIds: [] });
+  };
 
   // Reset Store
-  resetStore: () =>
-    set({
+  public resetStore = () => {
+    this.setState({
       scale: 1,
       pos: { x: 0, y: 0 },
       selectedSectionId: null,
@@ -466,5 +448,9 @@ export const useSeatMapStore = create<SeatMapState>((set, get) => ({
       past: [],
       future: [],
       tempIdCounter: -1,
-    }),
-}));
+    });
+  };
+}
+
+export const seatMapStore = new SeatMapStore();
+export const useSeatMapStore = seatMapStore.useSelector;

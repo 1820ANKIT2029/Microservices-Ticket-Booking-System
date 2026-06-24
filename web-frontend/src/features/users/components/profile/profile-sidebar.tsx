@@ -33,30 +33,30 @@ interface ProfileSidebarProps {
 // ── Tab definitions ────────────────────────────────────────────────────────────
 
 const CONSUMER_TABS = [
-  { id: "personal"      as const, label: "Personal Info",    icon: User      },
-  { id: "bookings"      as const, label: "My Bookings",      icon: Ticket    },
-  { id: "security"      as const, label: "Security",         icon: Shield    },
-  { id: "notifications" as const, label: "Notifications",    icon: Bell      },
-  { id: "payments"      as const, label: "Saved Payments",   icon: CreditCard },
+  { id: "personal" as const, label: "Personal Info", icon: User },
+  { id: "bookings" as const, label: "My Bookings", icon: Ticket },
+  // { id: "security"      as const, label: "Security",         icon: Shield    },
+  { id: "notifications" as const, label: "Notifications", icon: Bell },
+  // { id: "payments"      as const, label: "Saved Payments",   icon: CreditCard },
 ];
 
 const ORGANIZER_TABS = [
-  { id: "admin-events" as const, label: "Events", icon: LayoutDashboard  },
-  { id: "admin-sessions" as const, label: "Event Sessions", icon: Clock  },
+  { id: "admin-events" as const, label: "Events", icon: LayoutDashboard },
+  { id: "admin-sessions" as const, label: "Event Sessions", icon: Clock },
 ];
 
 const ADMIN_TABS = [
-  { id: "admin-venues" as const, label: "Venues", icon: Map              },
-  { id: "admin-users"    as const, label: "User Management", icon: Users      },
+  { id: "admin-venues" as const, label: "Venues", icon: Map },
+  { id: "admin-users" as const, label: "User Management", icon: Users },
   { id: "admin-settings" as const, label: "System Settings", icon: ShieldCheck },
 ];
 
 // ── Role badge ────────────────────────────────────────────────────────────────
 
 const ROLE_BADGE: Record<string, { label: string; cls: string }> = {
-  CONSUMER:   { label: "Consumer",   cls: "bg-muted text-muted-foreground" },
-  ORGANIZER:  { label: "Organizer",  cls: "bg-primary/10 text-primary" },
-  ADMIN:      { label: "Admin",      cls: "bg-amber-100 text-amber-700" },
+  CONSUMER: { label: "Consumer", cls: "bg-muted text-muted-foreground" },
+  ORGANIZER: { label: "Organizer", cls: "bg-primary/10 text-primary" },
+  ADMIN: { label: "Admin", cls: "bg-amber-100 text-amber-700" },
 };
 
 // ── Shared tab button ─────────────────────────────────────────────────────────
@@ -78,12 +78,12 @@ function TabButton({
     variant === "admin"
       ? "text-amber-600 bg-amber-50 font-bold"
       : variant === "organizer"
-      ? "text-primary bg-primary/5 font-bold"
-      : "text-primary bg-secondary-container font-bold";
+        ? "text-primary bg-primary/5 font-bold"
+        : "text-primary bg-secondary-container font-bold";
 
   const iconColor =
-    variant === "admin"     ? "text-amber-600" :
-    variant === "organizer" ? "text-primary"   : "";
+    variant === "admin" ? "text-amber-600" :
+      variant === "organizer" ? "text-primary" : "";
 
   return (
     <button
@@ -232,7 +232,7 @@ export function ProfileSidebar({
         )}
 
         {/* Footer card */}
-        <div className="px-6 mt-auto pt-4">
+        {/* <div className="px-6 mt-auto pt-4">
           <div className="p-4 rounded-xl border border-primary-container/20 bg-primary/5 text-center space-y-2">
             <p className="text-label-sm text-on-surface-variant font-medium">
               Want premium features?
@@ -241,7 +241,7 @@ export function ProfileSidebar({
               Upgrade to Pro
             </button>
           </div>
-        </div>
+        </div> */}
       </aside>
     </>
   );

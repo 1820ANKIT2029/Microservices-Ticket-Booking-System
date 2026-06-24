@@ -13,11 +13,11 @@ export const ROUTES = {
 
   events: {
     list:   "/events",
-    detail: (id: string | number) => `/events/${id}`,
+    detail: (id: string | number) => `/events/detail?id=${id}`,
   },
 
   eventSessions: {
-    detail: (id: string | number) => `/event-sessions/${id}`,
+    detail: (id: string | number) => `/event-sessions/edit?id=${id}`,
   },
 
   movies:  "/movies",
@@ -28,7 +28,7 @@ export const ROUTES = {
 
   bookings: {
     list:   "/bookings",
-    detail: (id: string) => `/bookings/${id}`,
+    detail: (id: string) => `/bookings?bookingId=${id}`,
   },
 
   checkout: {

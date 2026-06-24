@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserService } from "../api/service";
 import { userKeys } from "../query-keys";
 import { toUserProfileData } from "../mapper";
-import { useAuthStore } from "@/shared/store";
+import { useAuthStore, authStore } from "@/shared/store";
 import type { UserProfileData } from "../types";
 
 /**
@@ -13,7 +13,7 @@ import type { UserProfileData } from "../types";
  */
 export function useUpdateProfile() {
   const queryClient = useQueryClient();
-  const setUser     = useAuthStore((s) => s.setUser);
+  const setUser     = authStore.setUser;
 
   return useMutation({
     mutationFn: (data: Partial<UserProfileData>) =>
