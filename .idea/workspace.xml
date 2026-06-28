@@ -5,17 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="29083d6d-5ca6-4291-80a9-9f9fa16a6c9b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analytics-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/booking-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eureka-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/event-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gateway-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-server/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/PaymentVerificationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/PaymentVerificationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/search-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/search-service/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,22 +110,22 @@
     "Notification.DoNotAsk-DatabaseConfigFileWatcher.found": "true",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "422",
-    "RequestMappingsPanelWidth1": "421",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.AnalyticsServiceApplication.executor": "Run",
-    "Spring Boot.BookingServiceApplication.executor": "Run",
+    "Spring Boot.BookingServiceApplication.executor": "Debug",
     "Spring Boot.ConfigServerApplication.executor": "Debug",
     "Spring Boot.EurekaServerApplication.executor": "Debug",
-    "Spring Boot.EventServiceApplication.executor": "Run",
-    "Spring Boot.GatewayServerApplication.executor": "Run",
-    "Spring Boot.NotificationServiceApplication.executor": "Run",
-    "Spring Boot.PaymentServiceApplication.executor": "Run",
+    "Spring Boot.EventServiceApplication.executor": "Debug",
+    "Spring Boot.GatewayServerApplication.executor": "Debug",
+    "Spring Boot.NotificationServiceApplication.executor": "Debug",
+    "Spring Boot.PaymentServiceApplication.executor": "Debug",
     "Spring Boot.SearchServiceApplication.executor": "Run",
-    "Spring Boot.UserServiceApplication.executor": "Run",
+    "Spring Boot.UserServiceApplication.executor": "Debug",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
@@ -132,8 +136,11 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
     "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "spring",
+    "settings.editor.selected.configurable": "DockerRegistry",
     "to.speed.mode.migration.done": "true",
     "ts.external.directory.path": "D:\\DistributedTicketBookingSystem\\web-frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
@@ -204,7 +211,7 @@
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.UserServiceApplication">
+  <component name="RunManager" selected="Spring Boot.BookingServiceApplication">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="DistributedTicketBookingSystem" />
       <option name="ENV_FILES" value="" />
@@ -332,6 +339,7 @@
         </param>
       </additionalParameters>
       <module name="event-ticket-booking-system.event-service.main" />
+      <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.ankit.event_service.EventServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -350,6 +358,7 @@
     </configuration>
     <configuration name="NotificationServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="event-ticket-booking-system.notification-service.main" />
+      <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.ankit.notification_service.NotificationServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -369,6 +378,7 @@
         <env name="RAZORPAY_WEBHOOK_EVENT_TYPE" value="order.paid" />
       </envs>
       <module name="event-ticket-booking-system.payment-service.main" />
+      <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.ankit.payment_service.PaymentServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -453,8 +463,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.ConfigServerApplication | #3" />
         <item itemvalue="Docker.default: Compose Deployment" />
+        <item itemvalue="HTTP Request.ConfigServerApplication | #3" />
         <item itemvalue="HTTP Request.ConfigServerApplication | #1" />
         <item itemvalue="Docker.default.redis: Compose Deployment" />
       </list>
@@ -536,7 +546,10 @@
       <workItem from="1782133286152" duration="12800000" />
       <workItem from="1782189919350" duration="22127000" />
       <workItem from="1782221447621" duration="8751000" />
-      <workItem from="1782635192866" duration="2107000" />
+      <workItem from="1782635192866" duration="2480000" />
+      <workItem from="1782639293713" duration="2221000" />
+      <workItem from="1782641549495" duration="336000" />
+      <workItem from="1782641920126" duration="1956000" />
     </task>
     <servers />
   </component>

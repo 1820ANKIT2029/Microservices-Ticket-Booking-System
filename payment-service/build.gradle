@@ -6,12 +6,12 @@ plugins {
 }
 
 group = 'com.ankit'
-version = '0.0.1-SNAPSHOT'
+version = '2.0.0'
 description = 'Microservice for payment service'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(25)
+		languageVersion = JavaLanguageVersion.of(24)
 	}
 }
 
