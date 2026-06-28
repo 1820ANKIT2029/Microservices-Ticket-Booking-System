@@ -15,6 +15,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import java.util.Currency;
 
 @Service
 @RequiredArgsConstructor
+@RefreshScope
 public class RazorpayPaymentService implements IPaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;

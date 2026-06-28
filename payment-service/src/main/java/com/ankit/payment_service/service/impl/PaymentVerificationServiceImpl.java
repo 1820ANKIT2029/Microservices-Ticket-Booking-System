@@ -12,11 +12,13 @@ import com.razorpay.Utils;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@RefreshScope
 public class PaymentVerificationServiceImpl implements IPaymentVerificationService {
     @Value("${razorpay.key-secret}")
     private String keySecret;
