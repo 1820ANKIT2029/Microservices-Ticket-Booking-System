@@ -31,6 +31,13 @@ spring:
           force-pull: true
         native:
           search-locations: file:///C:/Users/Ankit/Downloads/Event-Ticketing-System-Config/common
+    bus:
+      enabled: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    listener:
+      observation-enabled: false
 
 management:
   endpoints:
