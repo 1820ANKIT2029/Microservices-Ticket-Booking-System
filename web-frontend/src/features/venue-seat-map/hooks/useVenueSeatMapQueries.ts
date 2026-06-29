@@ -155,7 +155,7 @@ export function useAdminVenues(page = 0, size = 10, keyword = "") {
   return useQuery({
     queryKey: [...venueKeys.all, "list", page, size, keyword],
     queryFn: async () => {
-      const res = await api.get<ApiResponse<any>>("/event/api/venues/search", {
+      const res = await api.get<ApiResponse<any>>("/inventory/api/venues/search", {
         params: { keyword: keyword || undefined, page, size }
       });
       const pageData = res.data.data;

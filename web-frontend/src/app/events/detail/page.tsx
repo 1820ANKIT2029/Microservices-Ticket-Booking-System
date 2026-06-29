@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { EventHero } from "@/features/events/components/event-hero";
 import { AboutEvent } from "@/features/events/components/about-event";
 import { FeaturedLineup } from "@/features/events/components/featured-lineup";
-import { OffersGuidelines } from "@/features/events/components/offers-guidelines";
 import { VenueDetails } from "@/features/events/components/venue-details";
 import { eventQueries } from "@/features/events/hooks/EventQueryService";
 import { useSessionsByEvent } from "@/features/event-sessions";
@@ -85,7 +84,7 @@ function EventDetailContent() {
 
   const dateText = activeSession ? formatSessionDate(activeSession.startDateTime) : "Multiple Dates";
   const timeText = activeSession ? formatSessionTime(activeSession.startDateTime) : "Evening Show";
-  const locationText = venue ? `${venue.name}, ${venue.city}` : "Wankhede Stadium, Mumbai";
+  const locationText = venue ? `${venue.name}, ${venue.city}` : "";
 
   const heroEventDetail = {
     title: event.title,
@@ -123,35 +122,7 @@ function EventDetailContent() {
     mapImageUrl: "https://placehold.co/600x400/1e293b/ffffff/png?text=" + encodeURIComponent(venue.name + " Map"),
     mapImageAlt: `Satellite map of ${venue.name}`,
     locationName: venue.city || "",
-  } : {
-    name: "Wankhede Stadium",
-    address: "D Rd, Churchgate, Mumbai, Maharashtra 400020",
-    transitInfo: "10 mins walk from Churchgate Station.",
-    mapImageUrl: "https://placehold.co/600x400/1e293b/ffffff/png?text=Wankhede+Stadium+Map",
-    mapImageAlt: "Wankhede Stadium Map",
-    locationName: "Mumbai",
-  };
-
-  // Mock guidelines for consumer visual completeness
-
-  const mockGuidelines = [
-    {
-      iconName: "Info",
-      label: "Age Limit: 3+ years and above.",
-    },
-    {
-      iconName: "CameraOff",
-      label: "Professional cameras not allowed.",
-    },
-    {
-      iconName: "Clock",
-      label: "Gates open 2 hours before session start.",
-    },
-    {
-      iconName: "FileText",
-      label: "E-tickets must be scanned for entry.",
-    },
-  ];
+  } : null;
 
   return (
     <main className="min-h-screen bg-surface flex flex-col">
@@ -180,20 +151,16 @@ function EventDetailContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {sessions.map((session) => {
                   const isSelected = activeSession?.id === session.id;
-                  const isSoldOut = session.availableCapacity === 0;
-                  const isSellingFast = session.availableCapacity > 0 && session.availableCapacity < 20;
 
                   return (
                     <div
                       key={session.id}
-                      onClick={() => !isSoldOut && setSelectedSessionId(session.id)}
+                      onClick={() => setSelectedSessionId(session.id)}
                       className={cn(
                         "flex flex-col p-4 rounded-xl border text-left transition-all duration-200 cursor-pointer",
-                        isSoldOut
-                          ? "bg-muted border-border opacity-50 cursor-not-allowed"
-                          : isSelected
-                            ? "bg-primary-container/25 border-primary ring-2 ring-primary/25 scale-[1.02] shadow-sm"
-                            : "bg-surface border-border hover:border-primary/50 hover:shadow-sm"
+                        isSelected
+                          ? "bg-primary-container/25 border-primary ring-2 ring-primary/25 scale-[1.02] shadow-sm"
+                          : "bg-surface border-border hover:border-primary/50 hover:shadow-sm"
                       )}
                     >
                       <div className="flex items-center justify-between w-full">
@@ -208,27 +175,9 @@ function EventDetailContent() {
                             {session.title || `Session ${session.sessionNumber}`}
                           </p>
                         </div>
-                        <div className="text-right flex flex-col items-end gap-1.5">
-                          {isSoldOut ? (
-                            <span className="bg-destructive/10 text-destructive text-[9px] font-bold px-2 py-0.5 rounded uppercase">
-                              Sold Out
-                            </span>
-                          ) : isSellingFast ? (
-                            <span className="bg-amber-500/10 text-amber-600 text-[9px] font-bold px-2 py-0.5 rounded uppercase animate-pulse">
-                              Selling Fast
-                            </span>
-                          ) : (
-                            <span className="bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2 py-0.5 rounded uppercase">
-                              Available
-                            </span>
-                          )}
-                          <span className="text-[10px] font-medium text-on-surface-variant">
-                            {session.availableCapacity} seats left
-                          </span>
-                        </div>
                       </div>
 
-                      {isSelected && !isSoldOut && (
+                      {isSelected && (
                         <div className="mt-4 pt-3 border-t border-primary/20">
                           <Link
                             href={`/events/seats?id=${event.id}&sessionId=${session.id}`}
@@ -255,14 +204,12 @@ function EventDetailContent() {
             <FeaturedLineup lineup={lineup} />
           )}
 
-          {/* Guidelines */}
-          <OffersGuidelines guidelines={mockGuidelines} />
         </div>
 
         {/* Right Column: Venue Info */}
         <div className="lg:col-span-4">
           <div className="sticky top-36">
-            <VenueDetails venue={mappedVenueInfo} />
+            {mappedVenueInfo && <VenueDetails venue={mappedVenueInfo} />}
           </div>
         </div>
       </div>

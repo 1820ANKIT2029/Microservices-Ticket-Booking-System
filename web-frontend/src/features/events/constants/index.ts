@@ -11,8 +11,8 @@ export const EVENT_ENDPOINTS = {
 } as const;
 
 export const VENUE_ENDPOINTS = {
-  base: "/event/api/venues",
-  byId: (id: string | number) => `/event/api/venues/${id}`,
+  base: "/inventory/api/venues",
+  byId: (id: string | number) => `/inventory/api/venues/${id}`,
 } as const;
 
 // Re-export shared constants so feature code only needs one import

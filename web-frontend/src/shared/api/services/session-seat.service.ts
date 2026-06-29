@@ -8,7 +8,7 @@ import type { SessionSeatDTO } from "@/features/venue-seat-map/types";
 export class SessionSeatService {
   static getSessionSeats(eventSessionId: number | string) {
     return api
-      .get<ApiResponse<SessionSeatDTO[]>>(`/event/api/event-sessions/${eventSessionId}/session-seats`)
+      .get<ApiResponse<SessionSeatDTO[]>>(`/inventory/api/event-sessions/${eventSessionId}/session-seats`)
       .then((res) => res.data.data);
   }
 }
