@@ -1,0 +1,50 @@
+server:
+  port: 8100
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: 'inventory-service'
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  cloud:
+    function:
+      definition: createSessionSeats
+
+    stream:
+      bindings:
+        createSessionSeats-in-0:
+          destination: event-session-created
+          group: inventory-service
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+
+    config:
+      enabled: true
+      uri: "optional:configserver:http://localhost:8888/"
+  config:
+    import: optional:configserver:http://localhost:8888/
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost

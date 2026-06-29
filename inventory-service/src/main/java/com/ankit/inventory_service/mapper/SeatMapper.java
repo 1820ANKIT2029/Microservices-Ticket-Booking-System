@@ -1,0 +1,64 @@
+package com.ankit.inventory_service.mapper;
+
+import com.ankit.inventory_service.dto.SeatDTO;
+import com.ankit.inventory_service.entity.Seat;
+import com.ankit.inventory_service.entity.Venue;
+import com.ankit.inventory_service.entity.VenueSection;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SeatMapper {
+
+    public SeatDTO toDto(Seat entity) {
+        if (entity == null) return null;
+
+        return SeatDTO.builder()
+                .id(entity.getId())
+                .venueSectionId(entity.getVenueSection() != null ? entity.getVenueSection().getId() : null)
+                .venueId(entity.getVenue() != null ? entity.getVenue().getId() : null)
+                .seatNumber(entity.getSeatNumber())
+                .rowLabel(entity.getRowLabel())
+                .seatType(entity.getSeatType())
+                .x(entity.getX())
+                .y(entity.getY())
+                .width(entity.getWidth())
+                .height(entity.getHeight())
+                .rotation(entity.getRotation())
+                .shape(entity.getShape())
+                .isAccessible(entity.getIsAccessible())
+                .isActive(entity.getIsActive())
+                .build();
+    }
+
+    public Seat toEntity(SeatDTO dto) {
+        if (dto == null) return null;
+
+        Seat seat = Seat.builder()
+                .id(dto.getId())
+                .seatNumber(dto.getSeatNumber())
+                .rowLabel(dto.getRowLabel())
+                .seatType(dto.getSeatType())
+                .x(dto.getX())
+                .y(dto.getY())
+                .width(dto.getWidth())
+                .height(dto.getHeight())
+                .rotation(dto.getRotation())
+                .shape(dto.getShape())
+                .isAccessible(dto.getIsAccessible())
+                .isActive(dto.getIsActive())
+                .build();
+
+        if (dto.getVenueSectionId() != null) {
+            VenueSection section = new VenueSection();
+            section.setId(dto.getVenueSectionId());
+            seat.setVenueSection(section);
+        }
+        if (dto.getVenueId() != null) {
+            Venue venue = new Venue();
+            venue.setId(dto.getVenueId());
+            seat.setVenue(venue);
+        }
+
+        return seat;
+    }
+}
