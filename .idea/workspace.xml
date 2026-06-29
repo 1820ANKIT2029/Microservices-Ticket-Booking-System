@@ -11,15 +11,77 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/analytics-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/booking-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/messaging/BookingMessagingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/impl/BookingMessagingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/client/SessionSeatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/client/SessionSeatClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/client/SessionSeatClientFallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/client/SessionSeatClientFallback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/impl/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/impl/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eureka-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/event-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/controller/SeatController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/controller/SessionSeatController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/controller/VenueController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/controller/VenueSectionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/dto/EventDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/dto/EventDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/dto/ResponseDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/dto/SeatDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/dto/SessionSeatDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/dto/VenueDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/dto/VenueSearchResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/dto/VenueSectionDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/EventSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/EventSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/Seat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/SessionSeat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/SessionSeatStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/TicketType.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/TicketType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/Venue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/entity/VenueSection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/mapper/EventMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/mapper/EventMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/mapper/EventSessionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/mapper/EventSessionMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/mapper/SeatMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/mapper/SessionSeatMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/mapper/TicketTypeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/mapper/TicketTypeMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/mapper/VenueMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/mapper/VenueSectionMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/repository/SeatRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/repository/SessionSeatsRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/repository/VenueRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/repository/VenueSectionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/IEventSessionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/IEventSessionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/ISeatService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/ISessionSeatService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/IVenueSectionService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/IVenueService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/EventServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/EventServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/EventSessionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/EventSessionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/PerformerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/PerformerServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/SeatServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/SessionSeatServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/VenueSectionServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/VenueServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/resources/schema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gateway-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-server/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-server/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/consumer/NotificationConsumer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/controller/TestNotificationProducerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/controller/TestNotificationProducerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/PaymentVerificationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/PaymentVerificationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/RazorpayWebhookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/RazorpayWebhookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/search-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/search-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/app/events/detail/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/app/events/detail/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/events/constants/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/events/constants/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/hooks/useVenueSeatMapQueries.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/features/venue-seat-map/hooks/useVenueSeatMapQueries.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/api/services/session-seat.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/api/services/session-seat.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/api/services/venue.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/api/services/venue.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,16 +108,6 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="event-ticket-booking-system" type="f1a62948:ProjectNode" />
               </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="event-ticket-booking-system" type="f1a62948:ProjectNode" />
-                <item name="analytics-service" type="2d1252cf:ModuleNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="event-ticket-booking-system" type="f1a62948:ProjectNode" />
-                <item name="payment-service" type="2d1252cf:ModuleNode" />
-              </path>
             </expand>
             <select />
           </tree_state>
@@ -69,8 +121,8 @@
         <option value="AnnotationType" />
         <option value="Exception" />
         <option value="Record" />
-        <option value="Interface" />
         <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -94,7 +146,6 @@
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
@@ -117,21 +168,23 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.AnalyticsServiceApplication.executor": "Run",
-    "Spring Boot.BookingServiceApplication.executor": "Debug",
+    "Spring Boot.BookingServiceApplication.executor": "Run",
     "Spring Boot.ConfigServerApplication.executor": "Debug",
     "Spring Boot.EurekaServerApplication.executor": "Debug",
-    "Spring Boot.EventServiceApplication.executor": "Debug",
+    "Spring Boot.EventServiceApplication.executor": "Run",
     "Spring Boot.GatewayServerApplication.executor": "Debug",
-    "Spring Boot.NotificationServiceApplication.executor": "Debug",
-    "Spring Boot.PaymentServiceApplication.executor": "Debug",
+    "Spring Boot.InventoryServiceApplication.executor": "Debug",
+    "Spring Boot.NotificationServiceApplication.executor": "Run",
+    "Spring Boot.PaymentServiceApplication.executor": "Run",
     "Spring Boot.SearchServiceApplication.executor": "Run",
-    "Spring Boot.UserServiceApplication.executor": "Debug",
+    "Spring Boot.UserServiceApplication.executor": "Run",
+    "Spring Boot.VenueServiceApplication.executor": "Run",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/DistributedTicketBookingSystem/payment-service/src/main/java/com/ankit/payment_service",
+    "last_opened_file_path": "D:/DistributedTicketBookingSystem/venue-service/src/main/java/com/ankit/venue_service/mapper",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -140,7 +193,7 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "DockerRegistry",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
     "to.speed.mode.migration.done": "true",
     "ts.external.directory.path": "D:\\DistributedTicketBookingSystem\\web-frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
@@ -159,18 +212,18 @@
       <recent name="com.ankit.gateway_server.security" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\DistributedTicketBookingSystem\payment-service\src\main\java\com\ankit\payment_service" />
-      <recent name="D:\DistributedTicketBookingSystem\booking-service\src\main\java\com\ankit\booking_service" />
-      <recent name="D:\DistributedTicketBookingSystem\user-service\src\main\java\com\ankit\user_service" />
-      <recent name="D:\DistributedTicketBookingSystem\notification-service\src\main\java\com\ankit\notification_service" />
-      <recent name="D:\DistributedTicketBookingSystem\event-service\src\main\java\com\ankit\event_service" />
+      <recent name="D:\DistributedTicketBookingSystem\venue-service\src\main\java\com\ankit\venue_service\mapper" />
+      <recent name="D:\DistributedTicketBookingSystem\venue-service\src\main\java\com\ankit\venue_service\exception" />
+      <recent name="D:\DistributedTicketBookingSystem\venue-service\src\main\java\com\ankit\venue_service\dto" />
+      <recent name="D:\DistributedTicketBookingSystem\venue-service\src\main\java\com\ankit\venue_service\controller" />
+      <recent name="D:\DistributedTicketBookingSystem\venue-service\src\main\java\com\ankit\venue_service\service\impl" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ankit.event_service.dto" />
+      <recent name="com.ankit.venue_service.repository" />
+      <recent name="com.ankit.venue_service.entity" />
       <recent name="com.ankit.user_service.dto" />
       <recent name="com.ankit.payment_service.dto" />
-      <recent name="com.ankit.gateway_server.security" />
-      <recent name="com.ankit.event_service.dto" />
-      <recent name="com.ankit.user_service.exception" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -201,6 +254,7 @@
               <entry key="EurekaServerApplication" value="STOPPED" />
               <entry key="EventServiceApplication" value="STOPPED" />
               <entry key="GatewayServerApplication" value="STOPPED" />
+              <entry key="InventoryServiceApplication" value="STOPPED" />
               <entry key="NotificationServiceApplication" value="STOPPED" />
               <entry key="PaymentServiceApplication" value="STOPPED" />
               <entry key="SearchServiceApplication" value="STOPPED" />
@@ -211,7 +265,7 @@
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.BookingServiceApplication">
+  <component name="RunManager" selected="Spring Boot.ConfigServerApplication">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="DistributedTicketBookingSystem" />
       <option name="ENV_FILES" value="" />
@@ -356,6 +410,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="InventoryServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="event-ticket-booking-system.inventory-service.main" />
+      <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ankit.inventory_service.InventoryServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="NotificationServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="event-ticket-booking-system.notification-service.main" />
       <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
@@ -450,6 +512,7 @@
       <item itemvalue="Docker.default: Compose Deployment" />
       <item itemvalue="HTTP Request.ConfigServerApplication | #3" />
       <item itemvalue="HTTP Request.ConfigServerApplication | #1" />
+      <item itemvalue="Spring Boot.InventoryServiceApplication" />
       <item itemvalue="Spring Boot.SearchServiceApplication" />
       <item itemvalue="Spring Boot.AnalyticsServiceApplication" />
       <item itemvalue="Spring Boot.BookingServiceApplication" />
@@ -473,8 +536,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28539.54" />
+        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-IU-252.28539.54" />
       </set>
     </attachedChunks>
   </component>
@@ -549,7 +612,15 @@
       <workItem from="1782635192866" duration="2480000" />
       <workItem from="1782639293713" duration="2221000" />
       <workItem from="1782641549495" duration="336000" />
-      <workItem from="1782641920126" duration="1956000" />
+      <workItem from="1782641920126" duration="2145000" />
+      <workItem from="1782712334947" duration="1015000" />
+      <workItem from="1782713370665" duration="139000" />
+      <workItem from="1782713530124" duration="7625000" />
+      <workItem from="1782723406011" duration="13038000" />
+      <workItem from="1782740807434" duration="1401000" />
+      <workItem from="1782743320180" duration="644000" />
+      <workItem from="1782744155961" duration="1176000" />
+      <workItem from="1782745368554" duration="3261000" />
     </task>
     <servers />
   </component>
