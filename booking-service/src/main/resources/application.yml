@@ -30,6 +30,27 @@ spring:
     config:
       enabled: true
       uri: "optional:configserver:http://localhost:8888/"
+
+    function:
+      definition: paymentSuccess;paymentFailure
+
+    stream:
+      bindings:
+        paymentSuccess-in-0:
+          destination: payment-success-topic
+          group: booking-service
+
+        paymentFailure-in-0:
+          destination: payment-failure-topic
+          group: booking-service
+
+        notification-out-0:
+          destination: notification-topic
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+
   config:
     import: optional:configserver:http://localhost:8888/
 

@@ -9,21 +9,21 @@ import java.util.List;
 @Component
 public class SessionSeatClientFallback implements SessionSeatClient{
     @Override
-    public ApiResponse<Void> lockSeats(Long eventSessionId, List<SessionSeatDTO> sessionSeats, String userId) {
+    public ApiResponse<Void> lockSeats(Long eventSessionId, List<Long> sessionSeats, String userId) {
         throw new RuntimeException(
                 "Event service unavailable"
         );
     }
 
     @Override
-    public ApiResponse<Void> unlockSeats(Long eventSessionId, List<SessionSeatDTO> sessionSeats, String userId) {
+    public ApiResponse<Void> unlockSeats(Long eventSessionId, List<Long> sessionSeats, String userId) {
         throw new RuntimeException(
                 "Event service unavailable: Session Seat"
         );
     }
 
     @Override
-    public ApiResponse<Void> bookedSeats(Long eventSessionId, List<SessionSeatDTO> sessionSeats, String userId) {
+    public ApiResponse<Void> bookedSeats(Long eventSessionId, List<Long> sessionSeats, String userId) {
         throw new RuntimeException(
                 "Event service unavailable: Session Seat"
         );

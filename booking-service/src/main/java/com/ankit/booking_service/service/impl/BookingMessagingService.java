@@ -1,18 +1,17 @@
-package com.ankit.booking_service.messaging;
+package com.ankit.booking_service.service.impl;
 
 import com.ankit.booking_service.dto.NotificationEvent;
 import com.ankit.booking_service.dto.PaymentEvent;
-import com.ankit.booking_service.dto.SessionSeatDTO;
 import com.ankit.booking_service.entity.Booking;
 import com.ankit.booking_service.entity.BookingStatus;
+import com.ankit.booking_service.entity.Ticket;
 import com.ankit.booking_service.entity.TicketStatus;
 import com.ankit.booking_service.exception.ResourceNotFoundException;
 import com.ankit.booking_service.repository.BookingRepository;
+import com.ankit.booking_service.service.IBookingMessagingService;
 import com.ankit.booking_service.service.client.SessionSeatClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,14 +20,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookingMessagingService {
+public class BookingMessagingService implements IBookingMessagingService {
     private final BookingRepository bookingRepository;
     private final SessionSeatClient sessionSeatClient;
-    private final KafkaTemplate<String, NotificationEvent> kafkaTemplate;
     private final StreamBridge streamBridge;
 
-
-//    @KafkaListener(topics = "payment-success-topic", groupId = "booking-service")
     @Transactional
     public void confirmBooking(PaymentEvent event) {
         Booking booking = bookingRepository.findById(event.getBookingId())
@@ -38,12 +34,8 @@ public class BookingMessagingService {
             return; // idempotency
         }
 
-        List<SessionSeatDTO> sessionSeatDTOList = booking.getTickets().stream()
-                .map(seatRequest -> SessionSeatDTO.builder()
-                        .id(seatRequest.getSessionSeatId())
-                        .eventSessionId(seatRequest.getEventSessionId())
-                        .build()
-                )
+        List<Long> sessionSeatDTOList = booking.getTickets().stream()
+                .map(Ticket::getSessionSeatId)
                 .toList();
 
         System.out.println("sessionSeatDTOList: " + sessionSeatDTOList);
@@ -77,10 +69,9 @@ public class BookingMessagingService {
                 .templateName("booking-confirmation")
                 .payload("Booking Confirmed")
                 .build();
-        kafkaTemplate.send("notification-topic", notificationEvent);
+        streamBridge.send("notification-out-0", notificationEvent);
     }
 
-//    @KafkaListener(topics = "payment-failure-topic", groupId = "booking-service")
     @Transactional
     public void cancelBooking(PaymentEvent paymentEvent) {
         Booking booking = bookingRepository.findById(paymentEvent.getBookingId())
@@ -90,12 +81,8 @@ public class BookingMessagingService {
             return; // idempotency
         }
 
-        List<SessionSeatDTO> sessionSeatDTOList = booking.getTickets().stream()
-                .map(seatRequest -> SessionSeatDTO.builder()
-                        .id(seatRequest.getSessionSeatId())
-                        .eventSessionId(seatRequest.getEventSessionId())
-                        .build()
-                )
+        List<Long> sessionSeatDTOList = booking.getTickets().stream()
+                .map(Ticket::getSessionSeatId)
                 .toList();
 
         // Release seats
@@ -120,6 +107,6 @@ public class BookingMessagingService {
                 .payload("Booking Failed")
                 .build();
 
-        kafkaTemplate.send("notification-topic", notificationEvent);
+        streamBridge.send("notification-out-0", notificationEvent);
     }
 }

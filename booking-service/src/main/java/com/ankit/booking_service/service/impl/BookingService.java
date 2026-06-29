@@ -44,13 +44,8 @@ public class BookingService implements IBookingService {
         List<SessionSeatRequest> sessionSeatRequests = bookingRequestDTO.getSeats();
 
         assert sessionSeatRequests != null;
-        List<SessionSeatDTO> sessionSeatDTOList = sessionSeatRequests.stream()
-                .map(seatRequest -> SessionSeatDTO.builder()
-                        .seatId(seatRequest.getSeatId())
-                        .id(seatRequest.getSessionSeatId())
-                        .eventSessionId(seatRequest.getEventSessionId())
-                        .build()
-                )
+        List<Long> sessionSeatDTOList = sessionSeatRequests.stream()
+                .map(SessionSeatRequest::getSessionSeatId)
                 .toList();
 
         List<Long> ticketTypeIds = sessionSeatRequests.stream()
