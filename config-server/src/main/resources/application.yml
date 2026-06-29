@@ -19,6 +19,7 @@ spring:
             - eureka-server
             - user-service
             - event-service
+            - venue-service
             - booking-service
             - payment-service
             - notification-service
