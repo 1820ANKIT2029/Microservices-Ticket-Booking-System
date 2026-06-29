@@ -23,6 +23,17 @@ spring:
     show-sql: true
 
   cloud:
+
+    stream:
+      bindings:
+        createSessionSeats-in-0:
+          destination: event-session-created
+          group: inventory-service
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+
     config:
       enabled: true
       uri: "optional:configserver:http://localhost:8888/"

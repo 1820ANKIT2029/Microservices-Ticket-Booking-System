@@ -2,7 +2,6 @@ package com.ankit.event_service.mapper;
 
 import com.ankit.event_service.dto.EventDTO;
 import com.ankit.event_service.entity.Event;
-import com.ankit.event_service.entity.Venue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +26,7 @@ public class EventMapper {
                 .status(entity.getStatus())
                 .eventType(entity.getEventType())
                 .minAge(entity.getMinAge())
-                .venueId(entity.getVenue() != null ? entity.getVenue().getId() : null)
+                .venueId(entity.getVenueId())
                 .bannerUrl(entity.getBannerUrl())
                 .posterUrl(entity.getPosterUrl())
                 .isMultiSession(entity.getIsMultiSession())
@@ -45,13 +44,14 @@ public class EventMapper {
     public Event toEntity(EventDTO dto) {
         if (dto == null) return null;
 
-        Event event = Event.builder()
+        return Event.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
                 .slug(dto.getSlug())
                 .description(dto.getDescription())
                 .status(dto.getStatus())
                 .eventType(dto.getEventType())
+                .venueId(dto.getVenueId())
                 .minAge(dto.getMinAge())
                 .bannerUrl(dto.getBannerUrl())
                 .posterUrl(dto.getPosterUrl())
@@ -65,13 +65,5 @@ public class EventMapper {
                 .sessions(dto.getSessions() != null ?
                         dto.getSessions().stream().map(eventSessionMapper::toEntity).collect(Collectors.toList()) : Collections.emptyList())
                 .build();
-
-        if (dto.getVenueId() != null) {
-            Venue venue = new Venue();
-            venue.setId(dto.getVenueId());
-            event.setVenue(venue);
-        }
-
-        return event;
     }
 }

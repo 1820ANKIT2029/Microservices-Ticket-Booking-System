@@ -39,9 +39,8 @@ public class Event {
     @Column(name = "min_age")
     private Integer minAge;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "venue_id")
-    private Venue venue;
+    @Column(name = "venue_id")
+    private Long venueId;
 
     @Column(name = "banner_url", length = 2048)
     private String bannerUrl;

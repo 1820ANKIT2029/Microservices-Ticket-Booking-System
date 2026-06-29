@@ -3,7 +3,6 @@ package com.ankit.event_service.mapper;
 import com.ankit.event_service.dto.EventSessionDTO;
 import com.ankit.event_service.entity.Event;
 import com.ankit.event_service.entity.EventSession;
-import com.ankit.event_service.entity.Venue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +21,7 @@ public class EventSessionMapper {
         return EventSessionDTO.builder()
                 .id(entity.getId())
                 .eventId(entity.getEvent() != null ? entity.getEvent().getId() : null)
-                .venueId(entity.getVenue() != null ? entity.getVenue().getId() : null)
+                .venueId(entity.getVenueId())
                 .title(entity.getTitle())
                 .description(entity.getDescription())
                 .status(entity.getStatus())
@@ -45,6 +44,7 @@ public class EventSessionMapper {
 
         EventSession session = EventSession.builder()
                 .id(dto.getId())
+                .venueId(dto.getVenueId())
                 .title(dto.getTitle())
                 .description(dto.getDescription())
                 .status(dto.getStatus())
@@ -65,11 +65,6 @@ public class EventSessionMapper {
             Event event = new Event();
             event.setId(dto.getEventId());
             session.setEvent(event);
-        }
-        if (dto.getVenueId() != null) {
-            Venue venue = new Venue();
-            venue.setId(dto.getVenueId());
-            session.setVenue(venue);
         }
 
         return session;

@@ -3,10 +3,7 @@ package com.ankit.event_service.mapper;
 import com.ankit.event_service.dto.TicketTypeDTO;
 import com.ankit.event_service.entity.EventSession;
 import com.ankit.event_service.entity.TicketType;
-import com.ankit.event_service.entity.VenueSection;
 import org.springframework.stereotype.Component;
-
-import java.util.stream.Collectors;
 
 @Component
 public class TicketTypeMapper {
@@ -20,11 +17,7 @@ public class TicketTypeMapper {
                         ? entity.getEventSession().getId()
                         : null
                 )
-                .venueSectionIds(entity.getVenueSections()
-                        .stream()
-                        .map(VenueSection::getId)
-                        .collect(Collectors.toSet())
-                )
+                .venueSectionIds(entity.getVenueSectionIds())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .basePrice(entity.getBasePrice())
@@ -51,14 +44,7 @@ public class TicketTypeMapper {
                 .isActive(dto.getIsActive())
                 .saleStartAt(dto.getSaleStartAt())
                 .saleEndAt(dto.getSaleEndAt())
-                .venueSections(dto.getVenueSectionIds()
-                        .stream()
-                        .map(id -> {
-                            VenueSection section = new VenueSection();
-                            section.setId(id);
-                            return section;
-                        })
-                        .collect(Collectors.toSet()))
+                .venueSectionIds(dto.getVenueSectionIds())
                 .build();
 
         if (dto.getEventSessionId() != null) {

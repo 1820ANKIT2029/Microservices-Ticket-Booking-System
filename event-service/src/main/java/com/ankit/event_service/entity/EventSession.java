@@ -24,9 +24,8 @@ public class EventSession {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "venue_id")
-    private Venue venue;
+    @Column(name = "venue_id")
+    private Long venueId;
 
     @Column(length = 255)
     private String title;

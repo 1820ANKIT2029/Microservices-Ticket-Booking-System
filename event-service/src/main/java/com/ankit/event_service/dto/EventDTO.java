@@ -48,7 +48,6 @@ public class EventDTO {
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 
-    // Deep object validation triggers cascading evaluations
     @Valid
     private List<PerformerDTO> performers;
 

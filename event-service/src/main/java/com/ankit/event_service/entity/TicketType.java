@@ -51,11 +51,11 @@ public class TicketType {
     @Column(name = "sale_end_at")
     private ZonedDateTime saleEndAt;
 
-    @ManyToMany
-    @JoinTable(
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
             name = "ticket_type_sections",
-            joinColumns = @JoinColumn(name = "ticket_type_id"),
-            inverseJoinColumns = @JoinColumn(name = "venue_section_id")
+            joinColumns = @JoinColumn(name = "ticket_type_id")
     )
-    private Set<VenueSection> venueSections = new HashSet<>();
+    @Column(name = "venue_section_id")
+    private Set<Long> venueSectionIds = new HashSet<>();
 }

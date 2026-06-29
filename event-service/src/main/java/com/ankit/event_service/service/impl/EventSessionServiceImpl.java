@@ -1,13 +1,14 @@
 package com.ankit.event_service.service.impl;
 
 import com.ankit.event_service.dto.EventSessionDTO;
+import com.ankit.event_service.dto.EventSessionEvent;
 import com.ankit.event_service.entity.*;
 import com.ankit.event_service.exception.ResourceNotFoundException;
 import com.ankit.event_service.mapper.EventSessionMapper;
 import com.ankit.event_service.repository.EventSessionRepository;
 import com.ankit.event_service.service.IEventSessionService;
-import com.ankit.event_service.service.ISessionSeatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ import java.util.List;
 public class EventSessionServiceImpl implements IEventSessionService {
     private final EventSessionRepository eventSessionRepository;
     private final EventSessionMapper eventSessionMapper;
-    private final ISessionSeatService sessionSeatServiceImpl;
+
+    private final StreamBridge streamBridge;
 
     @Override
     @Transactional
@@ -32,7 +34,13 @@ public class EventSessionServiceImpl implements IEventSessionService {
         EventSession savedEventSession = this.eventSessionRepository.save(eventSession);
 
         // CREATE SESSION SEATS FOR SEATS IN VENUE
-        this.sessionSeatServiceImpl.initializeSessionSeats(savedEventSession);
+        EventSessionEvent eventSessionEvent = EventSessionEvent.builder()
+                .eventId(eventId)
+                .id(savedEventSession.getId())
+                .venueId(savedEventSession.getVenueId())
+                .build();
+
+        streamBridge.send("createSessionSeats-in-0", eventSessionEvent);
 
         return this.eventSessionMapper.toDto(savedEventSession);
     }
@@ -66,13 +74,7 @@ public class EventSessionServiceImpl implements IEventSessionService {
                         () -> new ResourceNotFoundException("Event Session Not Found")
                 );
 
-        if(eventSessionDTO.getVenueId() != null) {
-            Venue venue = Venue.builder()
-                    .id(eventSessionDTO.getVenueId())
-                    .build();
-            eventSession.setVenue(venue);
-        }
-
+        if(eventSessionDTO.getVenueId() != null) eventSession.setVenueId(eventSessionDTO.getVenueId());
         if(eventSessionDTO.getTitle() != null) eventSession.setTitle(eventSessionDTO.getTitle());
         if(eventSessionDTO.getDescription() != null) eventSession.setDescription(eventSessionDTO.getDescription());
         if(eventSessionDTO.getStatus() != null) eventSession.setStatus(eventSessionDTO.getStatus());

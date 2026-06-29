@@ -12,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class PerformerServiceImpl implements IPerformerService {
         Performer performer = this.performerRepository
                 .findById(performerID)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Performer not found with ID: " + performerID.toString())
+                        new ResourceNotFoundException("Performer not found with ID: " + performerID)
                 );
 
         return this.performerMapper.toDto(performer);
@@ -52,7 +50,7 @@ public class PerformerServiceImpl implements IPerformerService {
         Performer performer = this.performerRepository
                 .findById(performerID)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Performer not found with ID: " + performerID.toString())
+                        new ResourceNotFoundException("Performer not found with ID: " + performerID)
                 );
 
         if(performerDto.getName() != null) performer.setName(performerDto.getName());
