@@ -23,6 +23,19 @@ spring:
     show-sql: true
 
   cloud:
+    function:
+      definition: handleNotification
+
+    stream:
+      bindings:
+        notification-in-0:
+          destination: notification-topic
+          group: notification-service
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+
     config:
       enabled: true
       uri: "optional:configserver:http://localhost:8888/"

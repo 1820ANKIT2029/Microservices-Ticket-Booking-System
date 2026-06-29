@@ -2,7 +2,7 @@ package com.ankit.notification_service.controller;
 
 import com.ankit.notification_service.dto.NotificationEvent;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +14,7 @@ import java.util.UUID;
 @RequestMapping("/api/notifications/test")
 @RequiredArgsConstructor
 public class TestNotificationProducerController {
-
-    private final KafkaTemplate<String, NotificationEvent> kafkaTemplate;
-    private static final String TOPIC = "notification-topic";
+    private final StreamBridge streamBridge;
 
     @PostMapping
     public String triggerNotification(@RequestBody NotificationEvent event) {
@@ -24,7 +22,7 @@ public class TestNotificationProducerController {
             event.setId(UUID.randomUUID().toString());
         }
 
-        kafkaTemplate.send(TOPIC, event.getId(), event);
+        streamBridge.send("notification-in-0", event);
         return "Notification event dispatched to Kafka successfully!";
     }
 }
