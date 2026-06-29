@@ -12,7 +12,7 @@ spring:
       server:
         webflux:
           default-filters:
-            # FILTER 1: Per-User Limit (Fair Use)
+            # FILTER 1: Per-User Limit
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter.replenishRate: 10
@@ -20,7 +20,7 @@ spring:
                 redis-rate-limiter.requestedTokens: 1
                 key-resolver: "#{@userIdKeyResolver}"
 
-            # FILTER 2: Global System Limit (Circuit Breaker)
+            # FILTER 2: Global System Limit
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter.replenishRate: 500
@@ -35,6 +35,13 @@ spring:
                 - Path=/event/**
               filters:
                 - RewritePath=/event/(?<segment>.*), /${segment}
+
+            - id: inventory-service
+              uri: lb://INVENTORY-SERVICE
+              predicates:
+                - Path=/inventory/**
+              filters:
+                - RewritePath=/inventory/(?<segment>.*), /${segment}
 
             - id: booking-service
               uri: lb://BOOKING-SERVICE
@@ -120,6 +127,8 @@ springdoc:
     urls:
       - name: Event Service
         url: /event/v3/api-docs
+      - name: Inventory Service
+        url: /inventory/v3/api-docs
       - name: Booking Service
         url: /booking/v3/api-docs
       - name: User Service
