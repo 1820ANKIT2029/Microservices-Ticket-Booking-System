@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +22,7 @@ public class RazorpayWebhookService implements IWebhookService {
     private String webhookSecret;
 
     private final PaymentRepository paymentRepository;
-    private final KafkaTemplate<String, PaymentEvent> kafkaTemplate;
+    private final StreamBridge streamBridge;
 
     @Override
     public void handlePaymentWebhook(String payload, String signature) {
@@ -66,12 +66,12 @@ public class RazorpayWebhookService implements IWebhookService {
                 case "payment.captured":
                     payment.setGatewayPaymentId(paymentId);
                     payment.setStatus(PaymentStatus.SUCCESS);
-                    kafkaTemplate.send("payment-success-topic", event);
+                    streamBridge.send("payment-success-out-0", event);
                     break;
 
                 case "payment.failed":
                     payment.setStatus(PaymentStatus.FAILED);
-                    kafkaTemplate.send("payment-failure-topic", event);
+                    streamBridge.send("payment-failure-out-0", event);
                     break;
             }
 

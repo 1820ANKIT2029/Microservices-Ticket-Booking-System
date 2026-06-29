@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +24,7 @@ public class PaymentVerificationServiceImpl implements IPaymentVerificationServi
     private String keySecret;
 
     private final PaymentRepository paymentRepository;
-    private final KafkaTemplate<String, PaymentEvent> kafkaTemplate;
+    private final StreamBridge streamBridge;
 
     @Override
     public void verifyPayment(PaymentVerificationRequest request) {
@@ -50,11 +50,11 @@ public class PaymentVerificationServiceImpl implements IPaymentVerificationServi
             if(isValid) {
                 payment.setGatewayPaymentId(request.getPaymentId());
                 payment.setStatus(PaymentStatus.SUCCESS);
-                kafkaTemplate.send("payment-success-topic", event);
+                streamBridge.send("payment-success-out-0", event);
             }
             else {
                 payment.setStatus(PaymentStatus.FAILED);
-                kafkaTemplate.send("payment-failure-topic", event);
+                streamBridge.send("payment-failure-out-0", event);
             }
 
             this.paymentRepository.save(payment);

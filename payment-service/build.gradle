@@ -11,7 +11,7 @@ description = 'Microservice for payment service'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(24)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -30,7 +30,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
+    implementation 'org.springframework.cloud:spring-cloud-function-context'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
     // Source: https://mvnrepository.com/artifact/com.razorpay/razorpay-java
     implementation 'com.razorpay:razorpay-java:1.4.8'
     implementation 'org.springframework.boot:spring-boot-starter-kafka'

@@ -26,11 +26,24 @@ spring:
     config:
       enabled: true
       uri: "optional:configserver:http://localhost:8888/"
+
+    stream:
+      bindings:
+        payment-success-out-0:
+          destination: payment-success-topic
+
+        payment-failure-out-0:
+          destination: payment-failure-topic
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+
   config:
     import: optional:configserver:http://localhost:8888/
 
 razorpay:
-  key_id: ${RAZORPAYa_KEY_ID}
+  key_id: ${RAZORPAY_KEY_ID}
   key_secret: ${RAZORPAY_KEY_SECRET}
   webhook:
     secret: ${RAZORPAY_WEBHOOK_SECRET} # 7A+so2UBjF3AALPPcmbkaG3ZR7SX/bIkePMDJ3FN4zI=
