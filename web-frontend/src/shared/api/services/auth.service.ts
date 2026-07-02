@@ -9,7 +9,7 @@ import { TOKEN_KEY } from "@/shared/constants";
 export class AuthService {
 
   static async login(data: LoginPayload): Promise<LoginResponse> {
-    const response = await api.post<ApiResponse<LoginResponse>>("/auth/login", data);
+    const response = await api.post<ApiResponse<LoginResponse>>("/auth/api/login", data);
     const loginResponse = response.data.data;
 
     if (loginResponse.token && typeof window !== "undefined") {
@@ -26,12 +26,12 @@ export class AuthService {
   }
 
   static async signup(data: SignupPayload): Promise<string> {
-    const response = await api.post<ApiResponse<string>>("/auth/signup", data);
+    const response = await api.post<ApiResponse<string>>("/auth/api/signup", data);
     return response.data?.data ?? (response.data as unknown as string);
   }
 
   static async createProfile(data: ProfileCreationRequest): Promise<string> {
-    const response = await api.post<ApiResponse<string>>("/auth/create-profile", data);
+    const response = await api.post<ApiResponse<string>>("/auth/api/create-profile", data);
     return response.data?.data ?? (response.data as unknown as string);
   }
 }

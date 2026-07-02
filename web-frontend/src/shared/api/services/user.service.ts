@@ -40,7 +40,7 @@ export class UserService {
       avatarUrl:   data.avatarUrl   ?? "",
     };
 
-    // Use AuthService instead of duplicating api.post("/auth/create-profile")
+    // Use AuthService instead of duplicating api.post("/auth/api/create-profile")
     await AuthService.createProfile(profilePayload as any);
 
     return { userId, ...profilePayload };

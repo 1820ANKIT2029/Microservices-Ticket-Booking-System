@@ -8,6 +8,9 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 # Build static export
 RUN npm run build
 
@@ -24,5 +27,7 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
 
-# docker build -t frontend-service .
+
+# VERSION=$(grep '"version"' package.json | head -1 | sed -E 's/.*"version": *"([^"]+)".*/\1/')
+# docker build --build-arg NEXT_PUBLIC_API_URL="" --build-arg APP_VERSION=$VERSION -t agentveer/frontend-service:$VERSION .
 # docker run -p 3000:80 frontend-service
