@@ -32,16 +32,19 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.cloud:spring-cloud-function-context'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
-	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
-	testCompileOnly 'org.projectlombok:lombok'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // database dependency
     runtimeOnly 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-h2console'
+    runtimeOnly 'org.postgresql:postgresql'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // Source: https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3'
 }
@@ -56,7 +59,15 @@ jar {
     enabled = true
 }
 
+// ./gradlew jibDockerBuild
 jib {
+//    from {
+//        image = 'gcr.io/distroless/java21-debian12'
+//    }
+    from {
+        image = 'eclipse-temurin:21-jre-alpine'
+    }
+
     to {
         def registry = System.getenv('DOCKER_REGISTRY') ?: 'agentveer'
         image = "${registry}/${project.name}:${project.version}"

@@ -28,16 +28,29 @@ spring:
 
     stream:
       bindings:
-        notification-in-0:
+        handleNotification-in-0:
           destination: notification-topic
           group: notification-service
+          consumer:
+            max-attempts: 3
 
       kafka:
         binder:
           brokers: localhost:9092
 
+        bindings:
+          handleNotification-in-0:
+            consumer:
+              enable-dlq: true # Send to a DLQ topic if all 3 attempts fail
+              dlq-name: notification-topic-dlq
+
     config:
       enabled: true
-      uri: "optional:configserver:http://localhost:8888/"
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        multiplier: 1.5
+        max-interval: 10000
+        max-attempts: 10
   config:
-    import: optional:configserver:http://localhost:8888/
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}
