@@ -2,6 +2,8 @@ package com.ankit.inventory_service.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -45,8 +47,7 @@ public class SessionSeat {
     @Column(name = "locked_until")
     private LocalDateTime lockedUntil;
 
-
     @Enumerated(EnumType.STRING)
-    @Builder.Default
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private SessionSeatStatus status = SessionSeatStatus.AVAILABLE;
 }

@@ -33,7 +33,7 @@ public class SessionSeatController {
             @RequestHeader("X-User-Id") String userId,
             @PathVariable Long eventSessionId
     ) {
-       this.sessionSeatsService.unlockSessionSeats(sessionSeats, userId);
+       this.sessionSeatsService.unlockSessionSeats(sessionSeats, eventSessionId,userId);
        return ResponseEntity.ok(
                 new ApiResponse<>(null, "seats unlocked")
         );

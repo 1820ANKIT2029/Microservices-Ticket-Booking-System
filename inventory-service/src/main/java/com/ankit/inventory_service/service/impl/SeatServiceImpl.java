@@ -7,11 +7,13 @@ import com.ankit.inventory_service.mapper.SeatMapper;
 import com.ankit.inventory_service.repository.SeatRepository;
 import com.ankit.inventory_service.service.ISeatService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class SeatServiceImpl implements ISeatService {
     private final SeatRepository seatRepository;
@@ -39,6 +41,8 @@ public class SeatServiceImpl implements ISeatService {
         seatDTO.setVenueSectionId(venueSectionId);
         Seat seat = this.seatMapper.toEntity(seatDTO);
         Seat savedSeat = this.seatRepository.save(seat);
+
+        log.info("Seat created: {}", savedSeat);
         return this.seatMapper.toDto(savedSeat);
     }
 
@@ -48,6 +52,8 @@ public class SeatServiceImpl implements ISeatService {
         seatDTOS.forEach(seatDTO -> seatDTO.setVenueSectionId(venueSectionId));
         List<Seat> seats = seatDTOS.stream().map(seatMapper::toEntity).toList();
         List<Seat> seats1 = this.seatRepository.saveAll(seats);
+
+        log.info("Seats created: {}", seats1);
         return seats1.stream().map(seatMapper::toDto).toList();
     }
 
@@ -75,6 +81,7 @@ public class SeatServiceImpl implements ISeatService {
 
     @Override
     public void deleteSeat(Long venueId, Long venueSectionId, Long seatId) {
+        log.info("Deleting seat with id: {}", seatId);
         this.seatRepository.deleteByVenueIdAndVenueSectionIdAndId(venueId, venueSectionId, seatId);
     }
 }

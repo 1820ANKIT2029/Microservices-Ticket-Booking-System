@@ -13,6 +13,7 @@ public interface ISessionSeatService {
     );
     void unlockSessionSeats(
             List<Long> sessionSeatIds,
+            Long eventSessionId,
             String userId
     );
     void bookedSessionSeats(

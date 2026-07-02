@@ -12,6 +12,7 @@ import com.ankit.inventory_service.repository.SeatRepository;
 import com.ankit.inventory_service.repository.SessionSeatsRepository;
 import com.ankit.inventory_service.service.ISessionSeatService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class SessionSeatServiceImpl implements ISessionSeatService {
     private final SessionSeatsRepository sessionSeatsRepository;
@@ -84,22 +86,29 @@ public class SessionSeatServiceImpl implements ISessionSeatService {
         }
 
         try {
-            LocalDateTime lockExpiry = LocalDateTime.now().plusMinutes(LOCK_MINUTES);
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime expiry = now.plusMinutes(10);
             // prevent deadlock by sorting the seatIds
             List<Long> sortedSeatIds = sessionSeatIds.stream().sorted().toList();
-            int updatedRows = this.sessionSeatsRepository
-                    .lockSeatsAtomic(sortedSeatIds, userId, lockExpiry);
+            int lockedCount = this.sessionSeatsRepository
+                    .lockSeatsAtomic(
+                            sortedSeatIds, userId, expiry, now,
+                            SessionSeatStatus.RESERVED,
+                            SessionSeatStatus.AVAILABLE
+                    );
 
-            if (updatedRows != sortedSeatIds.size()) {
+            if (lockedCount != sortedSeatIds.size()) {
                 throw new SeatAlreadyBookedException(
                         "One or more selected seats are no longer available."
                 );
             }
+
+            log.info("Successfully locked seats: {}", sortedSeatIds);
         } catch (SeatAlreadyBookedException e) {
             redisTemplate.delete(redisKeys);
             throw e;
         } catch (Exception e) {
-//            log.error("Database batch lock failed. Rolling back Redis locks for batch.", e);
+            log.error("Database batch lock failed. Rolling back Redis locks for batch.", e);
             redisTemplate.delete(redisKeys);
             throw new RuntimeException("Failed to secure batch seat lock", e);
         }
@@ -109,11 +118,22 @@ public class SessionSeatServiceImpl implements ISessionSeatService {
     @Transactional
     public void unlockSessionSeats(
             List<Long> sessionSeatIds,
+            Long eventSessionId,
             String userId
     ) {
         int updatedCount = sessionSeatsRepository
-                .unlockReservedSeats(sessionSeatIds, userId);
-        System.out.println("Unlocked seats: " + updatedCount);
+                .unlockReservedSeats(
+                        sessionSeatIds, userId,
+                        SessionSeatStatus.RESERVED,
+                        SessionSeatStatus.AVAILABLE
+                );
+        List<String> redisKeys = sessionSeatIds.stream()
+                .map(id ->
+                        String.format("lock:eventSession:%s:sessionSeat:%s", eventSessionId, id)
+                )
+                .toList();
+        redisTemplate.delete(redisKeys);
+        log.info("Unlocked seats: {}", updatedCount);
     }
 
     @Override
@@ -123,15 +143,26 @@ public class SessionSeatServiceImpl implements ISessionSeatService {
             String userId
     ) {
         int updatedCount = sessionSeatsRepository
-                .bookReservedSeats(sessionSeatIds, userId);
-        System.out.println("Unlocked seats: " + updatedCount);
+                .bookReservedSeats(
+                        sessionSeatIds, userId,
+                        SessionSeatStatus.RESERVED,
+                        SessionSeatStatus.BOOKED
+                );
+
+        log.info("Booked seats: {}", updatedCount);
     }
 
     @Scheduled(fixedRate = 60000)
     @Transactional
     public void releaseExpiredLocks() {
-        int data = this.sessionSeatsRepository.releaseExpiredSeats(LocalDateTime.now());
-        System.out.println("Expired locks released: " + data);
+        int data = this.sessionSeatsRepository
+                .releaseExpiredSeats(
+                        LocalDateTime.now(),
+                        SessionSeatStatus.RESERVED,
+                        SessionSeatStatus.AVAILABLE
+                );
+
+        log.info("Expired locks released: {}", data);
     }
 
     @Override
@@ -152,5 +183,7 @@ public class SessionSeatServiceImpl implements ISessionSeatService {
                 .toList();
 
         sessionSeatsRepository.saveAll(sessionSeats);
+
+        log.info("Session Seats initialized for event session {}", eventSessionEvent.getId());
     }
 }

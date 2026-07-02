@@ -8,12 +8,14 @@ import com.ankit.inventory_service.mapper.VenueMapper;
 import com.ankit.inventory_service.repository.VenueRepository;
 import com.ankit.inventory_service.service.IVenueService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class VenueServiceImpl implements IVenueService {
     final private VenueRepository venueRepository;
@@ -24,6 +26,8 @@ public class VenueServiceImpl implements IVenueService {
     public VenueDTO createVenue(VenueDTO venueDTO) {
         Venue venue = this.venueMapper.toEntity(venueDTO);
         Venue savedVenue = this.venueRepository.save(venue);
+
+        log.info("Venue created: {}", savedVenue);
         return this.venueMapper.toDto(savedVenue);
     }
 

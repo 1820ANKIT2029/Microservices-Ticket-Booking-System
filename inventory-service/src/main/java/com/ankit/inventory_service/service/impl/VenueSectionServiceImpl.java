@@ -7,12 +7,14 @@ import com.ankit.inventory_service.mapper.VenueSectionMapper;
 import com.ankit.inventory_service.repository.VenueSectionRepository;
 import com.ankit.inventory_service.service.IVenueSectionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class VenueSectionServiceImpl implements IVenueSectionService {
     private final VenueSectionRepository venueSectionRepository;
@@ -35,6 +37,8 @@ public class VenueSectionServiceImpl implements IVenueSectionService {
         venueSectionDTO.setVenueId(venueId);
         VenueSection venueSection = this.venueSectionMapper.toEntity(venueSectionDTO);
         VenueSection venueSection1 = this.venueSectionRepository.save(venueSection);
+
+        log.info("Venue Section created: {}", venueSection1);
         return this.venueSectionMapper.toDto(venueSection1);
     }
 
