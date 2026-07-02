@@ -7,12 +7,14 @@ import com.ankit.event_service.mapper.EventMapper;
 import com.ankit.event_service.repository.EventRepository;
 import com.ankit.event_service.service.IEventService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class EventServiceImpl implements IEventService {
     private final EventRepository eventRepository;
@@ -25,6 +27,8 @@ public class EventServiceImpl implements IEventService {
         Event event = this.eventMapper.toEntity(eventDTO);
 
         Event savedEvent = this.eventRepository.save(event);
+
+        log.info("Event created: {}", savedEvent);
         return eventMapper.toDto(savedEvent);
     }
 
@@ -45,6 +49,8 @@ public class EventServiceImpl implements IEventService {
     @Override
     @Transactional
     public void deleteEvent(Long eventId, String userId) {
+        log.info("Deleting event with id: {}", eventId);
+
         this.eventRepository.deleteByIdAndUserId(eventId, userId);
     }
 

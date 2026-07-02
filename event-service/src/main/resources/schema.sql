@@ -95,9 +95,9 @@ CREATE TABLE IF NOT EXISTS `ticket_type_sections` (
     `ticket_type_id` INT NOT NULL,
     `venue_section_id` INT NOT NULL,
 
-    PRIMARY KEY(ticket_type_id, venue_section_id),
+    PRIMARY KEY(`ticket_type_id`, `venue_section_id`),
 
-    FOREIGN KEY (ticket_type_id)
-        REFERENCES ticket_types(id)
+    FOREIGN KEY (`ticket_type_id`)
+        REFERENCES `ticket_types`(`id`)
         ON DELETE CASCADE
 );

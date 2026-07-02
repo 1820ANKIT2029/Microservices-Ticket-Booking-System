@@ -8,6 +8,7 @@ import com.ankit.event_service.mapper.EventSessionMapper;
 import com.ankit.event_service.repository.EventSessionRepository;
 import com.ankit.event_service.service.IEventSessionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class EventSessionServiceImpl implements IEventSessionService {
     private final EventSessionRepository eventSessionRepository;
@@ -41,7 +43,9 @@ public class EventSessionServiceImpl implements IEventSessionService {
                 .build();
 
         streamBridge.send("createSessionSeats-in-0", eventSessionEvent);
+        log.info("EventSessionEvent sent successfully");
 
+        log.info("Sending eventSessionEvent: {}", eventSessionEvent);
         return this.eventSessionMapper.toDto(savedEventSession);
     }
 
@@ -58,6 +62,7 @@ public class EventSessionServiceImpl implements IEventSessionService {
     @Override
     @Transactional
     public void deleteEventSession(Long id, Long eventId) {
+        log.info("Deleting event session with id: {}", id);
         this.eventSessionRepository.deleteByIdAndEventId(id, eventId);
     }
 
