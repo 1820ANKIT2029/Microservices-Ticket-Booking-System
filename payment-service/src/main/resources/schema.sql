@@ -1,11 +1,18 @@
+DO $$ BEGIN
+    CREATE TYPE payment_gateway AS ENUM ('PAYPAL', 'RAZORPAY', 'STRIPE');
+    CREATE TYPE payment_status AS ENUM ('FAILED', 'INITIATED', 'REFUNDED', 'SUCCESS');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
 CREATE TABLE IF NOT EXISTS `payments` (
     `id` SERIAL PRIMARY KEY,
-    `gateway_name` VARCHAR(100) NOT NULL,     -- e.g., STRIPE, PAYPAL
+    `gateway_name` payment_gateway NOT NULL,     -- e.g., STRIPE, PAYPAL
     `gateway_payment_id` VARCHAR(255) UNIQUE, -- Transaction reference from provider
     `gateway_order_id` VARCHAR(255) UNIQUE,          -- Associated order record on provider
     `amount` DECIMAL(12, 2) NOT NULL,
     `currency` VARCHAR(10) DEFAULT 'INR',
-    `status` VARCHAR(50) NOT NULL,            -- e.g., INITIATED, SUCCESS, FAILED
+    `status` payment_status NOT NULL,            -- e.g., INITIATED, SUCCESS, FAILED
     `method` VARCHAR(50),                     -- Quick copy reference of the processing type
     `gateway_response` TEXT,                  -- Complete payload logging for debugging
     `booking_id` INT NOT NULL,                -- Logical connection to Booking Service

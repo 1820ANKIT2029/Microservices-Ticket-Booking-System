@@ -10,6 +10,7 @@ import com.ankit.payment_service.service.IPaymentVerificationService;
 import com.razorpay.RazorpayException;
 import com.razorpay.Utils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -17,6 +18,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @RefreshScope
 public class PaymentVerificationServiceImpl implements IPaymentVerificationService {
@@ -58,6 +60,8 @@ public class PaymentVerificationServiceImpl implements IPaymentVerificationServi
             }
 
             this.paymentRepository.save(payment);
+
+            log.info("Payment verification completed for payment: {}", payment);
 
             if (!isValid) {
                 throw new RuntimeException("Payment signature verification failed");

@@ -3,7 +3,9 @@ package com.ankit.payment_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -22,7 +24,7 @@ public class Payment {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "gateway_name", nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private PaymentGateway gatewayName;
 
     @Column(name = "gateway_payment_id", unique = true, length = 255)
@@ -38,7 +40,7 @@ public class Payment {
     private String currency = "INR";
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private PaymentStatus status; // e.g., INITIATED, SUCCESS, FAILED
 
     @Column(length = 50)

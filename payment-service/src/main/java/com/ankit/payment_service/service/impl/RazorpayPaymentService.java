@@ -13,6 +13,7 @@ import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -26,6 +27,7 @@ import java.math.RoundingMode;
 import java.util.Currency;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @RefreshScope
 public class RazorpayPaymentService implements IPaymentService {
@@ -61,6 +63,8 @@ public class RazorpayPaymentService implements IPaymentService {
             Payment savedPayment = this.paymentRepository.save(payment);
             PaymentDTO savedPaymentDTO = this.paymentMapper.toDTO(savedPayment);
             savedPaymentDTO.setGatewayPublicApiKey(this.apiKey);
+
+            log.info("Payment created successfully: {}", savedPaymentDTO);
 
             return savedPaymentDTO;
         } catch (RazorpayException ex) {
@@ -113,6 +117,7 @@ public class RazorpayPaymentService implements IPaymentService {
 
         Order order = this.razorpayClient.orders.create(orderRequest);
 
+        log.info("Razorpay Order created: {}", order);
         return this.razorpayOrderMapper.toPaymentDTO(order, bookingId, userId);
     }
 }

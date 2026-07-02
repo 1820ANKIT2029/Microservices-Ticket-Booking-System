@@ -23,9 +23,6 @@ spring:
     show-sql: true
 
   cloud:
-    config:
-      enabled: true
-      uri: "optional:configserver:http://localhost:8888/"
 
     stream:
       bindings:
@@ -39,15 +36,23 @@ spring:
         binder:
           brokers: localhost:9092
 
+    config:
+      enabled: true
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        multiplier: 1.5
+        max-interval: 10000
+        max-attempts: 10
   config:
-    import: optional:configserver:http://localhost:8888/
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}
 
 razorpay:
   key_id: ${RAZORPAY_KEY_ID}
   key_secret: ${RAZORPAY_KEY_SECRET}
   webhook:
-    secret: ${RAZORPAY_WEBHOOK_SECRET} # 7A+so2UBjF3AALPPcmbkaG3ZR7SX/bIkePMDJ3FN4zI=
-    event_type: ${RAZORPAY_WEBHOOK_EVENT_TYPE}
+    secret: ${RAZORPAY_WEBHOOK_SECRET:} # 7A+so2UBjF3AALPPcmbkaG3ZR7SX/bIkePMDJ3FN4zI=
+    event_type: ${RAZORPAY_WEBHOOK_EVENT_TYPE:}
 
 eureka:
   client:
