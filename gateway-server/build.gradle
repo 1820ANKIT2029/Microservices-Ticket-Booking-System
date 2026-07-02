@@ -30,11 +30,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
-    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
-	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
-	testImplementation 'io.projectreactor:reactor-test'
+
+    testImplementation 'org.springframework.boot:spring-boot-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -42,6 +40,7 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testAnnotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
     // Source: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
     implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
     // Source: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
@@ -58,11 +57,15 @@ dependencyManagement {
 	}
 }
 
-jar {
-    enabled = true
-}
-
+// ./gradlew jibDockerBuild
 jib {
+//    from {
+//        image = 'gcr.io/distroless/java21-debian12'
+//    }
+    from {
+        image = 'eclipse-temurin:21-jre-alpine'
+    }
+
     to {
         def registry = System.getenv('DOCKER_REGISTRY') ?: 'agentveer'
         image = "${registry}/${project.name}:${project.version}"

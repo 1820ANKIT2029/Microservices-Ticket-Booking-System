@@ -1,5 +1,5 @@
 server:
-  port: 8087
+  port: 8080
 
 spring:
   application:
@@ -101,9 +101,14 @@ spring:
 
     config:
       enabled: true
-      uri: "optional:configserver:http://localhost:8888/"
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        multiplier: 1.5
+        max-interval: 10000
+        max-attempts: 10
   config:
-    import: optional:configserver:http://localhost:8888/
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}
 
   data:
     redis:

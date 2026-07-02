@@ -39,7 +39,7 @@ public class SecurityConfig {
 
                         // Actuator & Auth Endpoints
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .pathMatchers("/auth/login", "/auth/signup").permitAll()
+                        .pathMatchers("/auth/**").permitAll()
                         .pathMatchers("/*/actuator/**", "/actuator/**").permitAll()
                         .pathMatchers("/payment/api/payment/webhook/**").permitAll()
                         // Role-Based Access Control
