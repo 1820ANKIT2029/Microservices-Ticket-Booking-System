@@ -1,4 +1,8 @@
-CREATE TYPE user_role AS ENUM ('CONSUMER', 'ORGANIZER', 'ADMIN');
+DO $$ BEGIN
+    CREATE TYPE user_role AS ENUM ('CONSUMER', 'ORGANIZER', 'ADMIN');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 CREATE TABLE IF NOT EXISTS user_credentials (
     user_id VARCHAR(100) PRIMARY KEY,
@@ -12,7 +16,7 @@ CREATE TABLE IF NOT EXISTS user_credentials (
 );
 
 CREATE TABLE IF NOT EXISTS user_profiles (
-    user_id VARCHAR(100) PRIMARY KEY,
+    user_id VARCHAR(100) PRIMARY KEY REFERENCES user_credentials(user_id),
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,

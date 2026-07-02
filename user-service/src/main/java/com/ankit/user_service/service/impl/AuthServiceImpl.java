@@ -9,6 +9,7 @@ import com.ankit.user_service.security.JwtService;
 import com.ankit.user_service.service.IAuthService;
 import com.ankit.user_service.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
     private final UserCredentialRepository credentialRepository;
@@ -35,7 +37,7 @@ public class AuthServiceImpl implements IAuthService {
 
         UserCredential credential = UserCredential.builder()
                 .userId(sharedUserId)
-                .email(request.getEmail())
+                .email(request.getEmail().toLowerCase())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .isActive(true)
@@ -46,7 +48,7 @@ public class AuthServiceImpl implements IAuthService {
 
         UserRequestDto userRequestDto = UserRequestDto.builder()
                 .userId(sharedUserId)
-                .email(request.getEmail())
+                .email(request.getEmail().toLowerCase())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .phoneNumber(request.getPhoneNumber())
@@ -55,13 +57,14 @@ public class AuthServiceImpl implements IAuthService {
         // Create user profile
         this.userService.createUser(userRequestDto);
 
+        log.info("User registered successfully: {}", request.getEmail());
         return "User registration successful! Please log in to complete your profile.";
     }
 
     // LOGIN
     @Transactional
     public LoginResponse login(AuthRequest request) {
-        UserCredential credential = credentialRepository.findByEmail(request.getEmail())
+        UserCredential credential = credentialRepository.findByEmail(request.getEmail().toLowerCase())
                 .orElseThrow(() -> new InvalidCredentialException("Invalid username or password"));
 
         if (!passwordEncoder.matches(request.getPassword(), credential.getPassword())) {
@@ -78,6 +81,7 @@ public class AuthServiceImpl implements IAuthService {
         // Generate a JWT token containing the first-login flag
         String token = jwtService.generateToken(credential.getUserId(), credential.getRole().name(), isFirstLogin);
 
+        log.info("User logged in successfully: {}", request.getEmail());
         return new LoginResponse(token, isFirstLogin);
     }
 
