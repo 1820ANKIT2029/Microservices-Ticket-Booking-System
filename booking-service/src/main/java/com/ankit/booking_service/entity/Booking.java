@@ -3,6 +3,8 @@ package com.ankit.booking_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -32,13 +34,13 @@ public class Booking {
     private Long eventSessionId; // Logical link to Event Service
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private BookingStatus status = BookingStatus.PENDING;
 
     @Column(name = "ticket_count")
     private Integer ticketCount = 0;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;
 
     @Column(name = "tax_amount", precision = 10, scale = 2)

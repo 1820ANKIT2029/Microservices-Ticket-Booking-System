@@ -2,6 +2,8 @@ package com.ankit.booking_service.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -42,7 +44,7 @@ public class Ticket {
     private String barCode;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private TicketStatus status = TicketStatus.RESERVED;
 
     @Column(name = "price_paid", nullable = false, precision = 10, scale = 2)

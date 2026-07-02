@@ -1,6 +1,8 @@
 package com.ankit.booking_service.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
+@RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // 1. Handle Domain Resource Missing Errors (404)
@@ -32,6 +36,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .path(request.getRequestURI())
                 .timestamp(ZonedDateTime.now())
                 .build();
+
+        log.error("Resource not found: {}", ex.getMessage());
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
@@ -56,6 +62,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .timestamp(ZonedDateTime.now())
                 .build();
 
+        log.error("Validation failed: {}", validationErrors);
+
         return new ResponseEntity<>(errorWrapper, status);
     }
 
@@ -73,6 +81,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .path(request.getRequestURI())
                 .timestamp(ZonedDateTime.now())
                 .build();
+
+        log.error("Internal server error: {}", ex.getMessage());
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

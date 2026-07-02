@@ -13,6 +13,7 @@ import com.ankit.booking_service.service.client.PaymentClient;
 import com.ankit.booking_service.service.client.SessionSeatClient;
 import com.ankit.booking_service.service.client.TicketTypeClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BookingService implements IBookingService {
     private final BookingRepository bookingRepository;
@@ -95,6 +97,8 @@ public class BookingService implements IBookingService {
         savedBooking.getTickets().addAll(tickets);
 
         this.bookingRepository.save(savedBooking);
+
+        log.info("Booking created for bookingId: {}", savedBooking.getId());
 
         // Payment Feign Client
         PaymentRequestDTO paymentRequestDTO = PaymentRequestDTO.builder()

@@ -1,9 +1,16 @@
+DO $$ BEGIN
+    CREATE TYPE booking_status AS ENUM ('CANCELLED', 'CONFIRMED', 'EXPIRED', 'PENDING');
+    CREATE TYPE ticket_status AS ENUM ('RESERVED', 'VALID', 'USED', 'ISSUED', 'CANCELLED')
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
 CREATE TABLE IF NOT EXISTS `bookings` (
     `id` SERIAL PRIMARY KEY,
     `booking_ref` VARCHAR(100) NOT NULL UNIQUE,
     `user_id` VARCHAR(100) NOT NULL,          -- Logical link to User Service
     `event_session_id` INT NOT NULL,         -- Logical link to Event Service
-    `status` VARCHAR(50) DEFAULT 'PENDING', -- PENDING, CONFIRMED, CANCELLED, EXPIRED
+    `status` booking_status_enum DEFAULT 'PENDING', -- PENDING, CONFIRMED, CANCELLED, EXPIRED
     `ticket_count` INT DEFAULT 0,
     `subtotal` DECIMAL(10, 2) NOT NULL,
     `tax_amount` DECIMAL(10, 2) DEFAULT 0.00,

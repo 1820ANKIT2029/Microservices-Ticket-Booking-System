@@ -11,6 +11,7 @@ import com.ankit.booking_service.repository.BookingRepository;
 import com.ankit.booking_service.service.IBookingMessagingService;
 import com.ankit.booking_service.service.client.SessionSeatClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BookingMessagingService implements IBookingMessagingService {
     private final BookingRepository bookingRepository;
@@ -38,11 +40,7 @@ public class BookingMessagingService implements IBookingMessagingService {
                 .map(Ticket::getSessionSeatId)
                 .toList();
 
-        System.out.println("sessionSeatDTOList: " + sessionSeatDTOList);
-        System.out.println("booking.getUserId(): " + booking.getUserId());
-        System.out.println("booking.getEventSessionId(): " + booking.getEventSessionId());
-        System.out.println("booking.getTickets(): " + booking.getTickets());
-        System.out.println("booking.getTickets().size(): " + booking.getTickets().size());
+        log.info("Confirming booking for booking: {}", booking);
 
         // Tell Event Service to book seats
         this.sessionSeatClient.bookedSeats(
@@ -60,6 +58,8 @@ public class BookingMessagingService implements IBookingMessagingService {
         });
 
         bookingRepository.save(booking);
+
+        log.info("Booking confirmed for bookingId: {}", booking.getId());
 
         // Send Notification
         NotificationEvent notificationEvent = NotificationEvent.builder()
@@ -99,6 +99,9 @@ public class BookingMessagingService implements IBookingMessagingService {
                 .forEach(ticket -> ticket.setStatus(TicketStatus.CANCELLED));
 
         bookingRepository.save(booking);
+
+        log.info("Booking cancelled for bookingId: {}", booking.getId());
+
         NotificationEvent notificationEvent = NotificationEvent.builder()
                 .channel("EMAIL")
                 .BookingId(booking.getId())

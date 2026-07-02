@@ -27,22 +27,19 @@ spring:
       circuitbreaker:
         enabled: true
 
-    config:
-      enabled: true
-      uri: "optional:configserver:http://localhost:8888/"
-
-    function:
-      definition: paymentSuccess;paymentFailure
-
     stream:
       bindings:
         paymentSuccess-in-0:
           destination: payment-success-topic
           group: booking-service
+          consumer:
+            max-attempts: 3
 
         paymentFailure-in-0:
           destination: payment-failure-topic
           group: booking-service
+          consumer:
+            max-attempts: 3
 
         notification-out-0:
           destination: notification-topic
@@ -51,8 +48,27 @@ spring:
         binder:
           brokers: localhost:9092
 
+        bindings:
+          paymentSuccess-in-0:
+            consumer:
+              enable-dlq: true
+              dlq-name: payment-failure-topic-dlq
+
+          paymentFailure-in-0:
+            consumer:
+              enable-dlq: true
+              dlq-name: payment-failure-topic-dlq
+
+    config:
+      enabled: true
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        multiplier: 1.5
+        max-interval: 10000
+        max-attempts: 10
   config:
-    import: optional:configserver:http://localhost:8888/
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}
 
 eureka:
   client:
