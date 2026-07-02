@@ -1,5 +1,5 @@
 # 🎟️ Microservice Ticket Booking System
-VERSION 1.0
+VERSION 2.0
 
 A cloud-native event ticket booking platform built using **Spring Boot Microservices**, **Spring Cloud**, **Kafka**, **PostgreSQL**, and **Next.js**.
 
@@ -21,14 +21,17 @@ The system is designed with scalability, fault tolerance, and domain-driven micr
 * Create and update events
 * Event categories and metadata
 * Multiple event sessions
-* Create venues, Venue sections, Seat (Venue Management in later versions)
+
+## Inventory Services
+
+* Create venues, Venue sections, Seat 
 * Seat map support
 * Seat availability tracking
+* Seat locking with Redis and Database
 
 ## Booking Services
 
 * Ticket reservation
-* Seat locking (Database-driven, will shift to Redis in later versions)
 * Booking confirmation
 * Booking cancellation
 
@@ -71,17 +74,17 @@ The system is designed with scalability, fault tolerance, and domain-driven micr
 Client (Next.js)
         |
         ▼
-+----------------+          +-----------------------+
-| API Gateway    |   --->   | Eureka Discovery      |
-+----------------+          +-----------------------+
++----------------+          +-----------------------+       +----------------+
+| API Gateway    |   --->   | Eureka Discovery      |       | config-server  |
++----------------+          +-----------------------+       +----------------+
         |
         ▼
----------------------------------------------         +----------------+
-|         |          |         |            |         | config-server  |
-▼         ▼          ▼         ▼            ▼         +----------------+
+----------------------------------------------------
+|         |         |        |           |         |         
+▼         ▼         ▼        ▼           ▼         ▼         
 
-User     Event     Booking   Payment    Notification   
-Service  Service   Service   Service      Service     
+User     Event    Booking  Inventory   Payment  Notification   
+Service  Service  Service   Service    Service   Service     
 ```
 
 ---
@@ -94,7 +97,8 @@ Service  Service   Service   Service      Service
 | Discovery Service    | Eureka server                      |
 | Config Server        | Centralized configuration          |
 | User Service         | Authentication and user management |
-| Event Service        | Event and venue management         |
+| Event Service        | Event management                   |
+| Inventory Service    | venue management                   |
 | Booking Service      | Ticket reservations                |
 | Payment Service      | Payment processing                 |
 | Notification Service | Email notifications                |
@@ -105,13 +109,14 @@ Service  Service   Service   Service      Service
 
 ## Backend
 
-* Java 25
+* Java 21
 * Spring Boot 4
 * Spring Cloud
 * Spring Security
 * Spring Data JPA
 * Hibernate
 * Kafka
+* Redis
 * PostgreSQL
 * OpenFeign
 * Maven / Gradle
@@ -133,7 +138,6 @@ Service  Service   Service   Service      Service
 * Docker
 * Docker Compose
 * Kafka
-* Zookeeper
 * Eureka
 * Config Server
 * Google Jib
@@ -150,6 +154,7 @@ DistributedTicketBookingSystem
 ├── config-server
 ├── user-service
 ├── event-service
+├── inventory-service
 ├── booking-service
 ├── payment-service
 ├── notification-service
@@ -164,10 +169,9 @@ DistributedTicketBookingSystem
 
 Install:
 
-* Java 25+
-* Maven
+* Java 21+
+* Maven/Gradle
 * Node.js
-* PostgreSQL
 * Docker
 * Docker Compose
 * Git
@@ -180,8 +184,6 @@ Install:
 
 ```bash
 git clone https://github.com/1820ANKIT2029/DistributedTicketBookingSystem.git
-
-cd DistributedTicketBookingSystem
 ```
 
 ---
@@ -189,71 +191,36 @@ cd DistributedTicketBookingSystem
 ## 2. Start Infrastructure
 
 ```bash
+cd DistributedTicketBookingSystem
+cd docker-compose/default
+
 docker compose up -d
 ```
 
-Starts:
+OR 
 
-* Redis
-* Kafka
-* Zookeeper
-
----
-
-## 3. Start Config Server
-
+Open Docker and then Command line
 ```bash
-cd config-server
+cd DistributedTicketBookingSystem
 
-mvn spring-boot:run
-```
+./gradlew clean compileJava --parallel
+./gradlew jibDockerBuild --parallel
 
----
+cd DistributedTicketBookingSystem
+cd docker-compose/default
 
-## 4. Start Discovery Service
-
-```bash
-cd gateway-server
-
-mvn spring-boot:run
-```
-
----
-
-## 5. Start Backend Services
-
-Start each service:
-
-```bash
-user-service
-event-service
-booking-service
-payment-service
-notification-service
-```
-
-Example:
-
-```bash
-cd user-service
-
-mvn spring-boot:run
-```
-
----
-
-## 6. Start Frontend
-
-```bash
-cd web-frontend
-docker build -t frontend-service .
-docker run -p 3000:80 frontend-service
+docker compose up -d
 ```
 
 Application:
 
 ```text
 http://localhost:3000
+```
+
+Stop:
+```bash
+docker compose down -v
 ```
 
 ---
@@ -265,9 +232,9 @@ JWT-based authentication.
 Public APIs:
 
 ```text
-POST /auth/signup
+POST /auth/api/signup
 
-POST /auth/login
+POST /auth/api/login
 ```
 
 Protected APIs:
@@ -302,14 +269,15 @@ notification-email
 
 | Service              | Port |
 | -------------------- | ---- |
-| API Gateway          | 8087 |
+| API Gateway          | 8080 |
 | Config Server        | 8888 |
 | Eureka Server        | 8761 |
 | User Service         | 8081 |
 | Event Service        | 8082 |
-| Booking Service      | 8083 |
-| Payment Service      | 8084 |
-| Notification Service | 8085 |
+| Inventory Service    | 8083 |
+| Booking Service      | 8084 |
+| Payment Service      | 8085 |
+| Notification Service | 8086 |
 | Frontend             | 3000 |
 
 ---
@@ -319,7 +287,6 @@ notification-email
 * Redis caching
 * Elasticsearch integration
 * Recommendation engine
-* Real-time seat locking
 * WebSocket notifications
 * Prometheus monitoring
 * Grafana dashboards
