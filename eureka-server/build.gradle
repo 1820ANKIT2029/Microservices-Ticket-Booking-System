@@ -27,7 +27,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
-	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -37,11 +37,15 @@ dependencyManagement {
 	}
 }
 
-jar {
-    enabled = true
-}
-
+// ./gradlew jibDockerBuild
 jib {
+//    from {
+//        image = 'gcr.io/distroless/java21-debian12'
+//    }
+    from {
+        image = 'eclipse-temurin:21-jre-alpine'
+    }
+
     to {
         def registry = System.getenv('DOCKER_REGISTRY') ?: 'agentveer'
         image = "${registry}/${project.name}:${project.version}"
