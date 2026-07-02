@@ -1,52 +1,338 @@
-version: '3.8'
-
 services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.0
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-      # Force JVM to use exactly 128MB of heap
-      KAFKA_HEAP_OPTS: "-Xmx128m -Xms128m"
-    deploy:
-      resources:
-        limits:
-          memory: 256M # Hard Docker container limit
+
+  # infrastructure services
 
   kafka:
-    image: confluentinc/cp-kafka:7.3.0
-    depends_on:
-      - zookeeper
-    ports:
-      - "9092:9092"
+    image: apache/kafka:3.8.0
+    container_name: kafka-kraft
+#    ports:
+#      - "9092:9092"
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:29093'
+      KAFKA_LISTENERS: 'PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:9092'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      # Drastically reduce Kafka JVM heap (Default is usually 1GB)
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      # Heap tuning matching your resource constraints
       KAFKA_HEAP_OPTS: "-Xmx256m -Xms256m"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    networks:
+      - microservices-net
     deploy:
       resources:
         limits:
-          memory: 512M # Prevents Kafka from aggressively caching to host OS RAM
+          memory: 512M
+    restart: always
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "</dev/tcp/localhost/9092" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   redis:
     image: redis:7-alpine
     container_name: redis-cache
-    ports:
-      - "6379:6379"
-    # Added strict 50MB internal limit and an LRU eviction policy
+#    ports:
+#      - "6379:6379"
     command: redis-server --save 60 1 --loglevel warning --maxmemory 50mb --maxmemory-policy allkeys-lru
     volumes:
       - redis-data:/data
+    networks:
+      - microservices-net
     restart: always
     deploy:
       resources:
         limits:
           memory: 128M
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-server
+#    ports:
+#      - "5432:5432"
+    environment:
+      POSTGRES_USER: db_admin
+      POSTGRES_PASSWORD: admin_password
+    command: >
+      postgres 
+      -c max_connections=200
+      -c shared_buffers=16MB 
+      -c work_mem=1MB
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-databases.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - microservices-net
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "db_admin" ]
+      retries: 10
+      timeout: 5s
+
+
+  # microservices
+
+  config-server:
+    image: agentveer/config-server:2.0.0
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    networks:
+      - microservices-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 300M
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8888/actuator/health | grep UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: always
+    depends_on:
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  eureka-server:
+    image: agentveer/eureka-server:2.0.0
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://config-server:8888
+    networks:
+      - microservices-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 300M
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8761/actuator/health | grep UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: always
+    depends_on:
+      config-server:
+        condition: service_healthy
+
+  gateway-server:
+    image: agentveer/gateway-server:2.0.0
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATA_REDIS_URL: redis://redis:6379
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://config-server:8888
+    networks:
+      - microservices-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 300M
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep UP || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: always
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  user-service:
+    image: agentveer/user-service:2.0.0
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://config-server:8888
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_db
+      DB_USERNAME: user_service_user
+      DB_PASSWORD: user_service_user
+    networks:
+      - microservices-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 300M
+    restart: always
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  event-service:
+    image: agentveer/event-service:2.0.0
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://config-server:8888
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/event_db
+      DB_USERNAME: event_service_user
+      DB_PASSWORD: event_service_user
+    networks:
+      - microservices-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 300M
+    restart: always
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  inventory-service:
+    image: agentveer/inventory-service:2.0.0
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATA_REDIS_URL: redis://redis:6379
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://config-server:8888
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventory_db
+      DB_USERNAME: inventory_service_user
+      DB_PASSWORD: inventory_service_user
+    networks:
+      - microservices-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 300M
+    restart: always
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  booking-service:
+    image: agentveer/booking-service:2.0.0
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://config-server:8888
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/booking_db
+      DB_USERNAME: booking_service_user
+      DB_PASSWORD: booking_service_user
+    networks:
+      - microservices-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 300M
+    restart: always
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  payment-service:
+    image: agentveer/payment-service:2.0.0
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://config-server:8888
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/payment_db
+      DB_USERNAME: payment_service_user
+      DB_PASSWORD: payment_service_user
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET}
+    networks:
+      - microservices-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 300M
+    restart: always
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  notification-service:
+    image: agentveer/notification-service:2.0.0
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_PROFILES_ACTIVE: prod
+      CONFIG_SERVER_URL: http://config-server:8888
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/notification_db
+      DB_USERNAME: notification_service_user
+      DB_PASSWORD: notification_service_user
+    networks:
+      - microservices-net
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 300M
+    restart: always
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  frontend:
+    image: agentveer/frontend-service:2.0.0
+    ports:
+      - "3000:80"
+    environment:
+      NEXT_PUBLIC_API_URL: ""     # empty = same-origin, relative paths
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - microservices-net
+    deploy:
+      resources:
+        limits:
+          memory: 300M
+    restart: always
+    depends_on:
+      gateway-server:
+        condition: service_healthy
 
 volumes:
   redis-data:
     driver: local
+  kafka-data:
+    driver: local
+  postgres-data:
+    driver: local
+
+networks:
+  microservices-net:
+    driver: bridge
