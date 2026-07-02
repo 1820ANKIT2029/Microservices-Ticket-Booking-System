@@ -19,6 +19,7 @@ spring:
             - eureka-server
             - user-service
             - event-service
+            - inventory-service
             - venue-service
             - booking-service
             - payment-service
@@ -57,5 +58,5 @@ management:
 
 logging:
   level:
-    org.springframework.cloud.config.server: DEBUG
-    org.eclipse.jgit: DEBUG
+    root: INFO
+    org.springframework.cloud.config: INFO
