@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: agentveer/frontend-service:2.0.0
+          ports:
+            - containerPort: 80 # The internal container port from your "3000:80" mapping
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              value: "" # Empty string for same-origin relative paths
+          resources:
+            limits:
+              memory: "300Mi" # Matches deploy.resources.limits.memory
+            requests:
+              memory: "150Mi" # Best practice: set a starting request below the limit
+          volumeMounts:
+            - name: nginx-config-volume
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true # Matches the :ro flag
+      volumes:
+        - name: nginx-config-volume
+          configMap:
+            name: frontend-nginx-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 3000      # The external port from your "3000:80" mapping
+      targetPort: 80  # The internal container port
+  type: ClusterIP

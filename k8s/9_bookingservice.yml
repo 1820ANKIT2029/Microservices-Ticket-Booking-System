@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookingservice-deployment
+  labels:
+    app: bookingservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookingservice
+  template:
+    metadata:
+      labels:
+        app: bookingservice
+    spec:
+      containers:
+        - name: bookingservice
+          image: agentveer/bookingservice:v2.0.0
+          ports:
+            - containerPort: 8084
+          env:
+            - name: SPRING_APPLICATION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: eventpass-configmap
+                  key: ACCOUNTS_APPLICATION_NAME
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: eventpass-configmap
+                  key: SPRING_PROFILES_ACTIVE
+            - name: SPRING_CONFIG_IMPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: eventpass-configmap
+                  key: SPRING_CONFIG_IMPORT
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              valueFrom:
+                configMapKeyRef:
+                  name: eventpass-configmap
+                  key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookingservice
+spec:
+  selector:
+    app: bookingservice
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8084
+      targetPort: 8084
