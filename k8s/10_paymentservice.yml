@@ -1,55 +1,76 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: paymentservice-deployment
+  name: payment-service
   labels:
-    app: paymentservice
+    app: payment-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: paymentservice
+      app: payment-service
   template:
     metadata:
       labels:
-        app: paymentservice
+        app: payment-service
     spec:
       containers:
-        - name: paymentservice
-          image: agentveer/paymentservice:v2.0.0
+        - name: payment-service
+          image: agentveer/payment-service:v2.0.0
           ports:
             - containerPort: 8085
+          envFrom:
+            - configMapRef:
+                name: eventpass-configmap
+
+            - secretRef:
+                name: razorpay-secret
+
           env:
-            - name: SPRING_APPLICATION_NAME
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/payment_db
+
+            - name: DB_USERNAME
+              value: payment_service_user
+
+            - name: DB_PASSWORD
               valueFrom:
-                configMapKeyRef:
-                  name: eventpass-configmap
-                  key: ACCOUNTS_APPLICATION_NAME
-            - name: SPRING_PROFILES_ACTIVE
-              valueFrom:
-                configMapKeyRef:
-                  name: eventpass-configmap
-                  key: SPRING_PROFILES_ACTIVE
-            - name: SPRING_CONFIG_IMPORT
-              valueFrom:
-                configMapKeyRef:
-                  name: eventpass-configmap
-                  key: SPRING_CONFIG_IMPORT
-            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-              valueFrom:
-                configMapKeyRef:
-                  name: eventpass-configmap
-                  key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+                secretKeyRef:
+                  name: postgres-secret
+                  key: PAYMENT_DB_PASSWORD
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "300Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8085
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8085
+            initialDelaySeconds: 60
+            periodSeconds: 20
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: paymentservice
+  name: payment-service
+
 spec:
   selector:
-    app: paymentservice
-  type: LoadBalancer
+    app: payment-service
+
+  type: ClusterIP
   ports:
-    - protocol: TCP
-      port: 8085
+    - port: 8085
       targetPort: 8085

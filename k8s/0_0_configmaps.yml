@@ -1,0 +1,133 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eventpass-configmap
+data:
+  SPRING_PROFILES_ACTIVE: prod
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+  SPRING_CONFIG_IMPORT: configserver:http://config-server:8888/
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8761/eureka/
+  SPRING_DATA_REDIS_URL: redis://redis:6379
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-nginx-config
+data:
+  nginx.conf: |
+    # nginx.conf
+    user  nginx;
+    worker_processes  5;
+    
+    events {
+      worker_connections   1000;
+    }
+    
+    http {
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+    
+      resolver 127.0.0.11 valid=10s;
+    
+      upstream my_gateway_cluster {
+        least_conn;
+    
+        server gateway-server:8080;
+    
+        # Optional: Keep-alive connections for performance
+        keepalive 32;
+      }
+    
+      server {
+        listen             80;
+    
+        # Serve the local static frontend files
+        root /usr/share/nginx/html;
+        index index.html;
+    
+        # --- Backend routing ---
+        location ~ ^/[a-z-]+/api/ {
+            proxy_pass http://my_gateway_cluster;
+    
+            proxy_http_version 1.1;
+            proxy_set_header Connection "";
+    
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    
+        # --- Auth routing ---
+        location /auth/api/ {
+            proxy_pass http://gateway-server:8080;
+            proxy_http_version 1.1;
+    
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    
+        # ---- Frontend routing (Next.js static export) ----
+        location / {
+          try_files $uri $uri/ /index.html;
+        }
+      }
+    }
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init
+data:
+  init.sql: | 
+    -- Create all Databases and Users First
+    CREATE DATABASE user_db;
+    CREATE DATABASE event_db;
+    CREATE DATABASE inventory_db;
+    CREATE DATABASE booking_db;
+    CREATE DATABASE payment_db;
+    CREATE DATABASE notification_db;
+    
+    CREATE USER user_service_user WITH ENCRYPTED PASSWORD 'user_service_user';
+    CREATE USER event_service_user WITH ENCRYPTED PASSWORD 'event_service_user';
+    CREATE USER inventory_service_user WITH ENCRYPTED PASSWORD 'inventory_service_user';
+    CREATE USER booking_service_user WITH ENCRYPTED PASSWORD 'booking_service_user';
+    CREATE USER payment_service_user WITH ENCRYPTED PASSWORD 'payment_service_user';
+    CREATE USER notification_service_user WITH ENCRYPTED PASSWORD 'notification_service_user';
+    
+    -- Connect to each DB & Grant Schema Perms
+    
+    -- Switch to user_db
+    \c user_db
+    GRANT ALL PRIVILEGES ON DATABASE user_db TO user_service_user;
+    GRANT USAGE, CREATE ON SCHEMA public TO user_service_user;
+    
+    -- Switch to event_db
+    \c event_db
+    GRANT ALL PRIVILEGES ON DATABASE event_db TO event_service_user;
+    GRANT USAGE, CREATE ON SCHEMA public TO event_service_user;
+    
+    -- Switch to inventory_db
+    \c inventory_db
+    GRANT ALL PRIVILEGES ON DATABASE inventory_db TO inventory_service_user;
+    GRANT USAGE, CREATE ON SCHEMA public TO inventory_service_user;
+    
+    -- Switch to booking_db
+    \c booking_db
+    GRANT ALL PRIVILEGES ON DATABASE booking_db TO booking_service_user;
+    GRANT USAGE, CREATE ON SCHEMA public TO booking_service_user;
+    
+    -- Switch to payment_db
+    \c payment_db
+    GRANT ALL PRIVILEGES ON DATABASE payment_db TO payment_service_user;
+    GRANT USAGE, CREATE ON SCHEMA public TO payment_service_user;
+    
+    -- Switch to notification_db
+    \c notification_db
+    GRANT ALL PRIVILEGES ON DATABASE notification_db TO notification_service_user;
+    GRANT USAGE, CREATE ON SCHEMA public TO notification_service_user;

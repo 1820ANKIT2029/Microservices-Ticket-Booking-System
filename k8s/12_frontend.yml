@@ -18,15 +18,15 @@ spec:
         - name: frontend
           image: agentveer/frontend-service:2.0.0
           ports:
-            - containerPort: 80 # The internal container port from your "3000:80" mapping
+            - containerPort: 80
           env:
             - name: NEXT_PUBLIC_API_URL
               value: "" # Empty string for same-origin relative paths
           resources:
             limits:
-              memory: "300Mi" # Matches deploy.resources.limits.memory
+              memory: "300Mi"
             requests:
-              memory: "150Mi" # Best practice: set a starting request below the limit
+              memory: "150Mi"
           volumeMounts:
             - name: nginx-config-volume
               mountPath: /etc/nginx/nginx.conf
@@ -44,8 +44,9 @@ metadata:
 spec:
   selector:
     app: frontend
+
+  type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 3000      # The external port from your "3000:80" mapping
-      targetPort: 80  # The internal container port
-  type: ClusterIP
+      port: 80
+      targetPort: 80

@@ -1,0 +1,78 @@
+install kind and kubectl
+
+kind create cluster --name eventpass --config kind-config.yaml
+kubectl get nodes
+
+
+Ankit@LAPTOP-VCL7CO79 MINGW64 /d/DistributedTicketBookingSystem (k8s)
+$ cd k8s/
+
+Ankit@LAPTOP-VCL7CO79 MINGW64 /d/DistributedTicketBookingSystem/k8s (k8s)
+$ ls
+0_0_configmaps.yml  1_2_redis.yml               2_keycloak.yml       6_userservice.yml       init-databases.sql
+0_1_secret.yml      10_paymentservice.yml       3_configserver.yml   7_eventservice.yml      kind-config.yaml
+1_0_kafka.yml       11_notificationservice.yml  4_eurekaserver.yml   8_inventoryservice.yml  kind-demo.text
+1_1_postgresql.yml  12_frontend.yml             5_gatewayserver.yml  9_bookingservice.yml    nginx.conf
+
+Ankit@LAPTOP-VCL7CO79 MINGW64 /d/DistributedTicketBookingSystem/k8s (k8s)
+$ kind create cluster --name eventpass --config kind-config.yaml
+Creating cluster "eventpass" ...
+ ✓ Ensuring node image (kindest/node:v1.36.1) 🖼
+ ✓ Preparing nodes 📦 📦 📦 📦
+ ✓ Writing configuration 📜
+ ✓ Starting control-plane 🕹️
+ ✓ Installing CNI 🔌
+ ✓ Installing StorageClass 💾
+ ✓ Joining worker nodes 🚜
+Set kubectl context to "kind-eventpass"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-eventpass
+
+Have a question, bug, or feature request? Let us know! https://kind.sigs.k8s.io/#community 🙂
+
+Ankit@LAPTOP-VCL7CO79 MINGW64 /d/DistributedTicketBookingSystem/k8s (k8s)
+$ kubectl get nodes
+NAME                      STATUS   ROLES           AGE   VERSION
+eventpass-control-plane   Ready    control-plane   55s   v1.36.1
+eventpass-worker          Ready    <none>          44s   v1.36.1
+eventpass-worker2         Ready    <none>          44s   v1.36.1
+eventpass-worker3         Ready    <none>          44s   v1.36.1
+
+
+
+kubectl apply -f 0_0_configmaps.yml
+kubectl apply -f 0_1_secret.yml
+
+kubectl apply -f 1_0_kafka.yml
+kubectl apply -f 1_1_postgresql.yml
+kubectl apply -f 1_2_redis.yml
+
+kubectl apply -f 2_keycloak.yml
+kubectl apply -f 3_configserver.yml
+kubectl apply -f 4_eurekaserver.yml
+kubectl apply -f 5_gatewayserver.yml
+
+kubectl apply -f 6_userservice.yml
+kubectl apply -f 7_eventservice.yml
+kubectl apply -f 8_inventoryservice.yml
+kubectl apply -f 9_bookingservice.yml
+kubectl apply -f 10_paymentservice.yml
+kubectl apply -f 11_notificationservice.yml
+
+kubectl apply -f 12_frontend.yml
+
+
+
+kubectl get pods
+kubectl get svc
+kubectl get deployments
+kubectl get pods -w
+kubectl logs deployment/config-server
+
+
+kubectl delete -f .
+
+kind delete cluster --name eventpass
+
+
