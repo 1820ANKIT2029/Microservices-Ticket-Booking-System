@@ -5,70 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="29083d6d-5ca6-4291-80a9-9f9fa16a6c9b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analytics-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analytics-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/analytics-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/entity/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/entity/Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/entity/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/entity/Ticket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/impl/BookingMessagingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/impl/BookingMessagingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/impl/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/ankit/booking_service/service/impl/BookingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/resources/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose/default/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/default/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/repository/EventRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/repository/EventRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/EventServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/EventServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/EventSessionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/EventSessionServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event-service/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/resources/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-server/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway-server/src/main/java/com/ankit/gateway_server/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-server/src/main/java/com/ankit/gateway_server/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-server/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/controller/SessionSeatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/controller/SessionSeatController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/entity/SessionSeat.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/entity/SessionSeat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/repository/SessionSeatsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/repository/SessionSeatsRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/service/ISessionSeatService.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/service/ISessionSeatService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/service/impl/SeatServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/service/impl/SeatServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/service/impl/SessionSeatServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/service/impl/SessionSeatServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/service/impl/VenueSectionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/service/impl/VenueSectionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/service/impl/VenueServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/java/com/ankit/inventory_service/service/impl/VenueServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory-service/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/inventory-service/src/main/resources/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/service/impl/EmailNotificationStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/service/impl/EmailNotificationStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/service/impl/PushNotificationStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/service/impl/PushNotificationStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/service/impl/SMSNotificationStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/ankit/notification_service/service/impl/SMSNotificationStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/entity/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/entity/Payment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/PaymentVerificationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/PaymentVerificationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/RazorpayPaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/ankit/payment_service/service/impl/RazorpayPaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/resources/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/search-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/search-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/ankit/user_service/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/ankit/user_service/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/ankit/user_service/entity/UserCredential.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/ankit/user_service/entity/UserCredential.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/ankit/user_service/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/ankit/user_service/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/ankit/user_service/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/ankit/user_service/service/impl/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/resources/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-frontend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-frontend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/api/services/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/api/services/auth.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-frontend/src/shared/api/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web-frontend/src/shared/api/services/user.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,63 +77,63 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Docker.default.redis: Compose Deployment.executor": "Run",
-    "Docker.default: Compose Deployment.executor": "Run",
-    "Gradle.Build DistributedTicketBookingSystem.executor": "Run",
-    "Gradle.Download Sources.executor": "Run",
-    "HTTP Request.ConfigServerApplication | #1.executor": "Run",
-    "HTTP Request.ConfigServerApplication | #3.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found": "New/updated database configurations found",
-    "Notification.DoNotAsk-DatabaseConfigFileWatcher.found": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "420",
-    "RequestMappingsPanelWidth1": "419",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.AnalyticsServiceApplication.executor": "Run",
-    "Spring Boot.BookingServiceApplication.executor": "Run",
-    "Spring Boot.ConfigServerApplication.executor": "Run",
-    "Spring Boot.EurekaServerApplication.executor": "Debug",
-    "Spring Boot.EventServiceApplication.executor": "Run",
-    "Spring Boot.GatewayServerApplication.executor": "Debug",
-    "Spring Boot.InventoryServiceApplication.executor": "Debug",
-    "Spring Boot.NotificationServiceApplication.executor": "Run",
-    "Spring Boot.PaymentServiceApplication.executor": "Run",
-    "Spring Boot.SearchServiceApplication.executor": "Run",
-    "Spring Boot.UserServiceApplication.executor": "Run",
-    "Spring Boot.VenueServiceApplication.executor": "Run",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/DistributedTicketBookingSystem/notification-service/src/main/java/com/ankit/notification_service",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "reference.settings.deploy.options",
-    "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "D:\\DistributedTicketBookingSystem\\web-frontend\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.default.redis: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.default: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build DistributedTicketBookingSystem.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.ConfigServerApplication | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.ConfigServerApplication | #3.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;New/updated database configurations found&quot;,
+    &quot;Notification.DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;420&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;419&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AnalyticsServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.BookingServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ConfigServerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EurekaServerApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.EventServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.GatewayServerApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.InventoryServiceApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.NotificationServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.PaymentServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SearchServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.VenueServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;k8s&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/DistributedTicketBookingSystem/k8s&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.deploy.options&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\DistributedTicketBookingSystem\\web-frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
-      "SQL",
-      "PLAIN_TEXT"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;SQL&quot;,
+      &quot;PLAIN_TEXT&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -203,11 +142,11 @@
       <recent name="com.ankit.gateway_server.security" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\DistributedTicketBookingSystem\k8s" />
       <recent name="D:\DistributedTicketBookingSystem\notification-service\src\main\java\com\ankit\notification_service" />
       <recent name="D:\DistributedTicketBookingSystem\venue-service\src\main\java\com\ankit\venue_service\mapper" />
       <recent name="D:\DistributedTicketBookingSystem\venue-service\src\main\java\com\ankit\venue_service\exception" />
       <recent name="D:\DistributedTicketBookingSystem\venue-service\src\main\java\com\ankit\venue_service\dto" />
-      <recent name="D:\DistributedTicketBookingSystem\venue-service\src\main\java\com\ankit\venue_service\controller" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.ankit.event_service.dto" />
@@ -623,6 +562,7 @@
       <workItem from="1782969155775" duration="7982000" />
       <workItem from="1782977607263" duration="5019000" />
       <workItem from="1782986283427" duration="9305000" />
+      <workItem from="1783845873625" duration="13562000" />
     </task>
     <servers />
   </component>
