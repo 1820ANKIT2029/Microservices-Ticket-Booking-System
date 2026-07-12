@@ -42,7 +42,7 @@ public class EventSessionServiceImpl implements IEventSessionService {
                 .venueId(savedEventSession.getVenueId())
                 .build();
 
-        streamBridge.send("createSessionSeats-in-0", eventSessionEvent);
+        streamBridge.send("createSessionSeats-out-0", eventSessionEvent);
         log.info("EventSessionEvent sent successfully");
 
         log.info("Sending eventSessionEvent: {}", eventSessionEvent);
