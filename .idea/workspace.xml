@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="29083d6d-5ca6-4291-80a9-9f9fa16a6c9b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/EventSessionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/ankit/event_service/service/impl/EventSessionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,35 +162,6 @@
         <option value="QuarkusRunConfigurationType" />
         <option value="SpringBootApplicationConfigurationType" />
       </set>
-    </option>
-    <option name="configurationStatuses">
-      <map>
-        <entry key="HttpClient.HttpRequestRunConfigurationType">
-          <value>
-            <map>
-              <entry key="ConfigServerApplication | #1" value="STOPPED" />
-              <entry key="ConfigServerApplication | #3" value="STOPPED" />
-            </map>
-          </value>
-        </entry>
-        <entry key="SpringBootApplicationConfigurationType">
-          <value>
-            <map>
-              <entry key="AnalyticsServiceApplication" value="STOPPED" />
-              <entry key="BookingServiceApplication" value="STOPPED" />
-              <entry key="ConfigServerApplication" value="STOPPED" />
-              <entry key="EurekaServerApplication" value="STOPPED" />
-              <entry key="EventServiceApplication" value="STOPPED" />
-              <entry key="GatewayServerApplication" value="STOPPED" />
-              <entry key="InventoryServiceApplication" value="STOPPED" />
-              <entry key="NotificationServiceApplication" value="STOPPED" />
-              <entry key="PaymentServiceApplication" value="STOPPED" />
-              <entry key="SearchServiceApplication" value="STOPPED" />
-              <entry key="UserServiceApplication" value="STOPPED" />
-            </map>
-          </value>
-        </entry>
-      </map>
     </option>
   </component>
   <component name="RunManager" selected="Docker.default: Compose Deployment">
@@ -563,6 +532,7 @@
       <workItem from="1782977607263" duration="5019000" />
       <workItem from="1782986283427" duration="9305000" />
       <workItem from="1783845873625" duration="13562000" />
+      <workItem from="1783874878287" duration="604000" />
     </task>
     <servers />
   </component>
