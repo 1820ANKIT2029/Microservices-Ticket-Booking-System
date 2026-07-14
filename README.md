@@ -1,5 +1,5 @@
 # 🎟️ Microservice Ticket Booking System
-VERSION 2.0
+VERSION 3.0 (Kubernetes deployment)
 
 A cloud-native event ticket booking platform built using **Spring Boot Microservices**, **Spring Cloud**, **Kafka**, **PostgreSQL**, and **Next.js**.
 
@@ -137,6 +137,7 @@ Service  Service  Service   Service    Service   Service
 
 * Docker
 * Docker Compose
+* Kubernetes
 * Kafka
 * Eureka
 * Config Server
@@ -160,6 +161,7 @@ DistributedTicketBookingSystem
 ├── notification-service
 ├── web-frontend
 ├── docker-compose
+├── k8s
 └── README.md
 ```
 
@@ -192,35 +194,15 @@ git clone https://github.com/1820ANKIT2029/DistributedTicketBookingSystem.git
 
 ```bash
 cd DistributedTicketBookingSystem
-cd docker-compose/default
+cd k8s
 
-docker compose up -d
-```
-
-OR 
-
-Open Docker and then Command line
-```bash
-cd DistributedTicketBookingSystem
-
-./gradlew clean compileJava --parallel
-./gradlew jibDockerBuild --parallel
-
-cd DistributedTicketBookingSystem
-cd docker-compose/default
-
-docker compose up -d
+check kind-demo.text
 ```
 
 Application:
 
 ```text
 http://localhost:3000
-```
-
-Stop:
-```bash
-docker compose down -v
 ```
 
 ---
